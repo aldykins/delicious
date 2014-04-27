@@ -3487,6 +3487,10 @@ span.size10 {
     background: $secondarybackground;
 }
 
+#edit_menu li.ui-state-active a, #edit_menu li.ui-tabs-active a {
+    color: $primaryfontcolour;
+}
+
 #index .tabs a:first-child,.tabs li a:first-child,#edit_menu li a:first-child,#friendnav a:first-child {
     margin: 0 5px 0 0;
 }
