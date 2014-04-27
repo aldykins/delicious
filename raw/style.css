@@ -1,0 +1,166 @@
+.stext {
+    display: none;
+}
+
+.unread {
+    background: url('com.png') 0px -125px no-repeat;
+    height: 15px;
+    width: 15px;
+    display: inline-block;
+    margin-bottom: -5px;
+}
+
+.read {
+    background: url('com.png') 0px -149px no-repeat;
+    height: 15px;
+    width: 15px;
+    display: inline-block;
+    margin-bottom: -5px;
+}
+
+.locked {
+    background: url('com.png') -2px -171px no-repeat;
+    height: 15px;
+    width: 11px;
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+}
+
+.sticky {
+    background: url('com.png') 0px -195px no-repeat;
+    height: 15px;
+    width: 17px;
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+}
+
+.go-last-read {
+    background: url('com.png') -2px -219px no-repeat;
+    height: 12px;
+    width: 14px;
+    vertical-align: middle;
+    margin-top: -1px;
+}
+
+.com-edit {
+    background: url('com.png') 0px 0px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+}
+
+.com-quote {
+    background: url('com.png') 0px -23px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+}
+
+.com-pm {
+    background: url('com.png') 0px -42px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+}
+
+.com-add-friend {
+    background: url('com.png') 0px -63px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+}
+
+.com-report {
+    background: url('com.png') 0px -84px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+}
+
+.com-delete {
+    background: url('com.png') 0px -105px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+}
+
+img[src="/static/common/symbols/irc_online.png"] {
+    height: 0px;
+    padding: 7px 8px;
+    background: url('com.png') 0px -239px no-repeat;
+}
+
+img[src="/static/common/symbols/irc_offline.png"] {
+    height: 0px;
+    padding: 7px 8px;
+    background: url('com.png') 0px -260px no-repeat;
+}
+
+#menu .dropit {
+    background: url('menus.png') center -1px no-repeat;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+#userinfo .dropit {
+    background: url('menus.png') center -17px no-repeat;
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+#menu .dropit:hover {
+    background: url('menus.png') center -33px no-repeat;
+}
+
+#userinfo .dropit:hover {
+    background: url('menus.png') center -49px no-repeat;
+}
+
+.triangle-down-md {
+    background: url('triangles.png') center -6px no-repeat;
+    width: 12px;
+    height: 8px;
+    display: inline-block;
+}
+
+.triangle-right-md {
+    background: url('triangles.png') center -24px no-repeat;
+    width: 8px;
+    height: 12px;
+    display: inline-block;
+}
+
+.triangle-up-md {
+    background: url('triangles.png') center -46px no-repeat;
+    width: 12px;
+    height: 8px;
+    display: inline-block;
+}
+
+#radio_status {
+    background: url('radio.png') 0px 0px no-repeat;
+    padding-left: 18px;
+}
+
+ul.dropdown li {
+    background: url('dropdown.png') right 8px no-repeat;
+}
+
+ul.dropdown li:hover {
+    background: url('dropdown.png') right -24px no-repeat;
+}
+
+.post_id a[href="#header"] {
+    font-size: 0em;
+    background: url('com.png') 0px -279px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    padding-top: 3px;
+}

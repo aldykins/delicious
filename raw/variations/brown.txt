@@ -1,0 +1,23 @@
+$backgroundimage: "background/gradient.png";
+$primarybackground: rgba(0,0,0,0.75) !important;
+$secondarybackground: rgba(0,0,0,0.25);
+$headerbackground: #171615;
+$menubackground: #29251E;
+$searchbackground: #3F3B35;
+
+$primaryfontcolour: #FFF;
+$secondaryfontcolour: #696969;
+$tertiaryfontcolour: #BABABA;
+$disabled: #696969;
+
+$link: #5BBE70;
+$linkhover: #92d4a0;
+$header: #89AACC;
+$bold: #5BBEA2;
+$boldhover: #92D3C1;
+$usertorrent: #49AB53;
+$usertorrenthover: #92d4a0;
+
+$primaryborder: 1px solid #1F301F;
+$secondaryborder: 1px solid #000;
+$focusshadow: rgba(91,190,112,0.6);
