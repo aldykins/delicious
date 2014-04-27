@@ -119,5 +119,5 @@ function hideTreats() {
   $('#user_leftcol > div.box > div.head:contains("Treats")').parent().hide();
 }
 
-injectScript(hideTreats, 'HideTreats');
+injectScript('('+hideTreats+')();', 'HideTreats');
 
