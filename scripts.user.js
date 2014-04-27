@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AB delicious user scripts
 // @author Compiled and in some cases ported by aldy, mostly written by potatoe
-// @version 1.1
+// @version 1.1.1
 // @description Variety of userscripts to fully utilise the site and stylesheet.
 // @include *animebytes.tv/*
 // @icon http://animebytes.tv/favicon.ico
@@ -56,12 +56,12 @@ if (document.getElementById('smileys')) {
 // Adds a button that inserts the [hide] BBCode into the text field.
 var spoilersnode = document.evaluate("//img[@title='Spoilers']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 if (spoilersnode) {
-var hideimg = document.createElement('img');
-hideimg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAotJREFUeNpiYWBgaGCgImDBJaHqp6co76CmLaAkosjGw84PEvv15efHD/fe3H908PbVWxsv3semjxHdhZLGciKm+U7evDICCvhc8vnJhwenJ+7b+vzsozfI4sxA7ADjqHjryFtXeSRwCHIJE/IaOx+HgLyjmsGP998ev7v96iOGl0EuM8l1iGRiZWYD8b+9+vz83Z3X95ANYeVi4xDRlNBmZmfhAPFBakF6vr74NAfmUrCBjIyMDOYlLv7MbCzsMM1XV5zZc2vDxXvoLuOW4Ntj1+DjK6QmpgX2IlAPSO/GqPlz////D/GyWoC+koKzhi2yxv9//39RcFJX0ou3sFYPNNBX9tBWZ2Jh+vHizKPXz888vKcRbGgDUwuMNL4fH78/fnvj5XuwC+XtVbXRXSJjpWSNLsYvL6QEdHUn0Is/QEHCJcYrCZMDmQHyERNYoaKIIsnpjZOVA8UyqBksMCcTMuDT4/f3Hu67eRbEFtWVEmTj5RBEloeZwQIJr39/GZmYmdENeXLs3tGDNZv2oIubZDu44M0pv77+/MwhgDvtAWOWQ9pCUQqYZCSBtDG660Dg99efn+AGfnn28Sk+A0GGmeY5xhIIksfgtAkiHu6/dQmbIlBCBiUpkMsIhfGDfTcvwV14c92Fuxohhk+4xflkkBUJKosocQpzC7Kws3DiM+zry09Pbq2/eBfuQlAKP9mzZ+PfX39+Iit8dfnZtc3xCxeDcg0uw0B6Tvbt3QgyA24gCIDy4pnJB5b/+/33F7FpEaQWpOf56Ydv8BZfoLyJ7n1s3gT5Cr34YsRWYoMKC7VAfWU5WxUtUAHLys3O///fv7+gAvbTw3ePHh2+cw0UZjBvEjSQEgAQYABZyQWIL1ugrwAAAABJRU5ErkJggg==";
-hideimg.title = hideimg.alt="Hide";
-hideimg.setAttribute('onclick', "insert_text('[hide]', '[/hide]')");
-spoilersnode.parentNode.insertBefore(hideimg, spoilersnode.nextSibling);
-spoilersnode.insertAdjacentHTML('afterend', '\n');
+	var hideimg = document.createElement('img');
+	hideimg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAotJREFUeNpiYWBgaGCgImDBJaHqp6co76CmLaAkosjGw84PEvv15efHD/fe3H908PbVWxsv3semjxHdhZLGciKm+U7evDICCvhc8vnJhwenJ+7b+vzsozfI4sxA7ADjqHjryFtXeSRwCHIJE/IaOx+HgLyjmsGP998ev7v96iOGl0EuM8l1iGRiZWYD8b+9+vz83Z3X95ANYeVi4xDRlNBmZmfhAPFBakF6vr74NAfmUrCBjIyMDOYlLv7MbCzsMM1XV5zZc2vDxXvoLuOW4Ntj1+DjK6QmpgX2IlAPSO/GqPlz////D/GyWoC+koKzhi2yxv9//39RcFJX0ou3sFYPNNBX9tBWZ2Jh+vHizKPXz888vKcRbGgDUwuMNL4fH78/fnvj5XuwC+XtVbXRXSJjpWSNLsYvL6QEdHUn0Is/QEHCJcYrCZMDmQHyERNYoaKIIsnpjZOVA8UyqBksMCcTMuDT4/f3Hu67eRbEFtWVEmTj5RBEloeZwQIJr39/GZmYmdENeXLs3tGDNZv2oIubZDu44M0pv77+/MwhgDvtAWOWQ9pCUQqYZCSBtDG660Dg99efn+AGfnn28Sk+A0GGmeY5xhIIksfgtAkiHu6/dQmbIlBCBiUpkMsIhfGDfTcvwV14c92Fuxohhk+4xflkkBUJKosocQpzC7Kws3DiM+zry09Pbq2/eBfuQlAKP9mzZ+PfX39+Iit8dfnZtc3xCxeDcg0uw0B6Tvbt3QgyA24gCIDy4pnJB5b/+/33F7FpEaQWpOf56Ydv8BZfoLyJ7n1s3gT5Cr34YsRWYoMKC7VAfWU5WxUtUAHLys3O///fv7+gAvbTw3ePHh2+cw0UZjBvEjSQEgAQYABZyQWIL1ugrwAAAABJRU5ErkJggg==";
+	hideimg.title = hideimg.alt="Hide";
+	hideimg.setAttribute('onclick', "insert_text('[hide]', '[/hide]')");
+	spoilersnode.parentNode.insertBefore(hideimg, spoilersnode.nextSibling);
+	spoilersnode.insertAdjacentHTML('afterend', '\n');
 }
 
 // [url] and [quote] buttons by aldy
@@ -74,14 +74,6 @@ quotenode.setAttribute('onclick', "insert_text('[quote]', '[/quote]')");
 
 // Better quote by Potatoe
 // Makes the quoting feature on AnimeBytes better by including links back to posts and the posted date.
-function injectScript (content, id) {
-	var script = document.createElement('script');
-	if (id) script.setAttribute('id', id);
-	script.textContent = content.toString();
-	document.body.appendChild(script);
-	return script;
-}
-
 function Quote(postid, username, surround) {
 	$j.ajax({
 		url: window.location.pathname,
@@ -123,9 +115,9 @@ document.title=ntitle.substring(0, ntitle.length-2)+":: AnimeBytes";
 
 // Hide treats by Alpha
 // Hide treats on profile.
-var hideTreats = function() {
-  jQuery('#user_leftcol > div.box > div.head:contains("Treats")').parent().hide();
+function hideTreats() {
+  $('#user_leftcol > div.box > div.head:contains("Treats")').parent().hide();
 }
-var script = document.createElement("script");
-script.textContent = "(" + hideTreats.toString() + ")();";
-document.body.appendChild(script);
+
+injectScript(hideTreats, 'HideTreats');
+
