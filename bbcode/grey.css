@@ -1,0 +1,101 @@
+img[src="/static/common/symbols/bold.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/bold.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/italics.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/italics.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/underline.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/underline.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/strikethrough.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/strikethrough.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/spoilers.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/spoilers.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/code.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/code.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/url.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/url.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/image.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/image.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/quote.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/quote.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/list.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/list.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/youtube.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/youtube.png') top left no-repeat;
+}
+
+#smileysbutton img[src="/static/common/smileys/Smile.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/smileys.png') top left no-repeat;
+}
+
+#smileysbutton {
+    background: transparent !important;
+}
+
+img[src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAotJREFUeNpiYWBgaGCgImDBJaHqp6co76CmLaAkosjGw84PEvv15efHD/fe3H908PbVWxsv3semjxHdhZLGciKm+U7evDICCvhc8vnJhwenJ+7b+vzsozfI4sxA7ADjqHjryFtXeSRwCHIJE/IaOx+HgLyjmsGP998ev7v96iOGl0EuM8l1iGRiZWYD8b+9+vz83Z3X95ANYeVi4xDRlNBmZmfhAPFBakF6vr74NAfmUrCBjIyMDOYlLv7MbCzsMM1XV5zZc2vDxXvoLuOW4Ntj1+DjK6QmpgX2IlAPSO/GqPlz////D/GyWoC+koKzhi2yxv9//39RcFJX0ou3sFYPNNBX9tBWZ2Jh+vHizKPXz888vKcRbGgDUwuMNL4fH78/fnvj5XuwC+XtVbXRXSJjpWSNLsYvL6QEdHUn0Is/QEHCJcYrCZMDmQHyERNYoaKIIsnpjZOVA8UyqBksMCcTMuDT4/f3Hu67eRbEFtWVEmTj5RBEloeZwQIJr39/GZmYmdENeXLs3tGDNZv2oIubZDu44M0pv77+/MwhgDvtAWOWQ9pCUQqYZCSBtDG660Dg99efn+AGfnn28Sk+A0GGmeY5xhIIksfgtAkiHu6/dQmbIlBCBiUpkMsIhfGDfTcvwV14c92Fuxohhk+4xflkkBUJKosocQpzC7Kws3DiM+zry09Pbq2/eBfuQlAKP9mzZ+PfX39+Iit8dfnZtc3xCxeDcg0uw0B6Tvbt3QgyA24gCIDy4pnJB5b/+/33F7FpEaQWpOf56Ydv8BZfoLyJ7n1s3gT5Cr34YsRWYoMKC7VAfWU5WxUtUAHLys3O///fv7+gAvbTw3ePHh2+cw0UZjBvEjSQEgAQYABZyQWIL1ugrwAAAABJRU5ErkJggg=="] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/hide.png') top left no-repeat;
+}
+
+img[src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAeRJREFUeNpiYWBgaGCgImBioDJgQebYuGoayYQaGTDKCor+//7rB8OFJ08PLzp56OmDt69A8rwCXNyeSVbOjObyckz8XNz/X356/2bTpWt71p4/AjODEeZln3wnb35/PRN0G//9+ftrd9qyuW+AhoavTy9g4efkR1fz8/j9G2uqN64EsZmB2MHMS8dUKsnSHpsXGJmYmOWN5GS1fXQNWCX5xbB6U1ZQRJKVmf3uucd3wWGo4Kurgy9cWGUFJViVRGTwqRF0UleGRwqzkogExbErzC0AN/D/rz+/KDXw/99/f+EG/r0HiUWKDHz95SPcwNfH7j6g1MCv5x8/hRt4YOXZw7+uv3hIrmF/Xn5+vWXCvi0oOWV749b1fz///EyyV//9/3eya9dOjKz35dXnj4dL16789+vvD1IMvNayfeOD84/vYs3LT2+9enq2aM0yYg19ADTswoFbl5DFwDkFWeDt6y+fXh+4fVPOUU2ViYOVE5tB/37//XmmdN2KC8fvXyeqtHn55P2b9bELZ/19/hEjOf39+vPLvqwVC29deHKXpOLr19efP1ZEz5/+6/arx/DYfP357Y74RTNf3n39HJc+DC9jBPqWy+e1bVVU/////2d94uI5Xz99/4ZPPeOgL7EBAgwA4pbS9NwMCqsAAAAASUVORK5CYII="] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('grey/aldy.png') top left no-repeat;
+}

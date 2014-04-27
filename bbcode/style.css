@@ -1,0 +1,87 @@
+img[src="/static/common/symbols/bold.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('bold.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/italics.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('italics.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/underline.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('underline.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/strikethrough.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('strikethrough.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/spoilers.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('spoilers.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/code.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('code.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/url.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('url.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/image.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('image.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/quote.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('quote.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/list.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('list.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/youtube.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('youtube.png') top left no-repeat;
+}
+
+#smileysbutton img[src="/static/common/smileys/Smile.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('smileys.png') top left no-repeat;
+}
+
+#smileysbutton {
+    background: transparent !important;
+}

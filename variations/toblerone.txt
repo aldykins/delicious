@@ -1,0 +1,37 @@
+$background: url("background/Toblerone.jpg") no-repeat center bottom fixed !important;
+$primarybackground: rgba(0,0,0,0.5) !important;
+$secondarybackground: rgba(255,255,255,0.03);
+$tertiarybackground: rgba(0,0,0,0.5) !important;
+
+$headerbackground: #151517;
+$menubackground: #232325;
+$searchbackground: #35353f;
+$navigationbackground: 255;
+
+$primaryfontcolour: #FFF;
+$secondaryfontcolour: #696969;
+$tertiaryfontcolour: #BABABA;
+$header: #406E96;
+$snatched: #D71A41;
+$disabled: #696969;
+
+$link: #999;
+$linkhover: #CCC;
+$bold: #406E96;
+$boldhover: #6594BD;
+$usertorrent: #8AE0FF;
+$usertorrenthover: #A4DAB0;
+
+$primaryborder: 1px solid #45474A;
+$secondaryborder: 1px solid #202022;
+$focusshadow: rgba(153,153,153,0.4);
+$colouredposttransparency: 0.15;
+
+$quoteborder: #F7995B;
+$quotebackground: #2C1B11;
+$codeborder: #B29D4B;
+$codebackground: #32322D;
+$spoilerborder: #D71A41;
+$spoilerbackground: #281317;
+$hideborder: #36849B;
+$hidebackground: #0e3133;
