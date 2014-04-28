@@ -1,48 +1,43 @@
-/* Toblerone */
+/* Dream */
 @mixin background() {
-    background-color: #070707;
-    background-image: url("http://i.imgur.com/iUql4Yg.jpg");
-    background-repeat: no-repeat;
-    background-position: center bottom;
-    background-attachment: fixed;
-    background-size: cover;
+    background-color: #F4E9D5;
 }
-$primarybackground: rgba(0,0,0,0.5) !important;
-$secondarybackground: rgba(255,255,255,0.03);
-$tertiarybackground: rgba(0,0,0,0.5) !important;
+$primarybackground: rgba(255,255,255,0.3) !important;
+$secondarybackground: rgba(255,255,255,0.5);
+$tertiarybackground: rgba(0,0,0,0.8) !important;
 
-$headerbackground: #151517;
-$menubackground: #232325;
-$searchbackground: #35353f;
-$navigationbackground: 255;
+$headerbackground: #F4E9D5;
+$menubackground: #EFDFC2;
+$searchbackground: #FAF4EB;
+$navigationbackground: 0;
 
-$primaryfontcolour: #FFF;
+$primaryfontcolour: #2B2B2B;
 $secondaryfontcolour: #696969;
-$tertiaryfontcolour: #BABABA;
-$header: #406E96;
+$tertiaryfontcolour: #2B2B2B;
+$header: #E16151;
 $snatched: #D71A41;
-$disabled: #696969;
+$disabled: #9C9C9C;
 
-$link: #999;
-$linkhover: #CCC;
-$bold: #406E96;
-$boldhover: #6594BD;
-$usertorrent: #8AE0FF;
-$usertorrenthover: #A4DAB0;
+$link: #265E8B;
+$linkhover: #4B93CE;
+$bold: #429A76;
+$boldhover: #69BF9C;
+$usertorrent: #F24087;
+$usertorrenthover: #F788B4;
 
-$primaryborder: 1px solid #45474A;
-$secondaryborder: 1px solid #202022;
-$focusshadow: rgba(153,153,153,0.4);
+$primaryborder: 1px solid #84878B;
+$secondaryborder: 1px solid #83837C;
+$focusshadow: rgba(89,89,89,0.6);
 $colouredposttransparency: 0.15;
 
 $quoteborder: #F7995B;
-$quotebackground: #2C1B11;
+$quotebackground: #EDDACF;
 $codeborder: #B29D4B;
-$codebackground: #32322D;
+$codebackground: #D8D8D4;
 $spoilerborder: #D71A41;
-$spoilerbackground: #281317;
+$spoilerbackground: #EAD2D6;
 $hideborder: #36849B;
-$hidebackground: #0e3133;
+$hidebackground: #BBEAEC;
 
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {
     margin: 0;
@@ -521,6 +516,14 @@ input[type='button'],input[type='submit'] {
 
 #user_leftcol .box .center {
     padding-left:8px;
+}
+
+#user_leftcol .box div.center {
+    margin-top: 5px;
+}
+
+.friendslist dt:first-child, .friendslist dd:nth-child(2) {
+    margin-top: 0px;
 }
 
 ul.ucontact li {
