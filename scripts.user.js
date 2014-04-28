@@ -4,6 +4,7 @@
 // @version 1.2
 // @description Variety of userscripts to fully utilise the site and stylesheet.
 // @include *animebytes.tv/*
+// @match https://*.animebytes.tv/*
 // @icon http://animebytes.tv/favicon.ico
 // ==/UserScript==
 
