@@ -3606,7 +3606,7 @@ span.size10 {
 .poll {
     list-style: none;
     padding: 10px 0px;
-    margin: 5px 0;
+    margin: 5px 0 -20px;
 }
 
 .poll li {
@@ -3644,6 +3644,10 @@ span.size10 {
     -moz-border-radius-bottomright: 2px;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
+}
+
+#threadpoll {
+    margin-bottom: -15px;
 }
 
 #user label {
