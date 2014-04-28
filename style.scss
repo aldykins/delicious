@@ -3004,6 +3004,14 @@ img[src='/static/common/caticons/pv.png'] {
     margin-right: 5px;
 }
 
+#user_rightcol .wrappper_outer {
+    padding-top: 0px;
+}
+
+.userstatsleft .center.strong, .userstatsright .center.strong {
+    padding-top: 10px;
+}
+
 .userstatsleft h3,.userstatsright h3 {
     padding-left: 10px;
     color: $bold;
