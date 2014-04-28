@@ -32,7 +32,7 @@ if (document.getElementById('smileys')) {
 	}
 	smileys.innerHTML = r;
 
-	smileys.setAttribute('style', 'display: none; width: 350px !important; position: fixed; top: 0; left: 0;');
+	smileys.setAttribute('style', 'display: none; width: 335px !important; position: fixed; top: 0; left: 0;background:rgba(0,0,0,0.75);');
     smileys.setAttribute('id', 'hsmileys')
 
 	smileysbutton = smileys.firstElementChild.cloneNode();
@@ -40,7 +40,7 @@ if (document.getElementById('smileys')) {
 	smileysbutton.setAttribute('id','smileysbutton');
 	smileysbutton.setAttribute('style','width: 20px !important; height: 20px !important;');
 
-	document.getElementById('bbcode').innerHTML += '<span style="display:inline-block;width:20px;height:20px;z-index:1;position:relative" id="smileysholdster"><style>.smileyscell{display:inline-block;overflow:hidden;width:33px;max-width:33px;height:33px;background:rgba(0,0,0,0.75);float:left}#smileysbutton img[src="/static/common/smileys/Smile.png"]{margin-top:0px!important}</style><div id="smileysblank" style="width: 35px; height: 35px; display: none;"></div>'+smileysbutton.outerHTML+'</div>'
+	document.getElementById('bbcode').innerHTML += '<span style="display:inline-block;width:20px;height:20px;z-index:1;position:relative" id="smileysholdster"><style>.smileyscell{display:inline-block;overflow:hidden;width:33px;max-width:33px;height:33px;float:left}#smileysbutton img[src="/static/common/smileys/Smile.png"]{margin-top:0px!important}</style><div id="smileysblank" style="width: 35px; height: 35px; display: none;"></div>'+smileysbutton.outerHTML+'</div>'
 
 	document.getElementById('smileysholdster').appendChild(smileys);
 
