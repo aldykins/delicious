@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AB delicious user scripts
-// @author Compiled and in some cases ported by aldy, mostly written by potatoe
-// @version 1.1.1
+// @author aldy, potatoe, alpha
+// @version 1.2
 // @description Variety of userscripts to fully utilise the site and stylesheet.
 // @include *animebytes.tv/*
 // @icon http://animebytes.tv/favicon.ico
@@ -119,5 +119,53 @@ function hideTreats() {
   $('#user_leftcol > div.box > div.head:contains("Treats")').parent().hide();
 }
 
-injectScript('('+hideTreats+')();', 'HideTreats');
+injectScript('(' + hideTreats + ')();', 'HideTreats');
 
+// Keyboard shortcuts by Alpha
+// Enables keyboard shortcuts for forum (new post and edit) and PM
+function addKeyboardShortcuts() {
+	$.ctrl = function(key, callback, args) {
+		$(document).keydown(function(e) {
+			if(!args) args=[];
+			if(e.keyCode === key.charCodeAt(0) && (e.ctrlKey || e.metaKey) && ($('#quickpost').is(':focus') || $('.post > form > textarea').is(':focus'))) {
+				e.preventDefault();
+				callback.apply(this, args);
+				return false;
+			}
+		});
+	};
+	/**
+	 * All keyboard shortcuts based on MS Word
+	 **/
+
+	// Bold
+	var ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? 'CMD' : 'CTRL';
+	$('#bbcode > img[title="Bold"]').attr('title', 'Bold (' + ctrlorcmd + '+B)');
+	$.ctrl('B', function() {
+		insert_text('[b]', '[/b]');
+	});
+	// Italics
+	$('#bbcode > img[title="Italics"]').attr('title', 'Italics (' + ctrlorcmd + '+I)');
+	$.ctrl('I', function() {
+		insert_text('[i]', '[/i]');
+	});
+	// Underline
+	$('#bbcode > img[title="Underline"]').attr('title', 'Underline (' + ctrlorcmd + '+U)');
+	$.ctrl('U', function() {
+		insert_text('[u]', '[/u]');
+	});
+	// Align right
+	$.ctrl('R', function() {
+		insert_text('[align=right]', '[/align]');
+	});
+	// Align left
+	$.ctrl('L', function() {
+		insert_text('[align=left]', '[/align]');
+	});
+	// Align center
+	$.ctrl('E', function() {
+		insert_text('[align=center]', '[/align]');
+	});
+}
+
+injectScript('(' + addKeyboardShortcuts + ')();', 'AddKeyboardShortcuts');
