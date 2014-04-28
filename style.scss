@@ -1,5 +1,7 @@
 /* Dream */
-$background: #F4E9D5;
+@mixin background() {
+    background-color: #F4E9D5;
+}
 $primarybackground: rgba(255,255,255,0.3) !important;
 $secondarybackground: rgba(255,255,255,0.5);
 $tertiarybackground: rgba(0,0,0,0.8) !important;
@@ -100,9 +102,8 @@ body {
     font-size: 0.75em;
     color: $primaryfontcolour;
     min-width: 988px;
-    background: $background;
-    background-size: 100%;
     line-height: 1.5em;
+    @include background();
 }
 
 html,body {
