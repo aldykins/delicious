@@ -1003,15 +1003,12 @@ pre.php {
 
 #userinfo .subnav {
     background: $headerbackground;
-    -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     -moz-border-radius-topright: 4px;
     -webkit-border-top-right-radius: 4px;
     border-top-right-radius: 4px;
     position: absolute;
     top: 20px;
-    left: 0px;
+    left: -1px;
     margin: 0;
     padding: 5px 0;
     width: auto;
@@ -1025,6 +1022,11 @@ pre.php {
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 4px;
     margin-top: 5px;
+    border: $secondaryborder;
+}
+
+#userinfo_minor li:nth-child(4) ul.subnav {
+    left: 0px;
 }
 
 #userinfo .subnav li {
@@ -1205,9 +1207,9 @@ a[href^='alltorrents.php?action=history&userid='] {
     float: left;
     width: 110px;
     max-width: 110px;
-    border-right: 1px solid #1A1A1A;
-    border-left: 1px solid #1A1A1A;
-    border-bottom: 1px solid #1A1A1A;
+    border-right: $secondaryborder;
+    border-left: $secondaryborder;
+    border-bottom: $secondaryborder;
     background: $menubackground;
 }
 
