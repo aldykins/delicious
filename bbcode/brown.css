@@ -75,8 +75,8 @@ img[src="/static/common/symbols/youtube.png"] {
     background: transparent url('brown/youtube.png') top left no-repeat;
 }
 
-.smileyscell {
-    background: rgba(255,255,255,0.75) !important;
+.smileyscell, #hsmileys {
+    background: rgba(255,255,255,0.5) !important;
 }
 
 #smileysbutton img[src="/static/common/smileys/Smile.png"] {
