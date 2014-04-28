@@ -1,7 +1,7 @@
 /* Milky Way */
 @mixin background() {
     background-color: #0f1428;
-    background-image: url("https://mei.animebytes.tv/images/37b35397a01d0d9762ff8587ff5e6617.jpeg");
+    background-image: url("http://i.imgur.com/KxnYIHT.jpg");
     background-repeat: no-repeat;
     background-position: center bottom;
     background-attachment: fixed;

@@ -1,7 +1,7 @@
 /* Toblerone */
 @mixin background() {
     background-color: #070707;
-    background-image: url("https://mei.animebytes.tv/images/550ca15756e34de782e8601fb26b1b70.jpeg");
+    background-image: url("http://i.imgur.com/iUql4Yg.jpg");
     background-repeat: no-repeat;
     background-position: center bottom;
     background-attachment: fixed;
