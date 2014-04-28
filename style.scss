@@ -2302,6 +2302,10 @@ tr.freeleech a[title='Download']:after {
     padding: 5px !important;
 }
 
+#torrents #browse_nav_top + #browse_nav_bottom + .box.pad h2:first-child, #torrents2 #browse_nav_top + #browse_nav_bottom + .box.pad h2:first-child {
+    display: block !important;
+}
+
 #categories {
     background: $primarybackground;
     width: 100px;
