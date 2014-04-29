@@ -13,6 +13,10 @@ blockquote,q {
     quotes: none;
 }
 
+pre, blockquote {
+    color: $tertiaryfontcolour !important;
+}
+
 blockquote:before,blockquote:after {
     content: '';
     content: none;
@@ -2245,7 +2249,7 @@ span.freeleech {
 
 .pruned a[title="Download"] {
     background: rgba(#709F31, 0.35);
-    color: rgba(#FFF, 0.35);
+    color: rgba(#FFF, 0.35) !important;
 }
 
 tr.freeleech a[title='Download']:after {
@@ -2551,6 +2555,20 @@ td.center {
 
 .torrent_table .pad table {
     background: $primarybackground;
+}
+
+.torrent_table .spoiler {
+    padding: 10px !important;
+}
+
+table.mediainfo table, table.mediainfo table td {
+    border: none !important;
+    padding: 0;
+    margin: 0;
+}
+
+table.mediainfo table caption {
+    border-bottom: $primaryborder;
 }
 
 .mainimg img {
