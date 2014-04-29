@@ -525,6 +525,14 @@ dl.ratingslist_user {
     border-bottom: none !important;
 }
 
+#user .thin h2 + .pages + .main_column > div > center > table > tbody > tr.colhead {
+    display: none;
+}
+
+#user .thin h2 + .pages + .main_column > div > center > table > tbody > tr.colhead:first-child {
+    display: table-row;
+}
+
 .aot .head,#forums .box .head,.fpoll .head {
     padding: 8px 0px 0px 10px;
 }
