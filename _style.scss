@@ -3098,14 +3098,15 @@ ul.trophies li {
     width: 480px;
     overflow: hidden;
     position: relative;
-    padding-left: 24px;
 }
 
 #cover-slider .slider {
     border: $primaryborder;
     padding: 5px 0;
-    width: 422px !important;
+    width: 368px;
     background: $primarybackground;
+    margin: 0 auto;
+    float: none;
 }
 
 .slider a {
@@ -3155,24 +3156,20 @@ img[src*='coverflow-error.jpg'] {
     background: rgba(#000,0.5);
 }
 
-#cover-slider .next {
-    right: 24px;
-    float: none !important;
+#cover-slider .prev {
+    left: 27px;
 }
 
-#cover-slider .prev {
-    left: 0;
+#cover-slider .next {
+    right: 27px;
+    float: none !important;
 }
 
 #cover-slider .next,#cover-slider .prev {
     position: absolute;
     top: 50%;
-    margin-top: -21px;
     height: 0;
     width: 24px !important;
-}
-
-#cover-slider .next,#cover-slider .prev {
     margin: 0 !important;
 }
 
