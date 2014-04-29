@@ -1,10 +1,18 @@
-/********************************************
--------------- Beta Stylesheet --------------
+/***********************************************************
+------------------- Milky Way Stylesheet -------------------
 
-        Version 1.whocares
+        Design and CSS: aldy
+        
+        Version 1.0
+        
+        Thanks to:
+            noise for designing the original stylesheets
+            AdnapRalopib for testing and graphic designing
+            Alpha for assisting with some CSS
+            Leamas for testing and suggesting
 
-********************************************/
+***********************************************************/
 
-@import url("style.css");
-@import url("icons/dark.css");
-@import url("bbcode/brown.css");
+@import url("milkyways.css");
+@import url("icons/light.css");
+@import url("bbcode/blue.css");
