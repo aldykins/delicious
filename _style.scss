@@ -2427,22 +2427,22 @@ th.torrent_properties a {
     float: left;
 }
 
-#torrents #main_div.center.thin #dynamikku table > tbody > tr.rowa + tr > td {
+#dynamikku table > tbody > tr.rowa + tr > td {
     border-top: $primaryborder;
     padding-top: 4px !important;
     padding-bottom: 13px !important;
 }
 
-#torrents #main_div.center.thin #dynamikku #desc_edit input + h3 + input + br + br + h3 + textarea + br + h3, #torrents2 #main_div.center.thin #dynamikku #desc_edit input + h3 + input + br + br + h3 + textarea + br + h3 {
+#dynamikku #desc_edit input + h3 + input + br + br + h3 + textarea + br + h3 {
     margin-top: 15px;
 }
 
-#torrents #main_div.center.thin #dynamikku #episodeListTable tr.tableSpacer > td {
+#dynamikku #episodeListTable tr.tableSpacer > td {
     border-left: $primaryborder !important;
     border-right: $primaryborder !important;
 }
 
-#torrents #main_div.center.thin #dynamikku #episodeListTable > tbody > tr:nth-child(2) > td {
+#dynamikku #episodeListTable > tbody > tr:nth-child(2) > td {
     border-top: $primaryborder;
     border-bottom: none !important;
 }
@@ -3481,15 +3481,20 @@ span.size10 {
     clear: both;
 }
 
-#dynamikku h3, #dynamikku #desc_edit, #dynamikku #editExtendAn, #dynamikku #links_form, #dynamikku #titles_form, #dynamikku #misc_form, #dynamikku #rename_form {
+#dynamikku .box {
+    background: $primarybackground;
+    border: $primaryborder;
+}
+
+#dynamikku h3, #dynamikku #desc_edit, #dynamikku #editExtendAn, #dynamikku #links_form, #dynamikku #titles_form, #dynamikku #misc_form, #dynamikku #rename_form, #dynamikku #cdtype_form {
     text-align: center;
 }
 
-#dynamikku #desc_edit input[type="submit"], #dynamikku #editExtendAn input[type="submit"], #dynamikku #misc_form input[type="submit"], #dynamikku #rename_form input[type="submit"], #dynamikku #misc_form h3:nth-child(5), #dynamikku #editExtendAn .staff_div + input {
+#autofill_div, #dynamikku #desc_edit input[type="submit"], #dynamikku #editExtendAn input[type="submit"], #dynamikku #misc_form input[type="submit"], #dynamikku #rename_form input[type="submit"], #dynamikku #misc_form h3:nth-child(5), #dynamikku #editExtendAn .staff_div + input, #dynamikku input[id="update_cdtype"],#dynamikku input[id="renameAlbum"] {
     margin-top: 5px;
 }
 
-#dynamikku .songAdd input[name="song_title2[]"], #dynamikku .songEdit input[name="song_title2[]"], #dynamikku .studio_div + .studio_div input.studio_in, #dynamikku .staff_div + .staff_div .staff_in {
+#dynamikku .songAdd input[name="song_title2[]"], #dynamikku .songEdit input[name="song_title2[]"], #dynamikku .studio_div + .studio_div input.studio_in, #dynamikku .staff_div + .staff_div .staff_in, #dynamikku #rename_form input[name="name2"] {
     border-top: none !important;
 }
 
@@ -3497,7 +3502,7 @@ span.size10 {
     height: 17px;
 }
 
-#dynamikku #editExtendAn .studio_div + h3 {
+#dynamikku #editExtendAn .studio_div + h3, #dynamikku .box p + br + p + input + table, #dynamikku .box p + div > input + table {
     margin-top: 15px;
 }
 
