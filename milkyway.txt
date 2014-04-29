@@ -7,14 +7,14 @@
     background-attachment: fixed;
     background-size: cover;
 }
-$primarybackground: rgba(0,0,0,0.5) !important;
-$secondarybackground: rgba(0,0,0,0.25);
-$tertiarybackground: rgba(0,0,0,0.5) !important;
+$primarybackground: rgba(#000,0.5) !important;
+$secondarybackground: rgba(#000,0.25);
+$tertiarybackground: rgba(#000,0.5) !important;
 
 $headerbackground: #151517;
 $menubackground: #1e1f29;
 $searchbackground: #35353f;
-$navigationbackground: 255;
+$navigationbackground: #FFF;
 
 $primaryfontcolour: #FFF;
 $secondaryfontcolour: #696969;

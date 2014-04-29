@@ -2,14 +2,14 @@
 @mixin background() {
     background-color: #F4E9D5;
 }
-$primarybackground: rgba(255,255,255,0.3) !important;
-$secondarybackground: rgba(255,255,255,0.5);
-$tertiarybackground: rgba(0,0,0,0.8) !important;
+$primarybackground: rgba(#FFF,0.3) !important;
+$secondarybackground: rgba(#FFF,0.5);
+$tertiarybackground: rgba(#000,0.8) !important;
 
 $headerbackground: #F4E9D5;
 $menubackground: #EFDFC2;
 $searchbackground: #FAF4EB;
-$navigationbackground: 0;
+$navigationbackground: #000;
 
 $primaryfontcolour: #2B2B2B;
 $secondaryfontcolour: #696969;
@@ -346,9 +346,9 @@ textarea {
 textarea:focus,input[type="text"]:focus,input[type="password"]:focus,input[type="datetime"]:focus,input[type="datetime-local"]:focus,input[type="date"]:focus,input[type="month"]:focus,input[type="time"]:focus,input[type="week"]:focus,input[type="number"]:focus,input[type="email"]:focus,input[type="url"]:focus,input[type="search"]:focus,input[type="tel"]:focus,input[type="color"]:focus,.uneditable-input:focus {
     outline: 0;
     outline: thin dotted \9;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px $focusshadow;
-    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px $focusshadow;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px $focusshadow;
+    -webkit-box-shadow: inset 0 1px 1px rgba(#000,0.075),0 0 8px $focusshadow;
+    -moz-box-shadow: inset 0 1px 1px rgba(#000,0.075),0 0 8px $focusshadow;
+    box-shadow: inset 0 1px 1px rgba(#000,0.075),0 0 8px $focusshadow;
 }
 
 input, select {
@@ -1240,7 +1240,7 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 #menu ul.subnav li a:hover,#menu ul.subnav li:hover {
-    background: rgba($navigationbackground,$navigationbackground,$navigationbackground,0.2);
+    background: rgba($navigationbackground,0.2);
 }
 
 #forums #nav_torrents.navmenu.selected + #nav_forums {
@@ -1249,23 +1249,23 @@ a[href^='alltorrents.php?action=history&userid='] {
 
 /* menu styling */
 #nav_torrents, #nav_torrents ul.subnav > li {
-    background: rgba($navigationbackground,$navigationbackground,$navigationbackground,0.25);
+    background: rgba($navigationbackground,0.25);
 }
 
 #nav_forums {
-    background: rgba(($navigationbackground),($navigationbackground),($navigationbackground),0.2);
+    background: rgba($navigationbackground,0.2);
 }
 
 #nav_irc {
-    background: rgba($navigationbackground,$navigationbackground,$navigationbackground,0.15);
+    background: rgba($navigationbackground,0.15);
 }
 
 #nav_kb {
-    background: rgba($navigationbackground,$navigationbackground,$navigationbackground,0.1);
+    background: rgba($navigationbackground,0.1);
 }
 
 #nav_siteinfo, #nav_siteinfo ul.subnav > li {
-    background: rgba($navigationbackground,$navigationbackground,$navigationbackground,0.05);
+    background: rgba($navigationbackground,0.05);
 }
 
 /* menu section styling aaahhhh */
@@ -1275,32 +1275,32 @@ a[href^='alltorrents.php?action=history&userid='] {
 #kb #nav_kb,
 #siteinfo #nav_siteinfo,#devblog #nav_siteinfo,#staffpm #nav_siteinfo,#top10 #nav_siteinfo,#rules #nav_siteinfo,#about #nav_siteinfo,
 #siteinfo #nav_siteinfo ul.subnav > li,#devblog #nav_siteinfo ul.subnav > li,#staffpm #nav_siteinfo ul.subnav > li,#top10 #nav_siteinfo ul.subnav > li,#rules #nav_siteinfo ul.subnav > li,#about #nav_siteinfo ul.subnav > li {
-    background: rgba($navigationbackground,$navigationbackground,$navigationbackground,0.3);
+    background: rgba($navigationbackground,0.3);
 }
 
 #forums #nav_torrents, #forums #nav_torrents ul.subnav > li, #forums #nav_irc,
 #irc #nav_forums, #irc #nav_kb,
 #kb #nav_irc, #kb #nav_siteinfo, #kb #nav_siteinfo ul.subnav > li,
 #siteinfo #nav_kb,#devblog #nav_kb,#staffpm #nav_kb,#top10 #nav_kb,#rules #nav_kb,#about #nav_kb {
-    background: rgba($navigationbackground,$navigationbackground,$navigationbackground,0.2);
+    background: rgba($navigationbackground,0.2);
 }
 
 #forums #nav_kb,
 #irc #nav_torrents, #irc #nav_torrents ul.subnav > li, #irc #nav_siteinfo, #irc #nav_siteinfo ul.subnav > li,
 #kb #nav_forums,
 #siteinfo #nav_irc,#devblog #nav_irc,#staffpm #nav_irc,#top10 #nav_irc,#rules #nav_irc,#about #nav_irc {
-    background: rgba($navigationbackground,$navigationbackground,$navigationbackground,0.15);
+    background: rgba($navigationbackground,0.15);
 }
 
 #forums #nav_siteinfo, #forums #nav_siteinfo ul.subnav > li,
 #kb #nav_torrents, #kb #nav_torrents ul.subnav > li,
 #siteinfo #nav_forums,#devblog #nav_forums,#staffpm #nav_forums,#top10 #nav_forums,#rules #nav_forums,#about #nav_forums {
-    background: rgba($navigationbackground,$navigationbackground,$navigationbackground,0.1);
+    background: rgba($navigationbackground,0.1);
 }
 
 #siteinfo #nav_torrents,#devblog #nav_torrents,#staffpm #nav_torrents,#top10 #nav_torrents,#rules #nav_torrents,#about #nav_torrents,
 #siteinfo #nav_torrents ul.subnav > li,#devblog #nav_torrents ul.subnav > li,#staffpm #nav_torrents ul.subnav > li,#top10 #nav_torrents ul.subnav > li,#rules #nav_torrents ul.subnav > li,#about #nav_torrents ul.subnav > li  {
-    background: rgba($navigationbackground,$navigationbackground,$navigationbackground,0.05);
+    background: rgba($navigationbackground,0.05);
 }
 
 #requests #nav_requests,#screenshots #nav_screenshots,#collage #nav_collages,#projects #nav_projects,#serieslist #nav_series,#rules #nav_rules,#about #nav_about,#devblog #nav_devblog,#staffpm #nav_staffpm {
@@ -1321,10 +1321,6 @@ a[href^='alltorrents.php?action=history&userid='] {
     margin: 0 auto;
     padding: 10px 0;
 }
-/*
-#wrapper a[href="/index.php"] + #searchbars:nth-child(4) > ul {
-    top: -258px !important;
-}*/
 
 #searchbars {
     margin: 0 auto;
@@ -2275,8 +2271,21 @@ span.freeleech {
     text-indent: 0em;
 }
 
-.pruned, .deleted_post {
+.deleted_post {
     opacity: 0.35 !important;
+}
+
+.pruned {
+    opacity: 1 !important;
+    color: rgba($primaryfontcolour, 0.35);
+}
+
+.pruned a {
+    color: rgba($link, 0.35);
+}
+
+.pruned a[title="Download"] {
+    background: rgba(#709F31, 0.35);
 }
 
 tr.freeleech a[title='Download']:after {
@@ -3136,7 +3145,6 @@ ul.trophies li {
     border: $primaryborder;
     padding: 5px 0;
     width: 422px !important;
-    background: #E1E9EF;
     background: $primarybackground;
 }
 
@@ -3184,7 +3192,7 @@ img[src*='coverflow-error.jpg'] {
 
 #cover-slider .caption:hover {
     text-indent: 0;
-    background: rgba(0,0,0,0.5);
+    background: rgba(#000,0.5);
 }
 
 #cover-slider .next {
@@ -3417,7 +3425,7 @@ img[src*='coverflow-error.jpg'] {
 }
 
 #footer tr {
-    background: rgba(255,255,255,0.6);
+    background: rgba(#FFF,0.6);
 }
 
 #donation_column {

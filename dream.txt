@@ -2,14 +2,14 @@
 @mixin background() {
     background-color: #F4E9D5;
 }
-$primarybackground: rgba(255,255,255,0.3) !important;
-$secondarybackground: rgba(255,255,255,0.5);
-$tertiarybackground: rgba(0,0,0,0.8) !important;
+$primarybackground: rgba(#FFF,0.3) !important;
+$secondarybackground: rgba(#FFF,0.5);
+$tertiarybackground: rgba(#000,0.8) !important;
 
 $headerbackground: #F4E9D5;
 $menubackground: #EFDFC2;
 $searchbackground: #FAF4EB;
-$navigationbackground: 0;
+$navigationbackground: #000;
 
 $primaryfontcolour: #2B2B2B;
 $secondaryfontcolour: #696969;
