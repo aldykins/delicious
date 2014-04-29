@@ -174,21 +174,21 @@ ul.dropdown li:hover {
     margin-left: -3px;
 }
 
-img[src="/static//common/avatars/nsfw_avatar.png"] {
+img[src="/static//common/avatars/nsfw_avatar.png"], img[src="https://animebytes.tv/static//common/avatars/nsfw_avatar.png"] {
     width: 0px;
     height: 150px;
     padding-right: 150px;
     background: transparent url('dark NSFW.png') top left no-repeat;
 }
 
-img[src="/static//common/avatars/nsfw_avatar.png"].friend_ava {
+img[src="/static//common/avatars/nsfw_avatar.png"].friend_ava, img[src="https://animebytes.tv/static//common/avatars/nsfw_avatar.png"].friend_ava {
     width: 0px;
     height: 55px;
     padding-right: 75px;
     background: transparent url('dark NSFW friends.png') top left no-repeat;
 }
 
-.avatar_c img[src="/static//common/avatars/nsfw_avatar.png"] {
+.avatar_c img[src="/static//common/avatars/nsfw_avatar.png"], .avatar_c img[src="https://animebytes.tv/static//common/avatars/nsfw_avatar.png"]{
     width: 0px;
     height: 100px;
     padding-right: 100px;
