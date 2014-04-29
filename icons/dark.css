@@ -194,3 +194,23 @@ img[src="/static//common/avatars/nsfw_avatar.png"].friend_ava, img[src="https://
     padding-right: 100px;
     background: transparent url('dark NSFW comments.png') top left no-repeat;
 }
+
+#searchbars input[value='Series']:focus {
+    background: #FAF4EB url("dark searchbg.png") 0px 3px no-repeat;
+}
+
+#searchbars input[value='Albums']:focus {
+    background: #FAF4EB url("dark searchbg.png") 0px -37px no-repeat;
+}
+
+#searchbars input[value='Artist']:focus {
+    background: #FAF4EB url("dark searchbg.png") 0px -77px no-repeat;
+}
+
+#searchbars input[value='Forums']:focus {
+    background: #FAF4EB url("dark searchbg.png") 0px -117px no-repeat;
+}
+
+#searchbars input[value='Users']:focus {
+    background: #FAF4EB url("dark searchbg.png") 0px -153px no-repeat;
+}

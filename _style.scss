@@ -1322,7 +1322,7 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 #searchbars input:hover {
-    color: $primaryfontcolour;
+    color: $secondaryfontcolour;
 }
 
 #searchbars ul li {
@@ -1368,26 +1368,6 @@ a[href^='alltorrents.php?action=history&userid='] {
     cursor: text;
     text-align: left;
     box-shadow: none !important;
-}
-
-#searchbars input[value='Series']:focus {
-    background: $searchbackground url("images/searchbg.png") 0px 3px no-repeat;
-}
-
-#searchbars input[value='Albums']:focus {
-    background: $searchbackground url("images/searchbg.png") 0px -37px no-repeat;
-}
-
-#searchbars input[value='Artist']:focus {
-    background: $searchbackground url("images/searchbg.png") 0px -77px no-repeat;
-}
-
-#searchbars input[value='Forums']:focus {
-    background: $searchbackground url("images/searchbg.png") 0px -117px no-repeat;
-}
-
-#searchbars input[value='Users']:focus {
-    background: $searchbackground url("images/searchbg.png") 0px -153px no-repeat;
 }
 
 #content {
