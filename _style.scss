@@ -45,7 +45,7 @@ blockquote strong a:hover, .blockquote strong a:hover, .spoilerContainer strong 
     color: $linkhover !important;
 }
 
-span > strong {
+span[style*="color"] > strong {
     color: inherit;
 }
 
