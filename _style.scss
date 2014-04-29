@@ -3477,6 +3477,36 @@ span.size10 {
     clear: both;
 }
 
+#dynamikku h3, #dynamikku #desc_edit, #dynamikku #editExtendAn, #dynamikku #links_form, #dynamikku #titles_form, #dynamikku #misc_form, #dynamikku #rename_form {
+    text-align: center;
+}
+
+#dynamikku #desc_edit input[type="submit"], #dynamikku #editExtendAn input[type="submit"], #dynamikku #misc_form input[type="submit"], #dynamikku #rename_form input[type="submit"], #dynamikku #misc_form h3:nth-child(5), #dynamikku #editExtendAn .staff_div + input {
+    margin-top: 5px;
+}
+
+#dynamikku .songAdd input[name="song_title2[]"], #dynamikku .songEdit input[name="song_title2[]"], #dynamikku .studio_div + .studio_div input.studio_in, #dynamikku .staff_div + .staff_div .staff_in {
+    border-top: none !important;
+}
+
+#dynamikku #editExtendAn .staff_div .staff_in {
+    height: 17px;
+}
+
+#dynamikku #editExtendAn .studio_div + h3 {
+    margin-top: 15px;
+}
+
+#dynamikku #editExtendAn select[class="staff_sel"] {
+    width: 125px;
+    height: 24px;
+}
+
+#verify_div .box.pad {
+    background: $primarybackground;
+    border: $primaryborder;
+}
+
 #index .tabs,#edit_menu {
     border-bottom: $primaryborder;
 }
