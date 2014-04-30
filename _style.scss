@@ -472,6 +472,10 @@ input[type='button'],input[type='submit'] {
     padding: 10px;
 }
 
+#user h2 img[alt="Donor"] + img[alt="Special Sign"] {
+    margin-left: 3px;
+}
+
 #user_leftcol .box,#user_rightcol .box, #user_leftcol .ucontact {
     overflow: hidden;
     background-color: $primarybackground;
