@@ -4131,3 +4131,9 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
 #kb form input, #kb form textarea {
     margin-bottom: 5px;
 }
+
+#wrapper > a {
+    display: block;
+    width: 1024px;
+    margin: 0 auto;
+}
