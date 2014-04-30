@@ -154,7 +154,7 @@ a[href*='user.php?id=']:hover,.post_wrap a[href*='torrents.php?id=']:hover,.post
     color: $usertorrenthover !important;
 }
 
-a[rel='external']:hover,a[href^='http://']:not([href*='animebytes.tv']):hover {
+a[rel='external']:hover,a[href^='http://']:not([href*='animebytes.tv']):hover,a[href^='https://']:not([href*='animebytes.tv']):hover {
     text-decoration: underline;
 }
 
