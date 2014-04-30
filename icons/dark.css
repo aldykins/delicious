@@ -214,3 +214,53 @@ img[src="/static//common/avatars/nsfw_avatar.png"].friend_ava, img[src="https://
 #searchbars input[value='Users']:focus {
     background: #FAF4EB url("dark searchbg.png") 0px -153px no-repeat;
 }
+
+#user_comments .commentbody {
+    margin-top: 10px;
+}
+
+span.usercomment_posttime {
+    margin-right: 35px !important;
+}
+
+#user_comments .commentbody p:first-child {
+    margin-top: -36px;
+    text-align: right;
+    margin-bottom: 15px;
+    height: 21px;
+}
+
+#user_comments a[onclick^="Edit_Form"] {
+    font-size: 0;
+    background: url('dark.png') 0px 0px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    margin-top: 5px;
+    margin-right: 84px;
+}
+
+#user_comments a[onclick^="Delete"] {
+    font-size: 0;
+    background: url('dark.png') 0px -105px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    margin-top: 5px;
+    margin-right: 84px;
+    margin-left: -87px;
+}
+
+#user_comments a[onclick^="Quote"] {
+    font-size: 0;
+    background: url('dark.png') 0px -23px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    padding-top: 4px;
+    margin-right: 1px;
+}
+
+#user_comments .com-report {
+    margin-right: 2px;
+}
