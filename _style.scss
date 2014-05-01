@@ -246,7 +246,7 @@ input[type='button'],input[type='submit'] {
     border: none;
 }
 
-.posted_info,.last-edited,.user_fields li,.threads-cont,.posts-cont,.userstatsleft,.userstatsright,.fpoll ul,.group_statbox ul,#screenshots .information,.group_cont .placeholder span,#donation_column {
+.posted_info,.last-edited,.user_fields li,.threads-cont,.posts-cont,.userstatsleft,.userstatsright,.group_statbox ul,#screenshots .information,.group_cont .placeholder span,#donation_column {
     font-size: .92em;
 }
 
@@ -3621,10 +3621,6 @@ span.size10 {
     list-style: none;
     padding: 10px 0px;
     margin: 5px 0 -20px;
-}
-
-.poll li {
-    font-size: 11px;
 }
 
 .poll .graph {
