@@ -264,3 +264,13 @@ span.usercomment_posttime {
 #user_comments .com-report {
     margin-right: 2px;
 }
+
+#user_comments a[onclick^="Delete"], #user_comments a[onclick^="Edit_Form"] {
+    position: relative;
+    z-index: 1;
+}
+
+#user_comments a[onclick^="Quote"], #user_comments .com-report {
+    position: relative;
+    z-index: 2;
+}
