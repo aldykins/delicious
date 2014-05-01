@@ -206,24 +206,6 @@ input[type='button'],input[type='submit'] {
     border-radius: 3px;
 }
 
-ul.dropdown {
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-}
-
-ul.dropdown ul {
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-}
-
-ul.dropdown ul ul {
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-}
-
 #index .tabs .selected,.tabs ul li.selected a,#edit_menu ul li a,#browse_search,.filter_torrents,.placeholder,.torrent_table .pad blockquote,#quickpostform {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -598,7 +580,7 @@ tr.head td,tr.colhead td,tr.colhead_dark td {
     font-weight: bold;
 }
 
-#filter .tabs,.keywords,.up-control a,.down-control a,ul.dropdown,.page-link,.next-prev {
+#filter .tabs,.keywords,.up-control a,.down-control a,.page-link,.next-prev {
     background: $primarybackground;
 }
 
@@ -2031,6 +2013,8 @@ ul.dropdown ul {
 
 #forums ul.dropdown {
     width: 978px;
+    margin-top: 25px;
+    margin-bottom: -20px;
 }
 
 ul.dropdown {
@@ -2041,9 +2025,7 @@ ul.dropdown {
     display: inline-block;
     text-align: center;
     white-space: nowrap;
-    -moz-box-shadow: 0 1px 1px #f8f8f8, inset 0px 1px 0px white;
-    -webkit-box-shadow: 0 1px 1px #f8f8f8, inset 0px 1px 0px white;
-    box-shadow: 0 1px 1px #f8f8f8, inset 0px 1px 0px white;
+    background: $menubackground;
 }
 
 ul.dropdown li {
@@ -2051,7 +2033,7 @@ ul.dropdown li {
     font-weight: bold;
     margin: 0;
     zoom: 1;
-    background: url("images/fdda.png") center right no-repeat;
+    background: $menubackground;
 }
 
 ul.dropdown li:last-child a {
@@ -2059,7 +2041,7 @@ ul.dropdown li:last-child a {
 }
 
 ul.dropdown li:hover a {
-    color: #8E94A0;
+    color: $linkhover;
 }
 
 ul.dropdown li a {
@@ -2068,13 +2050,7 @@ ul.dropdown li a {
     border-right: none;
     color: $primaryfontcolour;
     line-height: 30px;
-    border-right: 1px solid #cbcbcb;
-}
-
-ul.dropdown li:hover {
-    -moz-box-shadow: 0 1px 12px #DDDDDD inset;
-    -webkit-box-shadow: 0 1px 12px #DDDDDD inset;
-    box-shadow: 0 1px 12px #DDDDDD inset;
+    border-right: $primaryborder;
 }
 
 ul.dropdown li:last-child a {
@@ -2094,25 +2070,7 @@ ul.dropdown ul li a {
 }
 
 ul.dropdown ul li a:hover {
-    color: #8e94a0 !important;
-}
-
-ul.dropdown ul li:hover {
-    -webkit-box-shadow: inset 0px 0px 0px !important;
-    -moz-box-shadow: inset 0px 0px 0px !important;
-    box-shadow: inset 0px 0px 0px !important;
-}
-
-ul.dropdown li:hover a:after {
-    background: #e6e6e6;
-    content: " ";
-    display: block;
-    height: 1px;
-    left: 0;
-    position: absolute;
-    top: 28px;
-    width: 100%;
-    z-index: 5;
+    color: $linkhover !important;
 }
 
 ul.dropdown ul {
@@ -2121,21 +2079,13 @@ ul.dropdown ul {
     visibility: hidden;
     position: absolute;
     list-style: none;
-    top: 28px;
+    top: 30px;
     left: -1px;
-    background: #e9e9e9;
+    background: $headerbackground;
     padding: 10px 5px;
     width: auto;
     min-width: 150px;
     border: $primaryborder;
-    -moz-border-radius-topleft: 0px;
-    -moz-border-radius-topright: 3px;
-    -moz-border-radius-bottomright: 3px;
-    -moz-border-radius-bottomleft: 3px;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
 }
 
 ul.dropdown ul li {
@@ -2161,19 +2111,7 @@ ul.dropdown ul li a {
 ul.dropdown ul ul {
     left: 100%;
     top: 0;
-    border-left: none;
-    -webkit-border-top-right-radius: 3px;
-    -webkit-border-bottom-left-radius: 0px;
-    -webkit-border-bottom-right-radius: 3px;
-    -moz-border-radius-topright: 3px;
-    -moz-border-radius-bottomleft: 0px;
-    -moz-border-radius-bottomright: 3px;
-    border-top-right-radius: 3px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 3px;
-    border-top: $primaryborder;
-    border-right: $primaryborder;
-    border-bottom: $primaryborder;
+    border: $primaryborder;
 }
 
 ul.dropdown li:hover > ul {
