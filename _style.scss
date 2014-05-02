@@ -479,6 +479,11 @@ input[type='button'],input[type='submit'] {
     margin-top: 5px;
 }
 
+#user_leftcol .box div img[title="IceCream"] + br + img[title="Watermelon"] {
+    margin-top: -15px;
+    margin-left: 160px;
+}
+
 .friendslist dt:first-child, .friendslist dd:nth-child(2) {
     margin-top: 0px;
 }
