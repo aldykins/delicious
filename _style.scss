@@ -2500,6 +2500,11 @@ td.center {
     padding: 10px !important;
 }
 
+.torrent_table td:first-child {
+    max-width: 480px;
+    word-wrap: break-word;
+}
+
 table.mediainfo table, table.mediainfo table td {
     border: none !important;
     padding: 0;
