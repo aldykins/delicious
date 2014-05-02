@@ -206,7 +206,7 @@ input[type='button'],input[type='submit'] {
     border-radius: 3px;
 }
 
-#index .tabs .selected,.tabs ul li.selected a,#edit_menu ul li a,#browse_search,.filter_torrents,.placeholder,.torrent_table .pad blockquote,#quickpostform {
+#index .tabs .selected,.tabs ul li.selected a,#edit_menu ul li a,#browse_search,.filter_torrents,.placeholder,.torrent_table .pad blockquote,#quickpostform, #edit_menu li.ui-state-active a, #edit_menu li.ui-tabs-active a, #userform ul.ue_tabs a.selected {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -3402,7 +3402,7 @@ span.size10 {
     display: none;
 }
 
-#edit_menu li {
+#edit_menu li, .ue_tabs li {
     float: left;
     display: block;
 }
@@ -3476,19 +3476,31 @@ span.size10 {
     margin-right: 0px !important;
 }
 
-#index .tabs a,.tabs li a,#edit_menu li a,#friendnav a {
+ul.ue_tabs {
+    padding: 10px 10px 28px !important;
+    list-style: none outside none;
+    border-bottom: 1px solid #84878B;
+    width: 100%;
+}
+
+#userform .ue_tabs li {
+    font-size: 0px;
+}
+
+#index .tabs a,.tabs li a,#edit_menu li a,#friendnav a, #userform ul.ue_tabs a {
     padding: 5px 10px;
     display: block;
     font-weight: normal;
+    font-size: 12px;
     margin: 0 5px;
     background: $secondarybackground;
 }
 
-#edit_menu li.ui-state-active a, #edit_menu li.ui-tabs-active a {
-    color: $primaryfontcolour;
+#userform ul.ue_tabs a {
+    display: inline;
 }
 
-#index .tabs a:first-child,.tabs li a:first-child,#edit_menu li a:first-child,#friendnav a:first-child {
+#index .tabs a:first-child,.tabs li a:first-child,#edit_menu li a:first-child,#friendnav a:first-child,#userform ul.ue_tabs a:first-child {
     margin: 0 5px 0 0;
 }
 
@@ -3502,10 +3514,12 @@ span.size10 {
     -moz-outline-style: none;
 }
 
-#index .tabs .selected,.tabs ul li.selected a,#edit_menu ul li a {
+#index .tabs .selected,.tabs ul li.selected a,#edit_menu ul li a, #edit_menu li.ui-state-active a, #edit_menu li.ui-tabs-active a, #userform ul.ue_tabs a.selected {
     background: $primarybackground;
     color: $primaryfontcolour;
+    text-decoration: none;
     font-weight: bold;
+    font-size: 12px;
     border: $primaryborder
 }
 
