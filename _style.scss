@@ -1824,34 +1824,26 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 /* Best posts */
-.post_block.user_17317 {
-    background: rgba(0,0,255,$colouredposttransparency);
+.post_block.user_17317 .head {
+    background: rgba(#0099FF,$colouredposttransparency) !important;
 }
 
 /* Cutest posts */
-.post_block.user_18701 {
-    background: rgba(255,102,217,$colouredposttransparency);
+.post_block.user_18701 .head {
+    background: rgba(#FF3AD9,$colouredposttransparency) !important;
 }
 
 /* Coolest posts */
-.post_block.user_14883, .post_block.user_16571, .post_block.user_21070 {
-    background: rgba(24,153,91,$colouredposttransparency);
+.post_block.user_14883 .head, .post_block.user_16571 .head, .post_block.user_21070 .head {
+    background: rgba(#18995B,$colouredposttransparency) !important;
 }
 
-/* Developer posts */
-.post_block.user_19023, .post_block.user_20307, .post_block.user_20403, .post_block.user_27082 {
-    background: rgba(255,163,26,$colouredposttransparency);
-}
-
-/* Moderator and Senior Moderator posts */
-.post_block.user_9339, .post_block.user_12326, .post_block.user_15435, .post_block.user_20811,
-.post_block.user_30, .post_block.user_234, .post_block.user_2939, .post_block.user_3573, .post_block.user_6245 {
-    background: rgba(234,82,113,$colouredposttransparency);
-}
-
-/* Administrator posts */
-.post_block.user_12, .post_block.user_261, .post_block.user_636, .post_block.user_20840 {
-    background: rgba(251,26,65,$colouredposttransparency);
+/* Staff posts */
+/* Developer */ .post_block.user_19023 .head, .post_block.user_20307 .head, .post_block.user_20403 .head, .post_block.user_27082 .head,
+/* Moderator */ .post_block.user_9339 .head, .post_block.user_12326 .head, .post_block.user_15435 .head, .post_block.user_20811 .head,
+/* Senior Moderator */ .post_block.user_30 .head, .post_block.user_234 .head, .post_block.user_2939 .head, .post_block.user_3573 .head, .post_block.user_6245 .head,
+/* Administrator */ .post_block.user_12 .head, .post_block.user_261 .head, .post_block.user_636 .head, .post_block.user_20840 .head {
+    background: rgba(#D71A41,$colouredposttransparency) !important;
 }
 
 .post_body {
