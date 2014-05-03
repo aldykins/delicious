@@ -178,7 +178,7 @@ input[type="checkbox"] {
     background: inherit;
 }
 
-#userinfo .subnav,.thin,.post_controls,#edit_menu,.tabs ul,#friendnav,.friends_right li,#footer_inner,.permissions {
+#userinfo .subnav,.post_controls,#edit_menu,.tabs ul,#friendnav,.friends_right li,#footer_inner,.permissions {
     overflow: hidden;
 }
 
@@ -1914,7 +1914,7 @@ span.uf_left,span.uf_right {
     margin: 0 auto;
 }
 
-.avatar, #user_leftcol .center:first-child {
+.avatar {
     max-height: 458px; /* grrr Zeroxv */
     overflow: hidden;
 }
@@ -1927,7 +1927,45 @@ span.uf_left,span.uf_right {
     background: transparent url('images/avatar.png') top right no-repeat;
 }
 
-#forums .thin, .post_block.user_17317, .post_block.user_17317 .avatar {
+#user_leftcol .center:first-child img[title^="aldy"] {
+    width: 0px;
+    height: 290px;
+    padding-left: 256px;
+    margin-left: -57px;
+    background: transparent url('images/avatar.png') top right no-repeat;
+}
+
+#userhistory .forum_post img[title^="aldy"] {
+    width: 0px;
+    height: 247px;
+    padding-left: 256px;
+    margin-left: -99px;
+    background: transparent url('images/avatarhistory.png') top right no-repeat;
+}
+
+#user_comments .avatar_c img[title^="aldy"] {
+    width: 0px;
+    height: 170px;
+    padding-left: 150px;
+    margin-left: -40px;
+    background: transparent url('images/avatarcomments.png') top right no-repeat;
+}
+
+#user_leftcol .friendslist img[title^="aldy"] {
+    width: 0px;
+    height: 55px;
+    padding-left: 118px;
+    background: transparent url('images/avatarcomments.png') top right no-repeat;
+}
+
+#friends .flist_av img[title^="aldy"] {
+    width: 0px;
+    padding-left: 152px;
+    background: transparent url('images/avatarcomments.png') top right no-repeat;
+    height: 170px;
+}
+
+.post_block.user_17317, .post_block.user_17317 .avatar, #user_leftcol .center:first-child, #userhistory .avatar, .avatar_c, .flist_av, .floatleft.clearcont.friends_left {
     overflow: visible !important;
 }
 
