@@ -2252,8 +2252,16 @@ tr.freeleech a[title='Download']:after {
     padding: 5px !important;
 }
 
-#torrents #browse_nav_top + #browse_nav_bottom + .box.pad h2:first-child, #torrents2 #browse_nav_top + #browse_nav_bottom + .box.pad h2:first-child {
+#torrents #browse_nav_top + #browse_nav_bottom + .box.pad h2:first-child, #torrents2 #browse_nav_top + #browse_nav_bottom + .box.pad h2:first-child, #alltorrents .box.pad h2 {
     display: block !important;
+}
+
+#alltorrents .linkbox {
+    font-size: 0px;
+}
+
+#alltorrents .linkbox h3 > a {
+    font-size: 14px !important;
 }
 
 #categories {
