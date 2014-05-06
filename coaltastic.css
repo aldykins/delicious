@@ -1,5 +1,5 @@
 /***********************************************************
-------------------- Milky Way Stylesheet -------------------
+------------------- Coaltastic Stylesheet ------------------
 
         Design and CSS: aldy
         
@@ -12,6 +12,6 @@
 
 ***********************************************************/
 
-@import url("milkyways.css");
+@import url("coaltastics.css");
 @import url("icons/light.css");
-@import url("bbcode/blue.css");
+@import url("bbcode/grey.css");

@@ -103,7 +103,7 @@ h2 {
     font-size: 1.5em;
     display: inline-block !important;
     background: $primarybackground;
-    border: 1px solid $header;
+    border: 1px solid $headerborder;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
@@ -353,9 +353,6 @@ input[type='submit']:hover,input[type='button']:hover {
 th.torrent_properties a:hover {
     cursor: pointer;
     cursor: hand;
-    -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
-    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
 }
 
 input[type='submit']::-moz-focus-inner,input[type='button']::-moz-focus-inner {
@@ -412,7 +409,7 @@ input[type='button'],input[type='submit'] {
 }
 
 .linkbox > a {
-    color: $tertiaryfontcolour;
+    color: $secondaryfontcolour;
 }
 
 .linkbox > a:hover {
@@ -932,10 +929,10 @@ pre.php {
     line-height: 23px;
     height: 25px;
     vertical-align: middle;
-    color: $primaryfontcolour;
+    color: $tertiaryfontcolour;
 }
 
-#userinfo a {
+#userinfo a, #userinfo strong {
     color: $tertiaryfontcolour;
     vertical-align: middle;
 }
@@ -950,7 +947,7 @@ pre.php {
 }
 
 #userinfo .navmenu:hover,#userinfo #yen_count:hover {
-    background: $primarybackground;
+    background: rgba($navigationbackground,0.1);
 }
 
 #userinfo .navmenu.nojs:hover,#userinfo .navmenu.selected,#userinfo #yen_count.nojs:hover,#userinfo #yen_count.selected {
@@ -1794,7 +1791,7 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 .post_id {
-    line-height: 1em;
+    line-height: 1.2em;
     margin-right: 4px;
 }
 
@@ -2229,8 +2226,13 @@ tr.freeleech a[title='Download']:after {
     display: none !important;
 }
 
-#browse_nav_top,#browse_nav_bottom,.group_cont {
+#browse_nav_top,.group_cont {
     width: 100% !important;
+}
+
+#browse_nav_bottom {
+    width: 800px !important;
+    margin: 10px auto !important;
 }
 
 #browse_nav_sections {
@@ -2974,7 +2976,7 @@ img[src='/static/common/caticons/pv.png'] {
     margin-bottom: 10px;
 }
 
-#user_comments input {
+#user_comments input, .post_body input {
     margin-right: 5px;
 }
 
@@ -3796,6 +3798,10 @@ ul.ue_tabs {
     color: #fff;
 }
 
+#forums table + br + table + br + table + br + table + br + table + div.linkbox + br + div.box > div.head > strong > a, #forums table + br + table + br + table + br + table + br + table + div.linkbox + br + div.box + br + div.box > div.head > strong > a {
+    color: #fff;
+}
+
 /* Aka-chan */
 a.permission_2,.permission_2 {
     color: #BEC2CC;
@@ -4080,6 +4086,7 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
     margin-bottom: 70px;
     background: $primarybackground;
     padding: 10px;
+    width: 100%;
 }
 
 #userform #tabs p {

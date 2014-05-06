@@ -1,11 +1,3 @@
-#logo a {
-    background: url("light logo.png") 0px 0px no-repeat;
-}
-
-#logo a:hover {
-    background: url("light logo.png") 0px -35px no-repeat;
-}
-
 .stext {
     display: none;
 }
@@ -192,26 +184,6 @@ img[src="/static//common/avatars/nsfw_avatar.png"].friend_ava, img[src="https://
     height: 100px;
     padding-right: 100px;
     background: transparent url('light NSFW comments.png') top left no-repeat;
-}
-
-#searchbars input[value='Series']:focus {
-    background: #35353f url("light searchbg.png") 0px 3px no-repeat;
-}
-
-#searchbars input[value='Albums']:focus {
-    background: #35353f url("light searchbg.png") 0px -37px no-repeat;
-}
-
-#searchbars input[value='Artist']:focus {
-    background: #35353f url("light searchbg.png") 0px -77px no-repeat;
-}
-
-#searchbars input[value='Forums']:focus {
-    background: #35353f url("light searchbg.png") 0px -117px no-repeat;
-}
-
-#searchbars input[value='Users']:focus {
-    background: #35353f url("light searchbg.png") 0px -153px no-repeat;
 }
 
 #user_comments .commentbody {

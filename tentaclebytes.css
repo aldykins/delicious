@@ -1,5 +1,5 @@
 /***********************************************************
-------------------- Milky Way Stylesheet -------------------
+----------------- Tentaclebytes Stylesheet -----------------
 
         Design and CSS: aldy
         
@@ -12,6 +12,6 @@
 
 ***********************************************************/
 
-@import url("milkyways.css");
-@import url("icons/light.css");
-@import url("bbcode/blue.css");
+@import url("tentaclebytess.css");
+@import url("icons/dark.css");
+@import url("bbcode/black.css");

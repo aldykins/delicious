@@ -1,3 +1,11 @@
+#logo a {
+    background: url("logo.png") 0px 0px no-repeat;
+}
+
+#logo a:hover {
+    background: url("logo.png") 0px -35px no-repeat;
+}
+
 img[src="/static/common/symbols/bold.png"] {
     width: 0px;
     height: 20px;
@@ -102,4 +110,24 @@ img[src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAG
     height: 20px;
     padding-right: 20px;
     background: transparent url('brown/aldy.png') top left no-repeat;
+}
+
+#searchbars input[value='Series']:focus {
+    background: #FAF4EB url("dark searchbg.png") 0px 3px no-repeat;
+}
+
+#searchbars input[value='Albums']:focus {
+    background: #FAF4EB url("dark searchbg.png") 0px -37px no-repeat;
+}
+
+#searchbars input[value='Artist']:focus {
+    background: #FAF4EB url("dark searchbg.png") 0px -77px no-repeat;
+}
+
+#searchbars input[value='Forums']:focus {
+    background: #FAF4EB url("dark searchbg.png") 0px -117px no-repeat;
+}
+
+#searchbars input[value='Users']:focus {
+    background: #FAF4EB url("dark searchbg.png") 0px -153px no-repeat;
 }
