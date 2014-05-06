@@ -1314,7 +1314,7 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 #searchbars input:hover {
-    color: rgba($tertiaryfontcolour,0.7);
+    color: rgba($tertiaryfontcolour,0.5);
 }
 
 #searchbars ul li {
@@ -2176,6 +2176,14 @@ span.download_link a,a[title='Download'] {
 
 tr.freeleech a {
     color: #B58D15;
+}
+
+tr.pruned.freeleech a {
+    color: rgba(#B58D15,0.35);
+}
+
+tr.pruned img {
+    opacity: 0.35;
 }
 
 span.freeleech {
