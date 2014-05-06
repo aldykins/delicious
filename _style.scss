@@ -1834,7 +1834,7 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 /* Coolest posts */
-.post_block.user_14883 .head, .post_block.user_16571 .head, .post_block.user_21070 .head {
+.post_block.user_14883 .head, .post_block.user_21070 .head {
     background: rgba(#18995B,$colouredposttransparency) !important;
 }
 
@@ -4067,14 +4067,14 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
     };
 }
 
-#forum_49 strong a:after {
-    content: '? what if im gay';
-}
-
 #forum_49 .sticky + strong a:after {
     content: '';
 }
 */
+
+#forum_49 strong a:after {
+    content: '? what if im gay';
+}
 
 #userform #tabs {
     margin-bottom: 70px;
