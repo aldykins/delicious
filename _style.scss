@@ -1762,7 +1762,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     font-size: .83em;
 }
 
-#forums table, #user table, #torrents table, #torrents2 table, #inbox table, #top10 table, #konbini table, #alltorrents table, #index #tabs, #rules table, #userhistory table, #requests table, #collage table, #irc table, #block table, #artist table, #series table, #screenshots table, #staffpm table, #serieslist table, #projects table, #reports table, #scholarapp table, #tools table {
+#forums table, #user table, #torrents table, #torrents2 table, #inbox table, #top10 table, #konbini table, #alltorrents table, #index #tabs, #rules table, #userhistory table, #requests table, #collage table, #irc table, #block table, #artist table, #series table, #screenshots table, #staffpm table, #serieslist table, #projects table, #reports table, #scholarapp table, #tools table, #log table, #logchecker table {
     background-color: $primarybackground;
 }
 
@@ -4122,6 +4122,14 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
 
 #reports input[value="Update"] {
     margin-top: 10px;
+}
+
+#reports table textarea {
+    width: 777px;
+}
+
+#reports table input[type="text"] {
+    width: 380px;
 }
 
 #import select, #import input {
