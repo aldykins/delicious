@@ -1314,7 +1314,7 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 #searchbars input:hover {
-    color: $secondaryfontcolour;
+    color: rgba($tertiaryfontcolour,0.7);
 }
 
 #searchbars ul li {
@@ -1353,7 +1353,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     background: $searchbackground;
     padding-left: 5px;
     font-size: 11px;
-    color: $primaryfontcolour;
+    color: $tertiaryfontcolour;
     font-weight: bold;
     text-shadow: 0px -1px 2px $searchbackground, 0px -2px 3px $searchbackground, 0px -5px 2px $searchbackground, 0px -3px 3px $searchbackground, 2px 0px 0px $searchbackground, 5px -1px 2px $searchbackground, 5px 0px 0px $searchbackground, 7px -1px 2px $searchbackground, 7px 0px 0px $searchbackground, 9px -1px 2px $searchbackground, 9px 0px 0px $searchbackground, 11px -1px 2px $searchbackground, 11px 0px 0px $searchbackground, 13px 0px 3px $searchbackground, 13px 0px 0px $searchbackground, 15px 0px 3px $searchbackground, 15px 0px 0px $searchbackground, 20px 0px 3px $searchbackground;
     filter: dropshadow(color=$searchbackground, offx=0, offy=-4);
