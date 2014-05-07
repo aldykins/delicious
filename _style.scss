@@ -49,6 +49,14 @@ span[style*="color"] > strong {
     color: inherit;
 }
 
+.post_block .post > a > strong, .post_block .post > strong > a {
+    color: $link;
+}
+
+.post_block .post > a:hover > strong, .post_block .post > strong > a:hover {
+    color: $linkhover;
+}
+
 * {
     margin: 0;
     padding: 0;
