@@ -1380,7 +1380,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     max-width: 988px;
     margin: 0px auto;
     background: none;
-    padding: 20px 0;
+    padding: 20px 0 0;
     position: relative;
 }
 
@@ -3357,7 +3357,7 @@ img[src*='coverflow-error.jpg'] {
 
 #footer {
     width: 988px;
-    margin: 0 auto 10px;
+    margin: -20px auto 10px;
     color: $secondaryfontcolour;
     text-align: left;
 }
@@ -4189,7 +4189,7 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
     }
 
     #forums #content {
-        padding: 20px 5px 50px !important;
+        padding: 20px 5px 0 !important;
     }
     
     #forums #searchbars ul, #forums #userinfo {
