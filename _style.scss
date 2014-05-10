@@ -691,7 +691,7 @@ td,#staffpm .box.vertical_space,.usercomment,#inbox .box.vertical_space,.friendc
     padding: 8px;
 }
 
-#staffpm .box.vertical_space,#inbox .box.vertical_space {
+#staffpm .box.vertical_space,#inbox .box.vertical_space,#staffpm table tr {
     background: $primarybackground;
 }
 
@@ -708,7 +708,7 @@ td {
     background: transparent;
 }
 
-.permissions li:nth-child(even),.usercomment:nth-child(even),.friendcont:nth-child(even),#serieslist tr:nth-child(even) td,.firstset,.secondset,#forums table tr:nth-child(even) {
+.permissions li:nth-child(even),.usercomment:nth-child(even),.friendcont:nth-child(even),#serieslist tr:nth-child(even) td,.firstset,.secondset,#forums table tr:nth-child(even),#inbox table tr:nth-child(even),#staffpm table tr:nth-child(even) {
     background: $secondarybackground !important;
 }
 
