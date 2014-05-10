@@ -4168,3 +4168,27 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
     width: 1024px;
     margin: 0 auto;
 }
+
+@media all and (max-width: 1018px) and (min-width: 840px) {
+    #forums #logo {
+        display: none !important;
+    }
+
+    #forums, #forums #content, #forums #header , #forums #footer, #forums #searchbars, #forums #logo, #forums #userinfo, #forums #menu ul , #wrapper > a{
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    #forums #content {
+        padding: 20px 5px 50px !important;
+    }
+    
+    #forums #searchbars ul, #forums #userinfo {
+        right: 5px !important;
+    }
+    
+    #forums .main-menu.nobullet, #forums #footer {
+        padding: 0 5px !important;
+    }
+}
