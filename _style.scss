@@ -186,7 +186,7 @@ input[type="checkbox"] {
     background: inherit;
 }
 
-#userinfo .subnav,.post_controls,#edit_menu,.tabs ul,#friendnav,.friends_right li,#footer_inner,.permissions {
+#userinfo .subnav,.post_controls,#edit_menu,.tabs ul,#friendnav,.friends_right li,.permissions {
     overflow: hidden;
 }
 
@@ -236,7 +236,7 @@ input[type='button'],input[type='submit'] {
     border: none;
 }
 
-.posted_info,.last-edited,.user_fields li,.threads-cont,.posts-cont,.userstatsleft,.userstatsright,.group_statbox ul,#screenshots .information,.group_cont .placeholder span,#donation_column {
+.posted_info,.last-edited,.user_fields li,.threads-cont,.posts-cont,.userstatsleft,.userstatsright,.group_statbox ul,#screenshots .information,.group_cont .placeholder span {
     font-size: .92em;
 }
 
@@ -1380,7 +1380,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     max-width: 988px;
     margin: 0px auto;
     background: none;
-    padding: 20px 0px 50px 0px;
+    padding: 20px 0;
     position: relative;
 }
 
@@ -3357,11 +3357,9 @@ img[src*='coverflow-error.jpg'] {
 
 #footer {
     width: 988px;
-    margin: 0 auto;
+    margin: 0 auto 10px;
     color: $secondaryfontcolour;
-    margin-top: -60px;
-    margin-bottom: 10px;
-    text-align: right;
+    text-align: left;
 }
 
 #footer hr, #disclaimer_container {
@@ -3404,10 +3402,28 @@ img[src*='coverflow-error.jpg'] {
 }
 
 #donation_column {
-    text-align: center;
-    width: 200px;
+    text-align: right;
     float: right;
     color: $secondaryfontcolour;
+    display: block;
+    margin-top: 23px;
+    width: auto;
+    font-size: 0;
+    margin-right: 0;
+    white-space: nowrap;
+}
+
+#donation_column span > span:before {
+    content: 'Donations: ';
+    padding-left: 5px;
+}
+
+#donation_column .percent span {
+    font-size: 12px;
+}
+
+#donation_column a {
+    color: #9FFF8F;
 }
 
 #breadcrumbs span.main_title {
@@ -3973,14 +3989,6 @@ ul .invitetree {
 .percent span {
     background: #68c059 !important;
     line-height: 25px;
-}
-
-#donation_column:before {
-    content: 'Donations: ';
-}
-
-#donation_column a {
-    color: #9FFF8F;
 }
 
 /*
