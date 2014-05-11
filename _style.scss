@@ -4037,8 +4037,53 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
     margin-top: 20px;
 }
 
+#site_prefs input#styleurl {
+    width: 380px;
+}
+
+#site_prefs label[for="showmiku"]:after,#site_prefs label[for="viewavatars"]:after,#site_prefs label[for="viewsignatures"]:after,#browse_settings label[for="downloadalt"]:after {
+    content: '.';
+}
+
+#browse_settings select#hideold, #browse_settings select#autosearch, #browse_settings select#browseHentai, #browse_settings select#browseLolicon {
+    width: 235px;
+}
+
+#browse_settings select#autosearch {
+    margin-bottom: 3px;
+    margin-right: 50px;
+}
+
+#browse_settings select#browseLolicon {
+    margin-left: 3px;
+}
+
 #profile_settings textarea {
     margin-bottom: 5px;
+}
+
+#profile_settings input#avatar + span {
+    margin-right: 10px;
+}
+
+#profile_settings input#has_adultavatar {
+    margin-top: 5px;
+}
+
+#profile_settings label[for="has_adultavatar"],#profile_settings label[for="has_adultsignature"] {
+    font-size: 0;
+}
+
+#profile_settings label[for="has_adultavatar"]:before {
+    content: 'You MUST check this, if your avatar is of 18+ material or otherwise NSFW.';
+    font-weight: bold;
+    font-size: 12px;
+}
+
+#profile_settings label[for="has_adultsignature"]:before {
+    content: 'You MUST check this, if signature avatar is of 18+ material or otherwise NSFW.';
+    font-weight: bold;
+    font-size: 12px;
 }
 
 #upload #dynamic_form {
