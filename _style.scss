@@ -1975,7 +1975,54 @@ span.uf_left,span.uf_right {
     height: 170px;
 }
 
-.post_block.user_17317, .post_block.user_17317 .avatar, #user_leftcol .center:first-child, #userhistory .avatar, .avatar_c, .flist_av, .floatleft.clearcont.friends_left {
+.post_block.user_18701 .avatar img {
+    width: 0px;
+    height: 324px;
+    padding-left: 250px;
+    margin-left: -70px;
+    background: transparent url('images/leamas.png') top right no-repeat;
+}
+
+#user_leftcol .center:first-child img[title^="Leamas"] {
+    width: 0px;
+    height: 324px;
+    padding-left: 250px;
+    margin-left: -25px;
+    background: transparent url('images/leamas.png') top right no-repeat;
+}
+
+#userhistory .forum_post img[title^="Leamas"] {
+    width: 0px;
+    height: 283px;
+    padding-left: 218px;
+    margin-left: -48px;
+    background: transparent url('images/leamashistory.png') top right no-repeat;
+}
+
+#user_comments .avatar_c img[title^="Leamas"] {
+    width: 0px;
+    height: 194px;
+    padding-left: 150px;
+    margin-left: -35px;
+    background: transparent url('images/leamascomments.png') top right no-repeat;
+}
+
+#user_leftcol .friendslist img[title^="Leamas"] {
+    width: 0px;
+    height: 55px;
+    padding-left: 118px;
+    background: transparent url('images/leamascomments.png') -65px -25px no-repeat;
+}
+
+#friends .flist_av img[title^="Leamas"] {
+    width: 0px;
+    padding-left: 152px;
+    background: transparent url('images/leamascomments.png') top right no-repeat;
+    height: 194px;
+    margin-left: -15px;
+}
+
+.post_block.user_17317, .post_block.user_17317 .avatar, .post_block.user_18701, .post_block.user_18701 .avatar, #user_leftcol .center:first-child, #userhistory .avatar, .avatar_c, .flist_av, .floatleft.clearcont.friends_left {
     overflow: visible !important;
 }
 
