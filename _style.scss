@@ -4142,6 +4142,10 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
     margin: 0 auto;
 }
 
+#uploadQueue {
+    color: #000;
+}
+
 @media all and (max-width: 1018px) and (min-width: 840px) {
     #forums #logo {
         display: none !important;

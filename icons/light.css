@@ -322,3 +322,59 @@ a.permission_1,.permission_1 {
     color: #D71A41;
     font-weight: bold;
 }
+
+img[src="/static/common/quality_stars/blue.png"] {
+    width: 0px;
+    height: 15px;
+    padding-right: 15px;
+    background: transparent url('quality_stars/blue.png') top left no-repeat;
+}
+
+img[src="/static/common/quality_stars/green.png"] {
+    width: 0px;
+    height: 15px;
+    padding-right: 15px;
+    background: transparent url('quality_stars/green.png') top left no-repeat;
+}
+
+img[src="/static/common/quality_stars/purple.png"] {
+    width: 0px;
+    height: 15px;
+    padding-right: 15px;
+    background: transparent url('quality_stars/purple.png') top left no-repeat;
+}
+
+img[src="/static/common/quality_stars/red.png"] {
+    width: 0px;
+    height: 15px;
+    padding-right: 15px;
+    background: transparent url('quality_stars/red.png') top left no-repeat;
+}
+
+img[src="/static/common/quality_stars/tpurple.png"] {
+    width: 0px;
+    height: 15px;
+    padding-right: 15px;
+    background: transparent url('quality_stars/tpurple.png') top left no-repeat;
+}
+
+img[src="/static/common/quality_stars/tred.png"] {
+    width: 0px;
+    height: 15px;
+    padding-right: 15px;
+    background: transparent url('quality_stars/tred.png') top left no-repeat;
+}
+
+img[src="/static/common/quality_stars/white-outline.png"] {
+    width: 0px;
+    height: 14px;
+    padding-right: 15px;
+    background: transparent url('quality_stars/white-outline.png') top left no-repeat;
+}
+
+img[src="/static/common/quality_stars/yellow.png"] {
+    width: 0px;
+    height: 15px;
+    padding-right: 15px;
+    background: transparent url('quality_stars/yellow.png') top left no-repeat;
+}
