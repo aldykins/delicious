@@ -32,7 +32,7 @@ strong, strong a {
     color: $bold;
 }
 
-strong a:hover {
+strong a:hover, a:hover strong {
     font-weight: bold;
     color: $boldhover;
 }
@@ -3826,87 +3826,7 @@ ul.ue_tabs {
 }
 
 #forums table + br + table + br + table + br + table + br + table + div.linkbox + br + div.box, #forums table + br + table + br + table + br + table + br + table + div.linkbox + br + div.box + br + div.box {
-    background: $tertiarybackground;
-    color: #fff;
-}
-
-#forums table + br + table + br + table + br + table + br + table + div.linkbox + br + div.box > div.head > strong > a, #forums table + br + table + br + table + br + table + br + table + div.linkbox + br + div.box + br + div.box > div.head > strong > a {
-    color: #fff;
-}
-
-/* Aka-chan */
-a.permission_2,.permission_2 {
-    color: #BEC2CC;
-}
-
-/* User */
-a.permission_3,.permission_3 {
-    color: #4AAC85;
-}
-
-/* Power User */
-a.permission_4,.permission_4 {
-    color: #A4F698;
-}
-
-/* Elite */
-a.permission_22,.permission_22 {
-    color: #33FFCC;
-}
-
-/* Torrent Master */
-a.permission_7,.permission_7 {
-    color: #41C7BD;
-}
-
-/* Legend */
-a.permission_8,.permission_8 {
-    color: #35A3AC;
-}
-
-/* VIP */
-a.permission_6,.permission_6 {
-    color: #29829D;
-}
-
-/* Sensei */
-a.permission_27,.permission_27 {
-    color: #FBDE6E;
-    font-weight: bold;
-}
-
-/* Developer */
-a.permission_14,.permission_14 {
-    font-weight: bold;
-    color: #F7995B;
-}
-
-/* Moderator */
-a.permission_23,.permission_23 {
-    font-weight: bold;
-    color: #FFA31A;
-}
-
-/* Senior Moderator */
-a.permission_11,.permission_11 {
-    font-weight: bold;
-    color: #EA5371;
-}
-
-/* cat */
-a.permission_30,.permission_30 {
-    color: #CC0000;
-}
-
-/* im the designer */
-a.permission_29,.permission_29 {
-    color: #99FFFF;
-}
-
-/* Administrator */
-a.permission_1,.permission_1 {
-    color: #D71A41;
-    font-weight: bold;
+    border: $primaryborder;
 }
 
 .curtain {
