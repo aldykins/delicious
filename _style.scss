@@ -709,7 +709,7 @@ td {
 }
 
 .permissions li:nth-child(even),.usercomment:nth-child(even),.friendcont:nth-child(even),#serieslist tr:nth-child(even) td,.firstset,.secondset,#forums table tr:nth-child(even),#inbox table tr:nth-child(even),#staffpm table tr:nth-child(even) {
-    background: $secondarybackground !important;
+    background: $secondarybackground;
 }
 
 .label {
@@ -3829,7 +3829,7 @@ ul.ue_tabs {
 }
 
 .unreadpm {
-    background: rgba(84,125,166,0.4);
+    background: rgba(84,125,166,0.4) !important;
 }
 
 .r00 {
