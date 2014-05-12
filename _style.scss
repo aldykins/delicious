@@ -708,8 +708,12 @@ td {
     background: transparent;
 }
 
-.permissions li:nth-child(even),.usercomment:nth-child(even),.friendcont:nth-child(even),#serieslist tr:nth-child(even) td,.firstset,.secondset,#forums table tr:nth-child(even),#inbox table tr:nth-child(even),#staffpm table tr:nth-child(even) {
+.permissions li:nth-child(even),.usercomment:nth-child(even),.friendcont:nth-child(even),#serieslist tr:nth-child(even) td,.firstset,.secondset,#forums table tr:nth-child(even),#inbox table tr:nth-child(even),#staffpm table tr:nth-child(even),#rules table tr:nth-child(even),#block table tr:nth-child(odd),#top10 table tr:nth-child(even) {
     background: $secondarybackground;
+}
+
+#block tbody tr:first-child td {
+    border-top: none;
 }
 
 .label {
@@ -1778,6 +1782,10 @@ a[href^='alltorrents.php?action=history&userid='] {
 
 #top10 table, #requests table, #collage table {
     border-radius: 3px !important;
+}
+
+#top10 h2 + .linkbox + .center > form > input + table > tbody > tr {
+    background-color: $primarybackground;
 }
 
 #konbini table td {
