@@ -476,6 +476,10 @@ input[type='button'],input[type='submit'] {
     border-bottom: $primaryborder;
 }
 
+#user_comments.clearcont, #user_comments br + h3 + .box.pad {
+    overflow: visible !important;
+}
+
 #user_leftcol .box .center {
     padding-left:8px;
 }
