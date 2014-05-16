@@ -189,12 +189,12 @@ if (GM_getValue('delicioustreats') === 'true') {
 // Keyboard shortcuts by Alpha
 // Enables keyboard shortcuts for forum (new post and edit) and PM
 // Depends on injectScript
-if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('quickpost') || document.evaluate('//*[@class="post"/form/textarea', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null))) {
+if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('quickpost') || document.evaluate('//*[@class="post"]/form/textarea', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null))) {
 	function keyboardshortcuts() {
 		var ctrl = function(key, callback, args) {
 			document.addEventListener('keydown', function (e) {
 				if(!args) args=[];
-				if(e.keyCode === key.charCodeAt(0) && (e.ctrlKey || e.metaKey) && (document.activeElement === document.getElementById('quickpost') || document.activeElement === document.evaluate('//*[@class="post"/form/textarea', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue)) {
+				if(e.keyCode === key.charCodeAt(0) && (e.ctrlKey || e.metaKey) && (document.activeElement === document.getElementById('quickpost') || document.activeElement === document.evaluate('//*[@class="post"]/form/textarea', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue)) {
 					e.preventDefault();
 					callback.apply(this, args);
 					return false;
