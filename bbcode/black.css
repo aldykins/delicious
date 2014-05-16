@@ -84,7 +84,7 @@ img[src="/static/common/symbols/youtube.png"] {
     background: transparent url('black/youtube.png') top left no-repeat;
 }
 
-.smileyscell, #hsmileys {
+.smileyscell, #hoversmileys {
     background: rgba(255,255,255,0.5) !important;
 }
 
