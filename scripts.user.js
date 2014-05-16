@@ -13,6 +13,10 @@
 // Do not delete or something might break and stuff!! :(
 HTMLCollection.prototype.each = function (f) { for (var i=0, e=null; e=this[i]; i++) f.call(e, e); return this; };
 HTMLElement.prototype.clone = function (o) { var n = this.cloneNode(); n.innerHTML = this.innerHTML; if (o!==undefined) for (var e in o) n[e] = o[e]; return n; };
+// Thank firefox for this ugly shit. Holy shit firefox get your fucking shit together >:(
+function forEach (arr, fun) { return HTMLCollection.prototype.each.call(arr, fun); }
+function clone (ele, obj) { return HTMLElement.prototype.clone.call(ele, obj); }
+
 function injectScript (content, id) {
 	var script = document.createElement('script');
 	if (id) script.setAttribute('id', id);
@@ -76,12 +80,12 @@ if (window.location.pathname === '/user.php' && window.location.search.indexOf('
 
 
 // A couple GM variables that need initializing
-gm_delicioussmileys = initGM('delicioussmileys', 'true', false);
-gm_deliciousbbcode = initGM('deliciousbbcode', 'true', false);
-gm_deliciousquote = initGM('deliciousquote', 'true', false);
-gm_delicioustitleflip = initGM('delicioustitleflip', 'true', false);
-gm_delicioustreats = initGM('delicioustreats', 'true', false);
-gm_deliciouskeyboard = initGM('deliciouskeyboard', 'true', false);
+var gm_delicioussmileys = initGM('delicioussmileys', 'true', false);
+var gm_deliciousbbcode = initGM('deliciousbbcode', 'true', false);
+var gm_deliciousquote = initGM('deliciousquote', 'true', false);
+var gm_delicioustitleflip = initGM('delicioustitleflip', 'true', false);
+var gm_delicioustreats = initGM('delicioustreats', 'true', false);
+var gm_deliciouskeyboard = initGM('deliciouskeyboard', 'true', false);
 
 
 // Banners and search bar by Potatoe
@@ -94,7 +98,7 @@ if (document.getElementById('bannerimg')) document.getElementById('searchbars').
 // Depends on HTMLElement.clone and HTMLCollection.each
 if (GM_getValue('delicioussmileys') === 'true' && document.getElementById('smileys')) {
 	var smileys = document.getElementById('smileys'), r = '';
-	smileys.getElementsByTagName('*').each(function (n) {
+	forEach(smileys.getElementsByTagName('*'), function (n) {
 		var c = n.getAttribute('onclick');
 		n.removeAttribute('onclick');
 		n.setAttribute('style',((n.width>33)?'margin-left:'+(33-n.width)/2+'px;':'')+'margin-top:'+(33-n.height)/2+'px;');
@@ -104,7 +108,7 @@ if (GM_getValue('delicioussmileys') === 'true' && document.getElementById('smile
 	smileys.setAttribute('style', 'display: none; width: 330px !important; position: absolute; top: 0; left: 0; background:rgba(0,0,0,0.75);');
 	smileys.setAttribute('id', 'hoversmileys');
 	document.getElementById('bbcode').innerHTML += '<span style="display:inline-block;max-width:20px;height:20px;z-index:1;position:relative;" id="smileysholdster"><style>.smileyscell{display:inline-block;overflow:hidden;width:33px;max-width:33px;height:33px;float:left}#smileysbutton img[src="/static/common/smileys/Smile.png"]{margin-top:0px!important}#smileysbutton{width:20px;height:20px}</style></div>'
-	var smileysholdster = document.getElementById('smileysholdster'), smileysbutton = smileys.firstElementChild.clone({'id':'smileysbutton'});
+	var smileysholdster = document.getElementById('smileysholdster'), smileysbutton = clone(smileys.firstElementChild, {'id':'smileysbutton'});
 	smileysholdster.appendChild(smileysbutton);
 	smileysholdster.appendChild(smileys);
 	smileys.style.top = smileysbutton.offsetTop + 'px';
@@ -184,47 +188,39 @@ if (GM_getValue('delicioustreats') === 'true') {
 
 // Keyboard shortcuts by Alpha
 // Enables keyboard shortcuts for forum (new post and edit) and PM
+// Depends on injectScript
 if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('quickpost') || document.evaluate('//*[@class="post"/form/textarea', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null))) {
-	ctrl = function(key, callback, args) {
-		document.addEventListener('keydown', function (e) {
-			if(!args) args=[];
-			if(e.keyCode === key.charCodeAt(0) && (e.ctrlKey || e.metaKey) && (document.activeElement === document.getElementById('quickpost') || document.activeElement === document.evaluate('//*[@class="post"/form/textarea', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue)) {
-				e.preventDefault();
-				callback.apply(this, args);
-				return false;
-			}
-		});
-	};
-	/**
-	 * All keyboard shortcuts based on MS Word
-	 **/
+	function keyboardshortcuts() {
+		var ctrl = function(key, callback, args) {
+			document.addEventListener('keydown', function (e) {
+				if(!args) args=[];
+				if(e.keyCode === key.charCodeAt(0) && (e.ctrlKey || e.metaKey) && (document.activeElement === document.getElementById('quickpost') || document.activeElement === document.evaluate('//*[@class="post"/form/textarea', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue)) {
+					e.preventDefault();
+					callback.apply(this, args);
+					return false;
+				}
+			});
+		};
+		/**
+		 * All keyboard shortcuts based on MS Word
+		 **/
 
-	// Bold
-	var ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '&#8984;' : 'CTRL';
-	document.evaluate('//*[@id="bbcode"]/img[@title="Bold"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('title', 'Bold (' + ctrlorcmd + '+B)');
-	ctrl('B', function() {
-		insert_text('[b]', '[/b]');
-	});
-	// Italics
-	document.evaluate('//*[@id="bbcode"]/img[@title="Italics"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('title', 'Italics (' + ctrlorcmd + '+I)');
-	ctrl('I', function() {
-		insert_text('[i]', '[/i]');
-	});
-	// Underline
-	document.evaluate('//*[@id="bbcode"]/img[@title="Underline"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('title', 'Underline (' + ctrlorcmd + '+U)');
-	ctrl('U', function() {
-		insert_text('[u]', '[/u]');
-	});
-	// Align right
-	ctrl('R', function() {
-		insert_text('[align=right]', '[/align]');
-	});
-	// Align left
-	ctrl('L', function() {
-		insert_text('[align=left]', '[/align]');
-	});
-	// Align center
-	ctrl('E', function() {
-		insert_text('[align=center]', '[/align]');
-	});
+		// Bold
+		var ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '&#8984;' : 'CTRL';
+		document.evaluate('//*[@id="bbcode"]/img[@title="Bold"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('title', 'Bold (' + ctrlorcmd + '+B)');
+		ctrl('B', insert_text, ['[b]', '[/b]']);
+		// Italics
+		document.evaluate('//*[@id="bbcode"]/img[@title="Italics"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('title', 'Italics (' + ctrlorcmd + '+I)');
+		ctrl('I', insert_text, ['[i]', '[/i]']);
+		// Underline
+		document.evaluate('//*[@id="bbcode"]/img[@title="Underline"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('title', 'Underline (' + ctrlorcmd + '+U)');
+		ctrl('U', insert_text, ['[u]', '[/u]']);
+		// Align right
+		ctrl('R', insert_text, ['[align=right]', '[/align]']);
+		// Align left
+		ctrl('L', insert_text, ['[align=left]', '[/align]']);
+		// Align center
+		ctrl('E', insert_text, ['[align=center]', '[/align]']);
+	}
+	injectScript('('+keyboardshortcuts+')();', 'keyboardshortcuts');
 }
