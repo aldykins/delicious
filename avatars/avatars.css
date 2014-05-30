@@ -2,7 +2,8 @@
 .post_block.user_17317, .post_block.user_17317 .avatar,
 .post_block.user_18701, .post_block.user_18701 .avatar,
 .post_block.user_12326, .post_block.user_12326 .avatar, 
-.post_block.user_20811, .post_block.user_20811 .avatar {
+.post_block.user_20811, .post_block.user_20811 .avatar, 
+.post_block.user_21070, .post_block.user_21070 .avatar  {
     overflow: visible !important;
 }
 
@@ -193,4 +194,28 @@
     background: transparent url('ZeroxvComments.png') top right no-repeat;
     height: 190px;
     margin-left: -35px;
+}
+
+/**** AdnapRalopib ****/
+.post_block.user_21070 .avatar img {
+    width: 0px;
+    height: 343px;
+    padding-left: 200px;
+    margin-left: -23px;
+    background: transparent url('AdnapRalopib.png') top right no-repeat;
+}
+
+#user_leftcol .center:first-child img[title^="AdnapRalopib"] {
+    width: 0px;
+    height: 343px;
+    padding-left: 200px;
+    background: transparent url('AdnapRalopib.png') top right no-repeat;
+}
+
+#userhistory .forum_post img[title^="AdnapRalopib"] {
+    width: 0px;
+    height: 301px;
+    padding-left: 175px;
+    margin-left: -17px;
+    background: transparent url('AdnapRalopibHistory.png') top right no-repeat;
 }
