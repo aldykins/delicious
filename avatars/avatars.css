@@ -211,11 +211,3 @@
     padding-left: 200px;
     background: transparent url('AdnapRalopib.png') top right no-repeat;
 }
-
-#userhistory .forum_post img[title^="AdnapRalopib"] {
-    width: 0px;
-    height: 301px;
-    padding-left: 175px;
-    margin-left: -17px;
-    background: transparent url('AdnapRalopibHistory.png') top right no-repeat;
-}
