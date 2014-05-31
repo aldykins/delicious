@@ -40,3 +40,11 @@ $hideborder: #36849B;
 $hidebackground: #144548;
 
 @import "style";
+
+span.download_link a,a[title='Download'] {
+    background: $header;
+}
+
+.pruned a[title="Download"] {
+    background: rgba($header, 0.35);
+}

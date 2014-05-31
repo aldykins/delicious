@@ -2197,9 +2197,17 @@ span.freeleech {
     color: rgba($link, 0.35);
 }
 
+.pruned a:hover {
+    color: rgba($linkhover, 0.35);
+}
+
 .pruned a[title="Download"] {
     background: rgba($link, 0.35);
     color: rgba(#FFF, 0.35) !important;
+}
+
+.pruned a[title="Download"]:hover {
+    background: rgba($linkhover, 0.35);
 }
 
 tr.freeleech a[title='Download']:after {
