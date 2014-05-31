@@ -95,7 +95,7 @@ h2,h3 {
     color: $header;
 }
 
-h1,h2,h3,h4 {
+h1,h2,h3,h4,.upload_forms div#torrent_file > div.head,.upload_forms div#autofill > div.head,.upload_forms div#group_information > div.head,.upload_forms div#release_information > div.head,.upload_forms div#upload_div > div.head {
     color: $header;
     padding: 0;
     line-height: normal;
@@ -107,7 +107,7 @@ h1 {
     letter-spacing: -1px;
 }
 
-h2 {
+h2,.upload_forms div#torrent_file > div.head,.upload_forms div#autofill > div.head,.upload_forms div#group_information > div.head,.upload_forms div#release_information > div.head,.upload_forms div#upload_div > div.head {
     font-size: 1.5em;
     display: inline-block !important;
     background: $primarybackground;
@@ -116,8 +116,11 @@ h2 {
     -webkit-border-radius: 3px;
     border-radius: 3px;
     line-height: 25px;
-    margin-bottom: 15px;
     padding: 5px 10px 5px 10px;
+}
+
+h2 {
+    margin-bottom: 15px;
 }
 
 h2:first-child {
@@ -2195,7 +2198,7 @@ span.freeleech {
 }
 
 .pruned a[title="Download"] {
-    background: rgba(#709F31, 0.35);
+    background: rgba($link, 0.35);
     color: rgba(#FFF, 0.35) !important;
 }
 
@@ -2461,14 +2464,6 @@ img[width='220'] {
 .group.discog strong a {
     font-size: 15px;
     font-weight: bold;
-}
-
-.group.discog strong a + a {
-    color: #547da6;
-}
-
-.group_title strong a + a {
-    color: #547da6;
 }
 
 .group.discog strong a + a:hover,.group_title strong a + a:hover {
@@ -4114,6 +4109,15 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
 
 #uploadQueue {
     color: #000;
+}
+
+#torrents .upload_forms div#torrent_file, #torrents .upload_forms div#upload_div > div.head,#torrents2 .upload_forms div#torrent_file, #torrents2 .upload_forms div#upload_div > div.head {
+    display: none !important;
+}
+
+.upload_forms {
+    background: $primarybackground;
+    padding: 5px;
 }
 
 @media all and (max-width: 1018px) and (min-width: 840px) {
