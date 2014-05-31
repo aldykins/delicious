@@ -2133,7 +2133,7 @@ ul.dropdown #no_drop:hover {
 }
 
 span.download_link a,a[title='Download'] {
-    background: #709F31;
+    background: $link;
     color: white !important;
     padding: 1px 5px;
     -moz-border-radius: 3px;
@@ -2142,6 +2142,10 @@ span.download_link a,a[title='Download'] {
     margin-right: 0px;
     text-indent: 0em;
     display: inline !important;
+}
+
+span.download_link a:hover,a[title='Download']:hover {
+    background: $linkhover;
 }
 
 tr.freeleech a {
