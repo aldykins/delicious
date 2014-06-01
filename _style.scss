@@ -1479,12 +1479,8 @@ a[href^='alltorrents.php?action=history&userid='] {
     padding: 15px;
     top: 68px;
     left: -39px;
-    border: 1px solid #55b5b7;
-    border: 1px solid white;
-    color: #427E7F;
-    color: #b5b5b5;
-    background: #f2ffff;
-    background: rgba(0, 0, 0, 0.8);
+    color: $tertiaryfontcolour;
+    background: $headerbackground;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
@@ -1506,8 +1502,6 @@ a[href^='alltorrents.php?action=history&userid='] {
     bottom: auto;
     right: auto;
     border: 14px solid transparent;
-    border-bottom-color: #55b5b7;
-    border-bottom-color: white;
 }
 
 #achbar:after {
@@ -1522,8 +1516,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     bottom: auto;
     left: 47px;
     border: 13px solid transparent;
-    border-bottom-color: #f2ffff;
-    border-bottom-color: rgba(0, 0, 0, 0.8);
+    border-bottom-color: $headerbackground;
 }
 
 #alerts .freeleech-miku, #alerts .freeleech {
@@ -1574,6 +1567,7 @@ a[href^='alltorrents.php?action=history&userid='] {
 
 #achievementBar .achievementText strong {
     margin-right: 10px;
+    color: $tertiaryfontcolour;
 }
 
 #achievementBar .achievementText a {
@@ -1584,7 +1578,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     position: static;
     width: auto;
     font-weight: bold;
-    color: white;
+    color: $link;
 }
 
 .alertbar a:hover,#achtoggle:hover,#achtoggle.Show {
@@ -2794,9 +2788,6 @@ table.mediainfo table caption {
     margin: 0 5px 5px 11px;
     padding: 1px 10px 2px 8px;
     display: inline-block;
-    border-top: 1px solid #b5c5ce;
-    border-right: 1px solid #b5c5ce;
-    border-bottom: 1px solid #b5c5ce;
     -moz-border-radius-bottomright: 3px;
     -webkit-border-bottom-right-radius: 3px;
     border-bottom-right-radius: 3px;
