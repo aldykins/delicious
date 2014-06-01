@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha
-// @version 1.4
+// @version 1.5
 // @description Variety of userscripts to fully utilise the site and stylesheet.
 // @include *animebytes.tv/*
 // @match https://*.animebytes.tv/*
@@ -73,7 +73,7 @@ function createSettingsPage() {
 	addCheckbox("Delicious Better Quote", "Enable/Disable delicious better <span style='color: green; font-family: Courier New;'>&gt;quoting</span>", 'deliciousquote');
 	addCheckbox("Delicious Title Flip", "Enable/Disable delicious flipping of Forum title tags.", 'delicioustitleflip');
 	addCheckbox("Disgusting Treats", "Hide/Unhide those hideous treats!", 'delicioustreats');
-	addCheckbox("Delicious Keyboard Shortcuts", "Enable/Disable delicious keyboard shortcuts for easier access to Bold/Italics/Underline and aligning.", 'deliciouskeyboard');
+	addCheckbox("Delicious Keyboard Shortcuts", "Enable/Disable delicious keyboard shortcuts for easier access to Bold/Italics/Underline/Spoiler/Hide and aligning.", 'deliciouskeyboard');
 }
 
 if (window.location.pathname === '/user.php' && window.location.search.indexOf('action=edit') > -1) createSettingsPage();
@@ -221,6 +221,10 @@ if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('qui
 		ctrl('L', insert_text, ['[align=left]', '[/align]']);
 		// Align center
 		ctrl('E', insert_text, ['[align=center]', '[/align]']);
+		// Spoiler
+		ctrl('S', insert_text, ['[spoiler]', '[/spoiler]']);
+		// Hide
+		ctrl('H', insert_text, ['[hide]', '[/hide]']);
 	}
 	injectScript('('+keyboardshortcuts+')();', 'keyboardshortcuts');
 }
