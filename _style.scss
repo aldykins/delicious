@@ -1486,9 +1486,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     border-radius: 10px;
     text-indent: 0;
     z-index: 3;
-    -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    border: $secondaryborder;
 }
 
 #achbar:before {
@@ -1510,7 +1508,6 @@ a[href^='alltorrents.php?action=history&userid='] {
     position: absolute;
     width: 0;
     height: 0;
-    border-top-color: #f2ffff;
     top: -26px;
     right: auto;
     bottom: auto;

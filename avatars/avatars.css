@@ -8,7 +8,7 @@
     overflow: visible !important;
 }
 
-/**** aldy ****/
+/**** aldy **** /
 .post_block.user_17317 .avatar img {
     width: 0px;
     height: 290px;
@@ -25,7 +25,7 @@
     background: transparent url('aldy.png') top right no-repeat;
 }
 
-#userhistory .forum_post img[title^="aldy"] {
+#userhistory .forum_post .avatar img[title^="aldy"] {
     width: 0px;
     height: 247px;
     padding-left: 256px;
@@ -72,7 +72,7 @@
     background: transparent url('Leamas.png') top right no-repeat;
 }
 
-#userhistory .forum_post img[title^="Leamas"] {
+#userhistory .forum_post .avatar img[title^="Leamas"] {
     width: 0px;
     height: 283px;
     padding-left: 218px;
@@ -119,7 +119,7 @@
     background: transparent url('aw3efgz7p.png') top right no-repeat;
 }
 
-#userhistory .forum_post img[title^="aw3efgz7p"] {
+#userhistory .forum_post .avatar img[title^="aw3efgz7p"] {
     width: 0px;
     height: 260px;
     padding-left: 194px;
@@ -166,7 +166,7 @@
     background: transparent url('Zeroxv.png') top right no-repeat;
 }
 
-#userhistory .forum_post img[title^="Zeroxv"] {
+#userhistory .forum_post .avatar img[title^="Zeroxv"] {
     width: 0px;
     height: 348px;
     padding-left: 190px;
@@ -213,7 +213,7 @@
     background: transparent url('AdnapRalopib.png') top right no-repeat;
 }
 
-/**** ramnik5 ****/
+/**** ramnik5 ****
 .post_block.user_16571 .avatar img {
     width: 0px;
     height: 400px;
@@ -228,4 +228,4 @@
     padding-left: 218px;
     margin-left: -20px;
     background: transparent url('ramnik5.png') top right no-repeat;
-}
+}*/
