@@ -8,23 +8,23 @@
     overflow: visible !important;
 }
 
-/**** aldy **** /
+/**** aldy ****/
 .post_block.user_17317 .avatar img {
     width: 0px;
-    height: 290px;
-    padding-left: 256px;
-    margin-left: -77px;
+    height: 353px;
+    padding-left: 242px;
+    margin-left: -63px;
     background: transparent url('aldy.png') top right no-repeat;
 }
 
 #user_leftcol .center:first-child img[title^="aldy"] {
     width: 0px;
-    height: 290px;
-    padding-left: 256px;
-    margin-left: -57px;
+    height: 353px;
+    padding-left: 242px;
+    margin-left: -29px;
     background: transparent url('aldy.png') top right no-repeat;
 }
-
+/*
 #userhistory .forum_post .avatar img[title^="aldy"] {
     width: 0px;
     height: 247px;
@@ -197,7 +197,7 @@
     margin-left: -35px;
 }
 
-/**** AdnapRalopib ****/
+/**** AdnapRalopib **** /
 .post_block.user_21070 .avatar img {
     width: 0px;
     height: 343px;

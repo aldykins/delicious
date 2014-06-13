@@ -1516,11 +1516,27 @@ a[href^='alltorrents.php?action=history&userid='] {
     border-bottom-color: $headerbackground;
 }
 
-#alerts .freeleech-miku, #alerts .freeleech {
+#alerts .freeleech-miku {
+    float: right;
+    height: auto;
+    width: auto;
+    text-align: center;
+    margin-right: 275px;
+}
+
+#alerts .freeleech {
     float: none;
     height: auto;
     width: auto;
     text-align: center;
+}
+
+#alerts .freeleech-miku > img {
+    margin: 5px;
+}
+
+#alerts .freeleech-miku + .alertbar.freeleech {
+    display: none;
 }
 
 #achievementBar .alert_words {
