@@ -1823,6 +1823,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     font-size: 1.1em !important;
     padding: 0px !important;
     line-height: 0.9em;
+    float: none;
 }
 
 .post_id {
@@ -2985,7 +2986,7 @@ img[src='/static/common/caticons/pv.png'] {
     border-left: $primaryborder !important;
 }
 
-.usercomment_author img[src="/static/common/symbols/donor.png"] {
+.usercomment_author img[src^="/static/common/symbols/"], .usercomment_author .special_icon {
     margin-bottom: -3px;
 }
 
