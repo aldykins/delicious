@@ -11,17 +11,17 @@
 /**** aldy ****/
 .post_block.user_17317 .avatar img {
     width: 0px;
-    height: 353px;
-    padding-left: 242px;
-    margin-left: -63px;
+    height: 400px;
+    padding-left: 368px;
+    margin-left: -188px;
     background: transparent url('aldy.png') top right no-repeat;
 }
 
 #user_leftcol .center:first-child img[title^="aldy"] {
     width: 0px;
-    height: 353px;
-    padding-left: 242px;
-    margin-left: -29px;
+    height: 400px;
+    padding-left: 368px;
+    margin-left: -148px;
     background: transparent url('aldy.png') top right no-repeat;
 }
 /*
@@ -196,36 +196,3 @@
     height: 190px;
     margin-left: -35px;
 }
-
-/**** AdnapRalopib **** /
-.post_block.user_21070 .avatar img {
-    width: 0px;
-    height: 343px;
-    padding-left: 200px;
-    margin-left: -23px;
-    background: transparent url('AdnapRalopib.png') top right no-repeat;
-}
-
-#user_leftcol .center:first-child img[title^="AdnapRalopib"] {
-    width: 0px;
-    height: 343px;
-    padding-left: 200px;
-    background: transparent url('AdnapRalopib.png') top right no-repeat;
-}
-
-/**** ramnik5 ****
-.post_block.user_16571 .avatar img {
-    width: 0px;
-    height: 400px;
-    padding-left: 218px;
-    margin-left: -46px;
-    background: transparent url('ramnik5.png') top right no-repeat;
-}
-
-#user_leftcol .center:first-child img[title^="ramnik5"] {
-    width: 0px;
-    height: 400px;
-    padding-left: 218px;
-    margin-left: -20px;
-    background: transparent url('ramnik5.png') top right no-repeat;
-}*/
