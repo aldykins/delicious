@@ -2082,7 +2082,11 @@ ul.dropdown ul li a {
     color: $primaryfontcolour !important;
 }
 
-ul.dropdown ul li a:hover {
+#forumsjump ul.dropdown li a {
+    color: $tertiaryfontcolour !important;
+}
+
+ul.dropdown ul li a:hover, #forumsjump ul.dropdown li a:hover {
     color: $linkhover !important;
 }
 
