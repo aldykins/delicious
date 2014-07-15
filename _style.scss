@@ -1536,7 +1536,8 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 #alerts .freeleech-miku + .alertbar.freeleech {
-    display: none;
+    margin-left: 230px;
+    margin-right: 210px;
 }
 
 #achievementBar .alert_words {
@@ -4138,25 +4139,30 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
 }
 
 @media all and (max-width: 1018px) and (min-width: 840px) {
-    #forums #logo {
+    #forums #logo, #scholarapp #logo {
         display: none !important;
     }
 
-    #forums, #forums #content, #forums #header , #forums #footer, #forums #searchbars, #forums #logo, #forums #userinfo, #forums #menu ul , #wrapper > a{
+    #forums, #forums #content, #forums #header, #forums #footer, #forums #searchbars, #forums #logo, #forums #userinfo, #forums #menu ul, #wrapper > a,
+    #scholarapp, #scholarapp #content, #scholarapp #header, #scholarapp #footer, #scholarapp #searchbars, #scholarapp #logo, #scholarapp #userinfo, #scholarapp #menu ul {
         width: auto !important;
         min-width: 0 !important;
         max-width: none !important;
     }
 
-    #forums #content {
+    #forums #content, #scholarapp #content {
         padding: 20px 5px 0 !important;
     }
     
-    #forums #searchbars ul, #forums #userinfo {
+    #forums #searchbars ul, #forums #userinfo, #scholarapp #searchbars ul, #scholarapp #userinfo {
         right: 5px !important;
     }
     
-    #forums .main-menu.nobullet, #forums #footer {
+    #forums .main-menu.nobullet, #forums #footer, #scholarapp .main-menu.nobullet, #scholarapp #footer {
         padding: 0 5px !important;
+    }
+    
+    #forums #tls, #scholarapp #tls {
+        padding-left: 60px !important;
     }
 }
