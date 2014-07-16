@@ -865,7 +865,7 @@ if((document.URL.match(/^http.*:\/\/animebytes\.tv\/forums\.php.*$/i) != null) &
 
 
 (function() {
-  var a, allResults, background_color, button, cb, filterPost, forumIds, forumid, getFirstTagParent, hideSubSelection, input, linkbox1, loadPost, loadText, loadThreadPage, loadingText, myCell, myLINK, newCheckbox, newLinkBox, patt, processThreadPage, quickLink, quickLinkSubs, result, sR, searchForums, searchForumsCB, searchForumsNew, showFastSearchLinks, showPost, strong, tP, textReplace, text_color, toggleText, toggleVisibility, user_filter, user_td, user_tr, workInForumSearch, workInRestOfForum, _i, _len;
+  var a, allResults, background_color, button, cb, filterPost, forumIds, forumid, getFirstTagParent, hideSubSelection, index, input, linkbox1, loadPost, loadText, loadThreadPage, loadingText, myCell, myLINK, newCheckbox, newLinkBox, patt, processThreadPage, quickLink, quickLinkSubs, result, sR, searchForums, searchForumsCB, searchForumsNew, showFastSearchLinks, showPost, strong, tP, textReplace, text_color, toggleText, toggleVisibility, user_filter, user_td, user_tr, workInForumSearch, workInRestOfForum, _i, _len;
 
   background_color = GM_getValue('ABForumSearchHighlightBG', '#FFC000');
 
@@ -897,10 +897,10 @@ if((document.URL.match(/^http.*:\/\/animebytes\.tv\/forums\.php.*$/i) != null) &
     while (elem !== null && elem.tagName !== 'BODY' && elem.tagName !== tag) {
       elem = elem.parentNode;
     }
-    if (elem.tagName === tag) {
-      return elem;
-    } else {
+    if (elem === null || elem.tagName !== tag) {
       return null;
+    } else {
+      return elem;
     }
   };
 
@@ -1015,7 +1015,7 @@ if((document.URL.match(/^http.*:\/\/animebytes\.tv\/forums\.php.*$/i) != null) &
     };
   };
 
-  loadPost = function(link, filtered) {
+  loadPost = function(link, index, filtered) {
     return function(event) {
       var cell, id, match, newLink, node, page, threadPage, threadid;
       if (event != null) {
@@ -1029,7 +1029,7 @@ if((document.URL.match(/^http.*:\/\/animebytes\.tv\/forums\.php.*$/i) != null) &
       threadid = threadid != null ? threadid[1] : '0';
       match = link.href.match(/([^#]*)(?:#post(\d+))?/i);
       if (match != null) {
-        id = match[2] != null ? 'post' + match[2] : id = 'thread' + threadid;
+        id = match[2] != null ? 'post' + match[2] : id = index + link.href;
       } else {
         return;
       }
@@ -1161,13 +1161,13 @@ if((document.URL.match(/^http.*:\/\/animebytes\.tv\/forums\.php.*$/i) != null) &
       patt = '';
     }
     allResults = document.querySelectorAll('a[href^="/forums.php?action=viewthread"]');
-    for (_i = 0, _len = allResults.length; _i < _len; _i++) {
-      result = allResults[_i];
+    for (index = _i = 0, _len = allResults.length; _i < _len; index = ++_i) {
+      result = allResults[index];
       textReplace(result);
       a = document.createElement('a');
       a.href = '#';
       a.textContent = loadText;
-      a.addEventListener('click', loadPost(result, false), true);
+      a.addEventListener('click', loadPost(result, index, false), true);
       myCell = result.parentNode;
       myCell.insertBefore(a, result);
     }
@@ -1209,9 +1209,9 @@ if((document.URL.match(/^http.*:\/\/animebytes\.tv\/forums\.php.*$/i) != null) &
         })();
         button.disabled = 'disabled';
         _results = [];
-        for (_j = 0, _len1 = allResults.length; _j < _len1; _j++) {
-          result = allResults[_j];
-          _results.push(loadPost(result, true)());
+        for (index = _j = 0, _len1 = allResults.length; _j < _len1; index = ++_j) {
+          result = allResults[index];
+          _results.push(loadPost(result, index, true)());
         }
         return _results;
       }
@@ -1272,8 +1272,7 @@ if((document.URL.match(/^http.*:\/\/animebytes\.tv\/forums\.php.*$/i) != null) &
 }).call(this);
 
 }
-
-// Add settings for Megure's scripts
+// Add settings
 (function(){function addBooleanSetting(key, name, description, onValue, offValue, myDefault){
 
       var __temp = document.createElement('li');
