@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
-// @author aldy, potatoe, alpha
-// @version 1.5
+// @author aldy, potatoe, alpha, Megure
+// @version 1.6
 // @description Variety of userscripts to fully utilise the site and stylesheet.
 // @include *animebytes.tv/*
 // @match https://*.animebytes.tv/*
@@ -228,3 +228,1113 @@ if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('qui
 	}
 	injectScript('('+keyboardshortcuts+')();', 'keyboardshortcuts');
 }
+
+// Three more scripts by Megure; the headers are still included
+// Search for UserScript or visit https://github.com/tubersan/AnimeBytes-Userscripts/ for details
+if((document.URL.match(/^http.*:\/\/animebytes\.tv.*$/i) != null)){
+// ==UserScript==
+// @name        Enhanced Torrent View
+// @namespace   Megure@AnimeBytes.tv
+// @description Shows how much yen you would receive if you seeded torrents; shows required seeding time
+// @include     http*://animebytes.tv*
+// @version     0.8
+// @grant       GM_getValue
+// @grant       GM_setValue
+// @icon        http://animebytes.tv/favicon.ico
+// ==/UserScript==
+
+(function() {
+    var showYen = GM_getValue('ABTorrentsShowYen', 'true'), // true / false: activate / deactivate display of yen production per hour
+        reqTime = GM_getValue('ABTorrentsReqTime', 'true'), // true / false: activate / deactivate display of required seeding time
+        fa = 1;
+
+    function unitPrefix (prefix) {
+        switch (prefix.toUpperCase()) {
+            case '':  return 1 / 1073741824;
+            case 'K': return 1 / 1048576;
+            case 'M': return 1 / 1024;
+            case 'G': return 1;
+            case 'T': return 1024;
+            case 'P': return 1048576;
+            case 'E': return 1073741824;
+            default:  return 0;
+        }
+    }
+
+    function countCols (row) {
+        var cells = row.cells, cols = 0, _i = 0, _len = cells.length;
+        for (; _i < _len; _i++) {
+            cols += cells[_i].colSpan;
+        }
+        return cols;
+    }
+
+    function dur2string (duration) {
+        var durationString = '',
+            tempH = Math.floor(duration),
+            tempM = Math.ceil((duration * 60) % 60);
+        if (tempM === 60) {
+            tempH += 1;
+            tempM = 0;
+        }
+        durationString += tempH + ' hours';
+        if (tempM > 0)
+            durationString += ' and ' + tempM + ' minutes';
+        durationString += ' (~' + (Math.round(10 * duration / 24) / 10) + ' days)';
+        return durationString;
+    }
+
+    function fu (myDuration) {
+        return Math.pow(2, duration / (24 * 365.25));
+    }
+
+    function fs (mySize) {
+        return Math.max(0.1, Math.sqrt(mySize)) / 4;
+    }
+
+    function ft (mySeeders) {
+        return Math.min(1.0, 3 / Math.sqrt(mySeeders + 4));
+    }
+
+    function f (mySize, mySeeders, myDuration) {
+        return fs(mySize) * fu(myDuration) * ft(mySeeders) * fa;
+    }
+
+    function createTitle (start, end, mySize, myDuration) {
+        start = Math.max(start, 5);
+        end   = Math.min(start + 4, Math.max(end, 5));
+        var res = '';
+        for (var j = start; j <= end; j++) {
+            res += '¥' + f(mySize, j, myDuration).toPrecision(6) + '\t';
+            if (j === 5)
+                res += '≤';
+            res += j + '\n';
+        }
+        return res;
+    }
+
+    if (showYen.toString() === 'true' || reqTime.toString() === 'true') {
+        var torrents, cells, seeders, leechers, size, sizeIndex, sizeRe, andRe, durationRe, torrentId, newCell, header, newHeader, lastHeaderCell, sum = 0, seedingTime, duration;
+        
+        torrents = document.querySelectorAll('tr.torrent,tr.group_torrent');
+        sizeRe = /^([\d\.,]+)\s([A-Z]?)B$/i;
+        andRe = /(and|\s|,)/ig;
+        durationRe = /^(?:(\d+)years?)?(?:(\d+)months?)?(?:(\d+)weeks?)?(?:(\d+)days?)?(?:(\d+)hours?)?(?:(\d+)minutes?)?(?:(\d+)seconds?)?$/i;
+        
+        fa = 2 - 1 / (1 + Math.exp(5 - ((new Date()).getTime() - GM_getValue('creation', 0)) / 1728000000)); // milliseconds per 20 days
+
+        for (var i = 0; i < torrents.length; i++) {
+            cells = torrents[i].cells;
+            size = null;
+            if (cells.length === 5) {
+                seeders = parseInt(cells[3].textContent, 10);
+                leechers = parseInt(cells[4].textContent, 10);
+                size = cells[1].textContent.match(sizeRe);
+                sizeIndex = 1;
+            }
+            else if (cells.length === 9) {
+                seeders = parseInt(cells[6].textContent, 10);
+                leechers = parseInt(cells[7].textContent, 10);
+                size = cells[4].textContent.match(sizeRe);
+                sizeIndex = 4
+            }
+            if (size === null || isNaN(seeders) || isNaN(leechers))
+                continue;
+
+            if (reqTime.toString() === 'true') {
+                size = parseFloat(size[1].replace(/,/g, '')) * unitPrefix(size[2]);
+                seedingTime = Math.max(0, size - 10) * 5 + 72;
+                cells[sizeIndex].title = 'You need to seed this torrent for at least\n' + dur2string(seedingTime) + '\nor it will become a hit and run!';
+
+                torrentId = torrents[i].querySelector('a[title="Download"]');
+                if (torrentId != null) {
+                    torrentId = torrentId.href.match(/id=(\d+)/i);
+                    if (torrentId != null) {
+                        torrentId = document.getElementById('torrent_' + torrentId[1]);
+                        if (torrentId != null) {
+                            torrentId = torrentId.querySelector('blockquote');
+                            if (torrentId != null) {
+                                torrentId.appendChild(document.createElement('br'));
+                                torrentId.innerHTML += 'You need to seed this torrent for at least <span class="r01">' + dur2string(seedingTime) + '</span> or it will become a hit and run!';
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (showYen.toString() === 'true') {
+                duration = 0;
+                if (document.URL.indexOf('type=seeding') >= 0) {
+                    duration = cells[3].textContent.replace(andRe, '').match(durationRe);
+                    if (duration != null) {
+                        duration = (function() {
+                            var _i, _len, _results, _num;
+                            _results = [];
+                            for (_i = 1, _len = duration.length; _i < _len; _i++) {
+                                _num = duration[_i];
+                                if (_num != null) {
+                                    _results.push(parseInt(_num, 10));
+                                } else {
+                                    _results.push(0);
+                                }
+                            }
+                            return _results;
+                        })();
+                        duration = 24 * (duration[0] * 365.25 + duration[1] * 30.4375 + duration[2] * 7 + duration[3]) + duration[4] + duration[5] / 60 + duration[6] / 3600;
+                    }
+                }
+                sum += f(size, seeders, duration);
+
+                newCell = document.createElement('td');
+                newCell.textContent = '¥' + f(size, seeders, duration).toFixed(2);
+                newCell.title = '¥' + fs(size).toPrecision(6)                      + '  \tbase for size';
+                if ((100 * (fa           - 1)).toFixed(1) !== '0.0')
+                    newCell.title += '\n+' + (100 * (fa           - 1)).toFixed(1) + '% \tfor your account\'s age';
+                if ((100 * (fu(duration) - 1)).toFixed(1) !== '0.0')
+                    newCell.title += '\n+' + (100 * (fu(duration) - 1)).toFixed(1) + '% \tfor seeding time';
+                if ((100 * (ft(seeders)  - 1)).toFixed(1) !== '0.0')
+                    newCell.title += '\n'  + (100 * (ft(seeders)  - 1)).toFixed(1) + '% \tfor number of seeders';
+                newCell.title += '\n\n¥ per hour \t#seeders\n' + createTitle(seeders - 1, seeders + leechers + 1, size, duration);
+                torrents[i].appendChild(newCell);
+                header = torrents[i].parentNode.firstChild;
+                if (countCols(header) + 1 === countCols(torrents[i])) {
+                    newHeader = header.children[1].cloneNode(true);
+                    newHeader.title = '¥ per hour';
+                    if (newHeader.textContent !== '') {
+                        if (newHeader.children.length > 0)
+                            newHeader.children[0].textContent = '¥/h';
+                        else
+                            newHeader.textContent = '¥/h';
+                    }
+                    header.appendChild(newHeader);
+                }
+            }
+        }
+
+        if (showYen.toString() === 'true') {
+            var myColSpan;
+            console.log("Sum of Yen for all torrents on this site:", sum);
+
+            torrents = document.querySelectorAll('tr.edition_info,tr.pad,tr[id^="group_"]');
+            for (var i = 0; i < torrents.length; i++) {
+                lastHeaderCell = torrents[i].cells[torrents[i].cells.length - 1];
+                lastHeaderCell.colSpan += 1;
+            }
+        }
+
+        if (document.URL.indexOf('user.php') >= 0 && document.URL.indexOf('preview=true') >= 0) {
+            var _temp = null;
+            try {
+                _temp = document.getElementById('first_wrapper_outer').getElementsByClassName('userstatsleft')[0].getElementsByTagName('span')[0].title;
+            } catch (e) {}
+            if (_temp != null)
+                GM_setValue('creation', Date.parse(_temp));
+        }
+    }
+
+}).call(this);
+
+}
+
+if((document.URL.match(/^http.*:\/\/animebytes\.tv.*alltorrents\.php.*$/i) != null)){
+// Generated by CoffeeScript 1.6.3
+/*
+// ==UserScript==
+// @name        Hit&Run Detector
+// @namespace   Megure@AnimeBytes.tv
+// @description Highlights torrents which might become a Hit & Run; allows sorting on all history-pages
+// @include     http*://animebytes.tv*alltorrents.php*
+// @version     0.82
+// @grant       GM_getValue
+// @icon        http://animebytes.tv/favicon.ico
+// ==/UserScript==
+*/
+
+
+(function() {
+  var a1, a2, allRows, andRe, clonedNode, colorRows, curPage, currencyRe, dateTimeRe, downIndex, downRe, dur2string, durIndex, durationRe, dynamicLoad, header, headers, index, lastPage, lcNegBG, lcNegFG, lcNeuBG, lcNeuFG, lcPosBG, lcPosFG, line_color_neg, line_color_neu, line_color_pos, loadPage, multiRatio, newPagenum, nextPage, pagenum, pagenums, parseCell, parseRows, prevPage, ratioIndex, ratioRe, sizeIndex, sizeRe, sortFunctions, sortIndex, sortRows, unitPrefix, _i, _j, _len, _len1;
+
+  colorRows = GM_getValue('ABHistColorRows', 'true');
+
+  sortRows = GM_getValue('ABHistSortRows', 'true');
+
+  dynamicLoad = GM_getValue('ABHistDynLoad', 'true');
+
+  lcPosBG = GM_getValue('ABHistColorPosBG', 'PaleGreen');
+
+  lcNeuBG = GM_getValue('ABHistColorNeuBG', 'Khaki');
+
+  lcNegBG = GM_getValue('ABHistColorNegBG', 'NavajoWhite');
+
+  lcPosFG = GM_getValue('ABHistColorPosFG', 'Black');
+
+  lcNeuFG = GM_getValue('ABHistColorNeuFG', 'Black');
+
+  lcNegFG = GM_getValue('ABHistColorNegFG', 'Black');
+
+  line_color_neg = [lcNegBG, lcNegFG];
+
+  line_color_neu = [lcNeuBG, lcNeuFG];
+
+  line_color_pos = [lcPosBG, lcPosFG];
+
+  sizeRe = /^([\d\.]+)\s([A-Z]?)B$/i;
+
+  downRe = /^([\d\.]+)\s([A-Z]?)B\s\(([\d\.]+)%\)$/i;
+
+  ratioRe = /^(∞|\-\-|[\d\.]+)$/i;
+
+  andRe = /(and|\s)/ig;
+
+  durationRe = /^(?:(\d+)years?)?(?:(\d+)months?)?(?:(\d+)weeks?)?(?:(\d+)days?)?(?:(\d+)hours?)?(?:(\d+)minutes?)?(?:(\d+)seconds?)?$/i;
+
+  dateTimeRe = /^(\d+)\-(\d{1,2})\-(\d{1,2})\s+(\d{1,2}):(\d{1,2})$/i;
+
+  currencyRe = /^(?:[¥|€|£|\$]\s*)([\d\.]+)$/i;
+
+  downIndex = null;
+
+  sizeIndex = null;
+
+  durIndex = null;
+
+  ratioIndex = null;
+
+  multiRatio = false;
+
+  allRows = [];
+
+  unitPrefix = function(prefix) {
+    switch (prefix.toUpperCase()) {
+      case '':
+        return 1 / 1073741824;
+      case 'K':
+        return 1 / 1048576;
+      case 'M':
+        return 1 / 1024;
+      case 'G':
+        return 1;
+      case 'T':
+        return 1024;
+      case 'P':
+        return 1048576;
+      case 'E':
+        return 1073741824;
+      default:
+        return 0;
+    }
+  };
+
+  dur2string = function(duration) {
+    var tempH, tempM;
+    tempH = Math.floor(duration);
+    tempM = Math.ceil((duration * 60) % 60);
+    if (tempM === 60) {
+      tempH += 1;
+      tempM = 0;
+    }
+    if (tempM === 0) {
+      return '' + tempH;
+    } else if (tempM < 10) {
+      return '' + tempH + ':0' + tempM;
+    } else {
+      return '' + tempH + ':' + tempM;
+    }
+  };
+
+  parseCell = function(cell, index) {
+    var match, num, textContent, textContentNoComma;
+    textContent = cell.textContent.trim();
+    textContentNoComma = textContent.replace(/,/g, '').trim();
+    match = cell.querySelector('img');
+    if (cell.textContent === '' && (match != null)) {
+      return match.alt.toUpperCase();
+    }
+    match = textContentNoComma.match(downRe);
+    if (match != null) {
+      downIndex = index;
+      return [parseFloat(match[1]) * unitPrefix(match[2]), parseFloat(match[3])];
+    }
+    match = textContentNoComma.match(sizeRe);
+    if (match != null) {
+      sizeIndex = index;
+      return parseFloat(match[1]) * unitPrefix(match[2]);
+    }
+    match = textContentNoComma.match(dateTimeRe);
+    if (match != null) {
+      match.shift();
+      match = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = match.length; _i < _len; _i++) {
+          num = match[_i];
+          _results.push(parseInt(num, 10));
+        }
+        return _results;
+      })();
+      return new Date(match[0], match[1] - 1, match[2], match[3], match[4]);
+    }
+    match = textContentNoComma.replace(andRe, '').match(durationRe);
+    if (match != null) {
+      durIndex = index;
+      match.shift();
+      match = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = match.length; _i < _len; _i++) {
+          num = match[_i];
+          if (num != null) {
+            _results.push(parseInt(num, 10));
+          } else {
+            _results.push(0);
+          }
+        }
+        return _results;
+      })();
+      return 24 * (match[0] * 365.25 + match[1] * 30.4375 + match[2] * 7 + match[3]) + match[4] + match[5] / 60 + match[6] / 3600;
+    }
+    match = textContentNoComma.match(currencyRe);
+    if (match != null) {
+      return parseFloat(match[1]);
+    }
+    match = textContentNoComma.match(ratioRe);
+    if (match != null) {
+      if ((ratioIndex != null) && ratioIndex !== index) {
+        multiRatio = true;
+      }
+      ratioIndex = index;
+      switch (match[1]) {
+        case '∞':
+          return Infinity;
+        case '--':
+          return -0.2;
+        case '0':
+          return -0.1;
+        default:
+          return parseFloat(match[1]);
+      }
+    } else if (textContentNoComma === 'Never') {
+      durIndex = index;
+      return 0;
+    } else {
+      return textContent.toUpperCase();
+    }
+  };
+
+  parseRows = function(myDocument) {
+    var cell, completion, downloaded, index, line_color, minSeedingTime, myData, ratio, row, seedingTime, size, torrent_rows, _i, _len, _ref;
+    torrent_rows = myDocument.querySelectorAll('tr[class="torrent"]');
+    for (_i = 0, _len = torrent_rows.length; _i < _len; _i++) {
+      row = torrent_rows[_i];
+      myData = (function() {
+        var _j, _len1, _ref, _results;
+        _ref = row.cells;
+        _results = [];
+        for (index = _j = 0, _len1 = _ref.length; _j < _len1; index = ++_j) {
+          cell = _ref[index];
+          _results.push(parseCell(cell, index));
+        }
+        return _results;
+      })();
+      completion = 100;
+      downloaded = 0;
+      size = 0;
+      ratio = 0;
+      line_color = ['', ''];
+      if (downIndex != null) {
+        _ref = myData[downIndex], downloaded = _ref[0], completion = _ref[1];
+        if (completion > 0) {
+          size = downloaded * 100 / completion;
+        } else {
+          size = downloaded;
+        }
+        myData[downIndex] = downloaded;
+      } else if (sizeIndex != null) {
+        size = myData[sizeIndex];
+      }
+      if ((ratioIndex != null) && !multiRatio) {
+        ratio = myData[ratioIndex];
+      }
+      if ((durIndex != null) && (document.URL.indexOf('action=history') >= 0 || document.URL.indexOf('type=seeding') >= 0)) {
+        minSeedingTime = 72 + 5 * Math.max(size - 10, 0);
+        seedingTime = myData[durIndex];
+        if (myData[myData.length - 1] === 'EXEMPT') {
+          line_color = line_color_pos;
+          myData[durIndex] = Math.min(0, minSeedingTime - seedingTime);
+        } else if (completion >= 10 && ratio < 1 && seedingTime < minSeedingTime) {
+          line_color = line_color_neg;
+          myData[durIndex] = minSeedingTime - seedingTime;
+          row.cells[durIndex].innerHTML += "<br />(~" + (dur2string(minSeedingTime - seedingTime)) + "h to seed)";
+        } else if (seedingTime >= minSeedingTime || ratio >= 1) {
+          line_color = line_color_pos;
+          myData[durIndex] = Math.min(0, minSeedingTime - seedingTime);
+        } else if (seedingTime > 0) {
+          line_color = line_color_pos;
+          myData[durIndex] = Math.min(0, minSeedingTime - seedingTime);
+        } else {
+          line_color = line_color_neu;
+          myData[durIndex] = Math.min(0.000001 * (completion + 1), minSeedingTime - seedingTime);
+        }
+        if (colorRows.toString() === 'true') {
+          if (line_color[0] !== '') {
+            row.style.backgroundColor = line_color[0];
+          }
+          if (line_color[1] !== '') {
+            row.style.color = line_color[1];
+          }
+        }
+      }
+      if (headers[0] != null) {
+        headers[0].parentNode.parentNode.appendChild(row);
+      }
+      if (sortRows.toString() === 'true') {
+        allRows.push([row].concat(myData));
+      }
+    }
+    return void 0;
+  };
+
+  sortIndex = null;
+
+  sortFunctions = function(index, force) {
+    return function(event) {
+      var row, _i, _len;
+      if (event != null) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      if ((index != null) && (allRows[0] != null)) {
+        if (sortIndex === index && force === false) {
+          allRows.reverse();
+        } else {
+          sortIndex = index;
+          allRows.sort(function(a, b) {
+            if ((a[index + 1] != null) && (b[index + 1] != null)) {
+              if (a[index + 1] > b[index + 1]) {
+                return -1;
+              } else if (a[index + 1] < b[index + 1]) {
+                return 1;
+              } else {
+                return 0;
+              }
+            } else if ((a[index + 1] != null) && (b[index + 1] == null)) {
+              return -1;
+            } else if ((b[index + 1] != null) && (a[index + 1] == null)) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+        }
+        for (_i = 0, _len = allRows.length; _i < _len; _i++) {
+          row = allRows[_i];
+          row[0].parentNode.appendChild(row[0]);
+        }
+      }
+      return void 0;
+    };
+  };
+
+  headers = document.querySelector('tr.colhead');
+
+  if (headers != null) {
+    headers = headers.cells;
+  } else {
+    headers = [];
+  }
+
+  parseRows(document);
+
+  if (sortRows.toString() === 'true') {
+    for (index = _i = 0, _len = headers.length; _i < _len; index = ++_i) {
+      header = headers[index];
+      a1 = document.createElement('a');
+      a1.href = '#';
+      if (index === 0) {
+        a1.textContent = 'Type';
+      } else if ((header.querySelector('a') != null) || header.textContent.trim() === '') {
+        a1.textContent = '*';
+      } else {
+        a1.textContent = header.textContent;
+      }
+      if (a1.textContent !== '*') {
+        while (header.hasChildNodes()) {
+          header.removeChild(header.lastChild);
+        }
+      }
+      header.appendChild(a1);
+      a1.addEventListener('click', sortFunctions(index, false), true);
+    }
+  }
+
+  if (dynamicLoad.toString() === 'true') {
+    curPage = document.URL.match(/page=(\d+)/i);
+    curPage = curPage != null ? parseInt(curPage[1], 10) : 1;
+    prevPage = curPage - 1;
+    nextPage = curPage + 1;
+    lastPage = 1;
+    pagenums = document.querySelectorAll('div.pagenums');
+    loadPage = function(prev) {
+      if (prev == null) {
+        prev = false;
+      }
+      return function(event) {
+        var newPage, newURL, xhr;
+        if (event != null) {
+          event.stopPropagation();
+          event.preventDefault();
+        }
+        if (prev) {
+          newPage = prevPage--;
+        } else {
+          newPage = nextPage++;
+        }
+        if (newPage < 1 || newPage > lastPage) {
+          return;
+        }
+        newURL = document.URL.split('#')[0];
+        if (newURL.indexOf('page=') >= 0) {
+          newURL = newURL.replace(/page=(\d+)/i, "page=" + newPage);
+        } else {
+          newURL += "&page=" + newPage;
+        }
+        xhr = new XMLHttpRequest();
+        xhr.open('GET', newURL, true);
+        xhr.send();
+        return xhr.onreadystatechange = function() {
+          var newDoc, parser;
+          if (xhr.readyState === 4) {
+            parser = new DOMParser();
+            newDoc = parser.parseFromString(xhr.responseText, 'text/html');
+            parseRows(newDoc);
+            return sortFunctions(sortIndex, true)(null);
+          }
+        };
+      };
+    };
+    for (_j = 0, _len1 = pagenums.length; _j < _len1; _j++) {
+      pagenum = pagenums[_j];
+      if (pagenum.lastChild.href != null) {
+        lastPage = pagenum.lastChild.href.match(/page=(\d+)/i);
+        lastPage = lastPage != null ? parseInt(lastPage[1], 10) : 1;
+      } else {
+        lastPage = parseInt(pagenum.lastChild.textContent, 10);
+        if (isNaN(lastPage)) {
+          lastPage = 1;
+        }
+      }
+      clonedNode = pagenum.parentNode.cloneNode(true);
+      newPagenum = clonedNode.querySelector('div[class="pagenums"]');
+      while (newPagenum.hasChildNodes()) {
+        newPagenum.removeChild(newPagenum.lastChild);
+      }
+      a1 = document.createElement('a');
+      a1.href = '#';
+      a1.className = 'next-prev';
+      a1.textContent = 'Load next page dynamically →';
+      a2 = document.createElement('a');
+      a2.href = '#';
+      a2.className = 'next-prev';
+      a2.textContent = '← Load previous page dynamically';
+      newPagenum.appendChild(a2);
+      newPagenum.appendChild(a1);
+      a1.addEventListener('click', loadPage(false), true);
+      a2.addEventListener('click', loadPage(true), true);
+      pagenum.parentNode.parentNode.insertBefore(clonedNode, pagenum.parentNode.nextSibling);
+    }
+  }
+
+}).call(this);
+
+}
+
+if((document.URL.match(/^http.*:\/\/animebytes\.tv\/forums\.php.*$/i) != null) && document.URL.match(/^.*action=viewthread.*$/i) == null){
+// Generated by CoffeeScript 1.6.3
+/*
+// ==UserScript==
+// @name        AnimeBytes - Forum Search - Enhancement
+// @namespace   Megure@AnimeBytes.tv
+// @description Load posts into search results; highlight search terms; filter authors; slide through posts
+// @include     http*://animebytes.tv/forums.php*
+// @exclude	*action=viewthread*
+// @version     0.7
+// @grant       GM_getValue
+// @icon        http://animebytes.tv/favicon.ico
+// ==/UserScript==
+*/
+
+
+(function() {
+  var a, allResults, background_color, button, cb, filterPost, forumIds, forumid, getFirstTagParent, hideSubSelection, input, linkbox1, loadPost, loadText, loadThreadPage, loadingText, myCell, myLINK, newCheckbox, newLinkBox, patt, processThreadPage, quickLink, quickLinkSubs, result, sR, searchForums, searchForumsCB, searchForumsNew, showFastSearchLinks, showPost, strong, tP, textReplace, text_color, toggleText, toggleVisibility, user_filter, user_td, user_tr, workInForumSearch, workInRestOfForum, _i, _len;
+
+  background_color = GM_getValue('ABForumSearchHighlightBG', '#FFC000');
+
+  text_color = GM_getValue('ABForumSearchHighlightFG', '#000000');
+
+  toggleText = GM_getValue('ABForumToggleText', '(Toggle)');
+
+  loadText = GM_getValue('ABForumLoadText', '(Load)');
+
+  loadingText = GM_getValue('ABForumLoadingText', '(Loading)');
+
+  hideSubSelection = GM_getValue('ABForumSearchHideSubfor', 'true') === 'true';
+
+  workInForumSearch = GM_getValue('ABForumSearchWorkInFS', 'true') === 'true' && document.URL.indexOf('action=search') >= 0;
+
+  workInRestOfForum = GM_getValue('ABForumEnhWorkInRest', 'true') === 'true' && (document.URL.indexOf('action=viewforum') >= 0 || document.URL.indexOf('?') === -1);
+
+  showFastSearchLinks = GM_getValue('ABForumEnhFastSearch', 'true') === 'true' && document.URL.indexOf('action=viewforum') >= 0;
+
+  user_filter = [];
+
+  sR = [];
+
+  tP = [];
+
+  cb = [];
+
+  getFirstTagParent = function(elem, tag) {
+    while (elem !== null && elem.tagName !== 'BODY' && elem.tagName !== tag) {
+      elem = elem.parentNode;
+    }
+    if (elem.tagName === tag) {
+      return elem;
+    } else {
+      return null;
+    }
+  };
+
+  textReplace = function(elem) {
+    var node, regExp, walk;
+    if (patt !== '' && (background_color !== '' || text_color !== '')) {
+      walk = document.createTreeWalker(elem, NodeFilter.SHOW_TEXT, null, false);
+      node = walk.nextNode();
+      regExp = new RegExp('(' + patt + ')', 'i');
+      while (node != null) {
+        node.textContent.replace(regExp, function(term) {
+          var args, newSpan, newTextNode, offset;
+          args = [].slice.call(arguments);
+          offset = args[args.length - 2];
+          newTextNode = node.splitText(offset);
+          newTextNode.textContent = newTextNode.textContent.substr(term.length);
+          newSpan = document.createElement('span');
+          if (background_color !== '') {
+            newSpan.style.backgroundColor = background_color;
+          }
+          if (text_color !== '') {
+            newSpan.style.color = text_color;
+          }
+          newSpan.appendChild(document.createTextNode(term));
+          node.parentNode.insertBefore(newSpan, newTextNode);
+          return node = walk.nextNode();
+        });
+        node = walk.nextNode();
+      }
+    }
+  };
+
+  processThreadPage = function(id, threadid, page, parent, link) {
+    return function() {
+      var cell, linkbox, myColsp, nextPost, pagenums, post, prevPost, td, threadPage, tr, user_id, _i, _j, _k, _len, _len1, _ref, _ref1;
+      threadPage = "threadid=" + threadid + "&page=" + page;
+      link.textContent = toggleText;
+      sR[id] = [];
+      sR[id].parent = parent;
+      sR[id].index = 0;
+      sR[id].page = page;
+      sR[id].threadid = threadid;
+      _ref = tP[threadPage];
+      for (_i = _j = 0, _len = _ref.length; _j < _len; _i = ++_j) {
+        post = _ref[_i];
+        if (post.id === id) {
+          sR[id].index = _i;
+        }
+      }
+      user_id = tP[threadPage][sR[id].index].className.split('_');
+      user_id = user_id[user_id.length - 1];
+      sR[id].user = tP[threadPage][sR[id].index].querySelector('a[href="/user.php?id=' + user_id + '"]').textContent;
+      linkbox = document.createElement('div');
+      pagenums = document.createElement('div');
+      linkbox.className = 'linkbox';
+      pagenums.className = 'pagenums';
+      prevPost = document.createElement('a');
+      nextPost = document.createElement('a');
+      prevPost.href = '#';
+      nextPost.href = '#';
+      prevPost.className = 'page-link';
+      nextPost.className = 'page-link';
+      prevPost.textContent = '← Prev';
+      nextPost.textContent = 'Next →';
+      pagenums.appendChild(prevPost);
+      pagenums.appendChild(nextPost);
+      linkbox.appendChild(pagenums);
+      prevPost.addEventListener('click', showPost(sR[id], true), true);
+      nextPost.addEventListener('click', showPost(sR[id], false), true);
+      tr = document.createElement('tr');
+      td = document.createElement('td');
+      myColsp = 0;
+      _ref1 = parent.cells;
+      for (_k = 0, _len1 = _ref1.length; _k < _len1; _k++) {
+        cell = _ref1[_k];
+        myColsp += cell.colSpan;
+      }
+      td.colSpan = myColsp;
+      td.appendChild(linkbox);
+      td.appendChild(tP[threadPage][sR[id].index]);
+      tr.appendChild(td);
+      sR[id].td = td;
+      return sR[id].parent.parentNode.insertBefore(tr, sR[id].parent.nextSibling);
+    };
+  };
+
+  loadThreadPage = function(threadid, page) {
+    var threadPage, xhr;
+    threadPage = "threadid=" + threadid + "&page=" + page;
+    tP[threadPage] = 'Loading';
+    cb[threadPage] = [];
+    xhr = new XMLHttpRequest();
+    xhr.open('GET', "https://animebytes.tv/forums.php?action=viewthread&" + threadPage, true);
+    xhr.send();
+    return xhr.onreadystatechange = function() {
+      var callback, parser, post, _i, _j, _len, _len1, _ref, _ref1;
+      if (xhr.readyState === 4) {
+        parser = new DOMParser();
+        tP[threadPage] = (parser.parseFromString(xhr.responseText, 'text/html')).querySelectorAll('div[id^="post"]');
+        _ref = tP[threadPage];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          post = _ref[_i];
+          textReplace(post);
+        }
+        _ref1 = cb[threadPage];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          callback = _ref1[_j];
+          callback();
+        }
+        return delete cb[threadPage];
+      }
+    };
+  };
+
+  loadPost = function(link, filtered) {
+    return function(event) {
+      var cell, id, match, newLink, node, page, threadPage, threadid;
+      if (event != null) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      newLink = link.previousSibling;
+      cell = link.parentNode;
+      node = getFirstTagParent(link, 'TR');
+      threadid = link.href.match(/threadid=(\d+)/i);
+      threadid = threadid != null ? threadid[1] : '0';
+      match = link.href.match(/([^#]*)(?:#post(\d+))?/i);
+      if (match != null) {
+        id = match[2] != null ? 'post' + match[2] : id = 'thread' + threadid;
+      } else {
+        return;
+      }
+      if (id in sR) {
+        if (filtered === true) {
+          return filterPost(id)();
+        } else {
+          return toggleVisibility(sR[id]);
+        }
+      } else {
+        page = link.href.match(/page=(\d+)/i);
+        page = page != null ? parseInt(page[1], 10) : 1;
+        link.previousSibling.textContent = loadingText;
+        threadPage = "threadid=" + threadid + "&page=" + page;
+        if (threadPage in tP) {
+          if (tP[threadPage] === 'Loading') {
+            cb[threadPage].push(processThreadPage(id, threadid, page, node, newLink));
+            if (filtered === true) {
+              return cb[threadPage].push(filterPost(id));
+            }
+          } else {
+            processThreadPage(id, threadid, page, node, newLink)();
+            if (filtered === true) {
+              return filterPost(id)();
+            }
+          }
+        } else {
+          loadThreadPage(threadid, page);
+          cb[threadPage].push(processThreadPage(id, threadid, page, node, newLink));
+          if (filtered === true) {
+            return cb[threadPage].push(filterPost(id));
+          }
+        }
+      }
+    };
+  };
+
+  toggleVisibility = function(elem) {
+    if (elem.td.parentNode.style.visibility === 'collapse') {
+      showPost(elem, null)();
+      return elem.td.parentNode.style.visibility = 'visible';
+    } else {
+      return elem.td.parentNode.style.visibility = 'collapse';
+    }
+  };
+
+  showPost = function(elem, prev) {
+    return function(event) {
+      var nextTP, prevTP, threadPage;
+      threadPage = "threadid=" + elem.threadid + "&page=" + elem.page;
+      nextTP = "threadid=" + elem.threadid + "&page=" + (elem.page + 1);
+      prevTP = "threadid=" + elem.threadid + "&page=" + (elem.page - 1);
+      if (event != null) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      if (prev === true) {
+        if (elem.index === 0 && elem.page > 1) {
+          if (prevTP in tP) {
+            if (tP[prevTP] === 'Loading') {
+              return cb[prevTP].push(showPost(elem, prev));
+            } else {
+              elem.page = elem.page - 1;
+              elem.index = tP[prevTP].length - 1;
+              return elem.td.replaceChild(tP[prevTP][elem.index], elem.td.lastChild);
+            }
+          } else {
+            loadThreadPage(elem.threadid, elem.page - 1);
+            return cb[prevTP].push(showPost(elem, prev));
+          }
+        } else {
+          elem.index = Math.max(elem.index - 1, 0);
+          return elem.td.replaceChild(tP[threadPage][elem.index], elem.td.lastChild);
+        }
+      } else if (prev === false) {
+        if (elem.index === 24) {
+          if (nextTP in tP) {
+            if (tP[nextTP] === 'Loading') {
+              return cb[prevTP].push(showPost(elem, prev));
+            } else {
+              if (tP[nextTP].length > 0) {
+                elem.page = elem.page + 1;
+                elem.index = 0;
+                return elem.td.replaceChild(tP[nextTP][0], elem.td.lastChild);
+              }
+            }
+          } else {
+            loadThreadPage(elem.threadid, elem.page + 1);
+            return cb[nextTP].push(showPost(elem, prev));
+          }
+        } else {
+          elem.index = Math.min(elem.index + 1, tP[threadPage].length - 1);
+          return elem.td.replaceChild(tP[threadPage][elem.index], elem.td.lastChild);
+        }
+      } else {
+        if (elem.td.hasChildNodes() === true) {
+          return elem.td.replaceChild(tP[threadPage][elem.index], elem.td.lastChild);
+        } else {
+          return elem.td.appendChild(tP[threadPage][elem.index]);
+        }
+      }
+    };
+  };
+
+  filterPost = function(id) {
+    return function() {
+      var elem, toFilter, user_name, _i, _len;
+      elem = sR[id];
+      toFilter = true;
+      for (_i = 0, _len = user_filter.length; _i < _len; _i++) {
+        user_name = user_filter[_i];
+        if (elem.user.toUpperCase() === user_name.toUpperCase()) {
+          toFilter = false;
+          break;
+        }
+      }
+      if (toFilter) {
+        elem.td.parentNode.style.visibility = 'collapse';
+        return elem.parent.style.visibility = 'collapse';
+      }
+    };
+  };
+
+  if (workInRestOfForum || workInForumSearch) {
+    patt = document.querySelector('form[action=""] input[name="search"]');
+    if (patt != null) {
+      patt = patt.value.trim().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&').replace(/\s+/g, '|');
+    } else {
+      patt = '';
+    }
+    allResults = document.querySelectorAll('a[href^="/forums.php?action=viewthread"]');
+    for (_i = 0, _len = allResults.length; _i < _len; _i++) {
+      result = allResults[_i];
+      textReplace(result);
+      a = document.createElement('a');
+      a.href = '#';
+      a.textContent = loadText;
+      a.addEventListener('click', loadPost(result, false), true);
+      myCell = result.parentNode;
+      myCell.insertBefore(a, result);
+    }
+  }
+
+  if (workInForumSearch) {
+    user_tr = document.createElement('tr');
+    user_td = [];
+    user_td.push(document.createElement('td'));
+    user_td.push(document.createElement('td'));
+    user_td[0].className = 'label';
+    strong = document.createElement('strong');
+    strong.textContent = 'Filter author(s):';
+    user_td[0].appendChild(strong);
+    input = document.createElement('input');
+    input.placeholder = 'Comma- or space-separated list of authors';
+    input.size = '64';
+    button = document.createElement('button');
+    button.textContent = 'Filter';
+    button.type = 'button';
+    user_td[1].appendChild(input);
+    user_td[1].appendChild(button);
+    user_tr.appendChild(user_td[0]);
+    user_tr.appendChild(user_td[1]);
+    searchForums = document.querySelector('select[name="forums[]"]').parentNode.parentNode;
+    searchForums.parentNode.insertBefore(user_tr, searchForums);
+    button.addEventListener('click', function(event) {
+      var userName, _j, _len1, _results;
+      if (input.value.replace(/[,\s]/g, '') !== '') {
+        user_filter = (function() {
+          var _j, _len1, _ref, _results;
+          _ref = input.value.trim().replace(/[,\s]+/g, ',').split(',');
+          _results = [];
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            userName = _ref[_j];
+            _results.push(userName.trim());
+          }
+          return _results;
+        })();
+        button.disabled = 'disabled';
+        _results = [];
+        for (_j = 0, _len1 = allResults.length; _j < _len1; _j++) {
+          result = allResults[_j];
+          _results.push(loadPost(result, true)());
+        }
+        return _results;
+      }
+    }, true);
+    if (hideSubSelection) {
+      searchForumsNew = searchForums.cloneNode(true);
+      searchForums.style.visibility = 'collapse';
+      searchForumsCB = searchForumsNew.cells[1];
+      while (searchForumsCB.hasChildNodes()) {
+        searchForumsCB.removeChild(searchForumsCB.lastChild);
+      }
+      newCheckbox = document.createElement('input');
+      newCheckbox.type = 'checkbox';
+      searchForumsCB.appendChild(newCheckbox);
+      searchForumsCB.appendChild(document.createTextNode(' Show forum selection: select (sub-) forums to search in.'));
+      searchForums.parentNode.insertBefore(searchForumsNew, searchForums);
+      newCheckbox.addEventListener('change', function(event) {
+        searchForums.style.visibility = 'visible';
+        return searchForumsNew.style.visibility = 'collapse';
+      }, true);
+    }
+  }
+
+  if (showFastSearchLinks) {
+    forumid = document.URL.match(/forumid=(\d+)/i);
+    if (forumid != null) {
+      forumid = parseInt(forumid[1], 10);
+      quickLink = document.createElement('a');
+      quickLink.textContent = ' [Search this forum] ';
+      quickLink.href = "/forums.php?action=search&forums[]=" + forumid;
+      linkbox1 = document.querySelector('div.linkbox');
+      newLinkBox = linkbox1.cloneNode(true);
+      while (newLinkBox.hasChildNodes()) {
+        newLinkBox.removeChild(newLinkBox.lastChild);
+      }
+      linkbox1.parentNode.insertBefore(newLinkBox, linkbox1);
+      newLinkBox.appendChild(quickLink);
+      forumIds = document.querySelectorAll('table a[href^="/forums.php?action=viewforum&forumid="]');
+      forumIds = (function() {
+        var _j, _len1, _results;
+        _results = [];
+        for (_j = 0, _len1 = forumIds.length; _j < _len1; _j++) {
+          myLINK = forumIds[_j];
+          _results.push(parseInt((myLINK.href.match(/forumid=(\d*)/i))[1], 10));
+        }
+        return _results;
+      })();
+      if (forumIds.length > 0) {
+        forumIds.push(forumid);
+        quickLinkSubs = document.createElement('a');
+        quickLinkSubs.textContent = ' [Search this forum and all direct subforums] ';
+        quickLinkSubs.href = "/forums.php?action=search&forums[]=" + forumIds.join('&forums[]=');
+        newLinkBox.appendChild(quickLinkSubs);
+      }
+    }
+  }
+
+}).call(this);
+
+}
+
+// Add settings for Megure's scripts
+(function(){function addBooleanSetting(key, name, description, onValue, offValue, myDefault){
+
+      var __temp = document.createElement('li');
+      __temp.className = '';
+      __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'><input id='" + key + "' name='" + key + "' type='checkbox' " + (function(){if(GM_getValue(key, myDefault).toString() === onValue.toString())return "checked='checked'";else return "";}).call(this) + "'> <label for='" + key + "'>" + description + "</label></span>";
+      __temp.addEventListener('change', function(ev){var ch=ev.target.checked;"boolean"===typeof ch&&(ch?GM_setValue(key,onValue):GM_setValue(key,offValue))});
+      document.getElementById('pose_list').appendChild(__temp);
+    
+}
+function addColorSetting(key, name, description, myDefault, deactivatable, deactiveDefault){
+
+      var __temp = document.createElement('li');
+      __temp.className = '';
+      __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'>" +
+    (function(){if(deactivatable)return "<input id='CCB_" + key + "' type='checkbox' " +
+		  (function(){if(GM_getValue(key, myDefault).toString() !== deactiveDefault.toString())return "checked='checked'";else return "";}).call(this) +
+    ">";else return "";}).call(this) +
+    "<input id='" + key + "' name='" + key + "' type='color' value='" + GM_getValue(key, myDefault) + "'>" +
+    "<button type='button'>Reset</button> <label for='" + key + "'>" + description + "</label></span>";
+      __temp.addEventListener('change', function(e){var a=e.target;
+		  if(a.type==="checkbox"){if(!a.checked)GM_setValue(key,deactiveDefault);}
+		  else if(a.type==="color"){GM_setValue(key,a.value);document.getElementById('CCB' + key).checked=true;}
+    });
+__temp.addEventListener('click', function(e){var a=e.target;
+		  if(a.type==="button"){
+		  	GM_setValue(key, myDefault);
+		  	document.getElementById('CCB_' + key).checked = true;
+		  	document.getElementById(key).value = myDefault;
+		  }
+    });
+      document.getElementById('pose_list').appendChild(__temp);
+    
+}
+function addTextSetting(key, name, description, myDefault, maxLength){
+
+      var __temp = document.createElement('li');
+      __temp.className = '';
+      __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'><input id='" + key + "' name='" + key + "' type='text' maxlength='" + maxLength + "' value='" + GM_getValue(key, myDefault) + "'> <label for='" + key + "'>" + description + "</label></span>";
+      __temp.addEventListener('keyup', function(e){var a=e.target;
+		  if(a.type==="text"){GM_setValue(key,a.value);}});
+      document.getElementById('pose_list').appendChild(__temp);
+    
+}
+
+if(document.URL.match(/^.*\/user\.php\?.*action=edit.*$/i) != null){addBooleanSetting('ABTorrentsShowYen', 'Show Yen production', 'Show Yen production for torrents, with detailed information when hovered.', 'true', 'false', 'true');
+	addBooleanSetting('ABTorrentsReqTime', 'Show required seeding time', 'Shows minimal required seeding time for torrents in their description and when size is hovered.', 'true', 'false', 'true');
+	addBooleanSetting('ABHistColorRows', 'Color history', 'Color rows in your history according to H&R status. (Choose colors below.)', 'true', 'false', 'true');
+	addColorSetting('ABHistColorPosBG', 'Color for non-H&Rs', 'Background color for torrents in your history that are no Hit & Runs.', '#B0F0B0', 'true', '');
+	addColorSetting('ABHistColorPosFG', 'Color for non-H&Rs', 'Text color for torrents in your history that are no Hit & Runs.', '#000000', 'true', '');
+	addColorSetting('ABHistColorNeuBG', 'Color for partial downloads', 'Background color for torrents in your history with less than 10% download.', '#F0F0B0', 'true', '');
+	addColorSetting('ABHistColorNeuFG', 'Color for partial downloads', 'Text color for torrents in your history with less than 10% download.', '#000000', 'true', '');
+	addColorSetting('ABHistColorNegBG', 'Color for potential H&R', 'Background color for torrents where you have not seeded enough yet.', '#F0B0B0', 'true', '');
+	addColorSetting('ABHistColorNegFG', 'Color for potential H&R', 'Text color for torrents where you have not seeded enough yet.', '#000000', 'true', '');
+	addBooleanSetting('ABHistSortRows', 'Sorting of history', 'Sort your history pages for any column (seed-time column is sorted for remaining required seed-time).', 'true', 'false', 'true');
+	addBooleanSetting('ABHistDynLoad', 'Load history pages', 'Add buttons to dynamically load more pages into your history tables.', 'true', 'false', 'true');
+	addBooleanSetting('ABForumEnhFastSearch', 'Create links to search forums', 'Add links to search forums (including or excluding direct subforums) at the top of a forums page.', 'true', 'false', 'true');
+	addBooleanSetting('ABForumSearchWorkInFS', 'Load posts into search results', 'Allows you to load posts and threads into search results, slide through posts and filter for authors.', 'true', 'false', 'true');
+	addBooleanSetting('ABForumSearchHideSubfor', 'Hide subforum selection in search', 'This will hide the subforum selection in the search until a checkbox is clicked.', 'true', 'false', 'true');
+	addColorSetting('ABForumSearchHighlightBG', 'Color for search terms', 'Background color for search terms within posts and headers.', '#FFC000', 'true', '');
+	addColorSetting('ABForumSearchHighlightFG', 'Color for search terms', 'Text color for search terms within posts and headers.', '#000000', 'true', '');
+	addBooleanSetting('ABForumEnhWorkInRest', 'Load posts into forum view', 'Allows you to load posts and threads into the general forum view.', 'true', 'false', 'true');
+	addTextSetting('ABForumLoadText', 'Text for links to be loaded', 'The text to be shown for forum links that have not been loaded yet.', '(Load)', '16');
+	addTextSetting('ABForumLoadingText', 'Text for loading links', 'The text to be shown for forum links that are currently being loaded.', '(Loading)', '16');
+	addTextSetting('ABForumToggleText', 'Text for loaded links', 'The text to be shown for forum links that have been loaded and can now be toggled.', '(Toggle)', '16');}}).call(this);
