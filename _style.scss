@@ -3710,12 +3710,12 @@ ul.ue_tabs {
     top: 0px;
     width: 600px;
     z-index: 96;
-    color: #274263;
+    color: $tertiaryfontcolour;
 }
 
 #tls a {
-    border-left: 1px solid #1F354F;
-    color: rgba(137, 170, 204, 0.6);
+    border-left: $secondaryborder;
+    color: $tertiaryfontcolour;
     display: inline-block;
     font-size: 11px;
     height: 25px;
@@ -3724,12 +3724,12 @@ ul.ue_tabs {
 }
 
 #tls a:last-child {
-    border-right: 1px solid #1F354F;
+    border-right: $secondaryborder;
 }
 
 #tls a:hover {
-    color: #89aacc;
-    background: #1F354F;
+    color: $tertiaryfontcolour;
+    background: rgba($navigationbackground,0.1);
 }
 
 #tls + br {
@@ -4163,6 +4163,6 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
     }
     
     #forums #tls, #scholarapp #tls {
-        padding-left: 60px !important;
+        padding-left: 68px !important;
     }
 }
