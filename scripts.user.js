@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.6
+// @version 1.61
 // @description Variety of userscripts to fully utilise the site and stylesheet.
 // @include *animebytes.tv/*
 // @match https://*.animebytes.tv/*
@@ -1284,7 +1284,9 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
 
 }
 // Add settings
-(function(){function addBooleanSetting(key, name, description, onValue, offValue, myDefault){
+if(/\/user\.php\?.*action=edit/i.test(document.URL)){
+    (function(){
+    function addBooleanSetting(key, name, description, onValue, offValue, myDefault){
 
       var __temp = document.createElement('li');
       __temp.className = '';
@@ -1293,6 +1295,7 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
       document.getElementById('pose_list').appendChild(__temp);
     
 }
+
 function addColorSetting(key, name, description, myDefault, deactivatable, deactiveDefault){
 
       var __temp = document.createElement('li');
@@ -1317,6 +1320,7 @@ __temp.addEventListener('click', function(e){var a=e.target;
       document.getElementById('pose_list').appendChild(__temp);
     
 }
+
 function addTextSetting(key, name, description, myDefault, maxLength){
 
       var __temp = document.createElement('li');
@@ -1328,7 +1332,8 @@ function addTextSetting(key, name, description, myDefault, maxLength){
     
 }
 
-if(/\/user\.php\?.*action=edit/i.test(document.URL)){document.getElementById('pose_list').appendChild(document.createElement('hr'));
+    
+	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABTorrentsShowYen', 'Show Yen production', 'Show Yen production for torrents, with detailed information when hovered.', 'true', 'false', 'true');
 	addBooleanSetting('ABTorrentsReqTime', 'Show required seeding time', 'Shows minimal required seeding time for torrents in their description and when size is hovered.', 'true', 'false', 'true');
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
@@ -1347,7 +1352,11 @@ if(/\/user\.php\?.*action=edit/i.test(document.URL)){document.getElementById('po
 	addBooleanSetting('ABForumSearchHideSubfor', 'Hide subforum selection in search', 'This will hide the subforum selection in the search until a checkbox is clicked.', 'true', 'false', 'true');
 	addColorSetting('ABForumSearchHighlightBG', 'Color for search terms', 'Background color for search terms within posts and headers.', '#FFC000', 'true', '');
 	addColorSetting('ABForumSearchHighlightFG', 'Color for search terms', 'Text color for search terms within posts and headers.', '#000000', 'true', '');
-	addBooleanSetting('ABForumEnhWorkInRest', 'Load posts into forum view', 'Allows you to load posts and threads into the general forum view.', 'true', 'false', 'true');
+	addBooleanSetting('ABForumEnhWorkInRest', 'Load posts into forum view', 'Allows you to load posts and threads into the general forum view.', 'true', 'false', 'false');
 	addTextSetting('ABForumLoadText', 'Text for links to be loaded', 'The text to be shown for forum links that have not been loaded yet.', '(Load)', '16');
 	addTextSetting('ABForumLoadingText', 'Text for loading links', 'The text to be shown for forum links that are currently being loaded.', '(Loading)', '16');
-	addTextSetting('ABForumToggleText', 'Text for loaded links', 'The text to be shown for forum links that have been loaded and can now be toggled.', '(Toggle)', '16');}}).call(this);
+	addTextSetting('ABForumToggleText', 'Text for loaded links', 'The text to be shown for forum links that have been loaded and can now be toggled.', '(Toggle)', '16');
+
+    }).call(this);
+}
+
