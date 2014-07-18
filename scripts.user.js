@@ -881,7 +881,7 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
 
   workInForumSearch = GM_getValue('ABForumSearchWorkInFS', 'true') === 'true' && document.URL.indexOf('action=search') >= 0;
 
-  workInRestOfForum = GM_getValue('ABForumEnhWorkInRest', 'true') === 'true' && (document.URL.indexOf('action=viewforum') >= 0 || document.URL.indexOf('?') === -1);
+  workInRestOfForum = GM_getValue('ABForumEnhWorkInRest', 'false') === 'true' && (document.URL.indexOf('action=viewforum') >= 0 || document.URL.indexOf('?') === -1);
 
   showFastSearchLinks = GM_getValue('ABForumEnhFastSearch', 'true') === 'true' && document.URL.indexOf('action=viewforum') >= 0;
 
