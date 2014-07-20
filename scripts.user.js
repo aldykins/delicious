@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.61
+// @version 1.62
 // @description Variety of userscripts to fully utilise the site and stylesheet.
 // @include *animebytes.tv/*
 // @match https://*.animebytes.tv/*
@@ -444,7 +444,7 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
 // @namespace   Megure@AnimeBytes.tv
 // @description Highlights torrents which might become a Hit & Run; allows sorting on all history-pages
 // @include     http*://animebytes.tv*alltorrents.php*
-// @version     0.82
+// @version     0.83
 // @grant       GM_getValue
 // @icon        http://animebytes.tv/favicon.ico
 // ==/UserScript==
@@ -460,11 +460,11 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
 
   dynamicLoad = GM_getValue('ABHistDynLoad', 'true');
 
-  lcPosBG = GM_getValue('ABHistColorPosBG', 'PaleGreen');
+  lcPosBG = GM_getValue('ABHistColorPosBG', '#B0F0B0');
 
-  lcNeuBG = GM_getValue('ABHistColorNeuBG', 'Khaki');
+  lcNeuBG = GM_getValue('ABHistColorNeuBG', '#F0F0B0');
 
-  lcNegBG = GM_getValue('ABHistColorNegBG', 'NavajoWhite');
+  lcNegBG = GM_getValue('ABHistColorNegBG', '#F0B0B0');
 
   lcPosFG = GM_getValue('ABHistColorPosFG', 'Black');
 
@@ -676,10 +676,10 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
           myData[durIndex] = Math.min(0.000001 * (completion + 1), minSeedingTime - seedingTime);
         }
         if (colorRows.toString() === 'true') {
-          if (line_color[0] !== '') {
+          if (line_color[0] !== 'none') {
             row.style.backgroundColor = line_color[0];
           }
-          if (line_color[1] !== '') {
+          if (line_color[1] !== 'none') {
             row.style.color = line_color[1];
           }
         }
@@ -857,7 +857,7 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
 // @description Load posts into search results; highlight search terms; filter authors; slide through posts
 // @include     http*://animebytes.tv/forums.php*
 // @exclude     *action=viewthread*
-// @version     0.7
+// @version     0.71
 // @grant       GM_getValue
 // @icon        http://animebytes.tv/favicon.ico
 // ==/UserScript==
@@ -906,7 +906,7 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
 
   textReplace = function(elem) {
     var node, regExp, walk;
-    if (patt !== '' && (background_color !== '' || text_color !== '')) {
+    if (patt !== '' && (background_color !== 'none' || text_color !== 'none')) {
       walk = document.createTreeWalker(elem, NodeFilter.SHOW_TEXT, null, false);
       node = walk.nextNode();
       regExp = new RegExp('(' + patt + ')', 'i');
@@ -918,10 +918,10 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
           newTextNode = node.splitText(offset);
           newTextNode.textContent = newTextNode.textContent.substr(term.length);
           newSpan = document.createElement('span');
-          if (background_color !== '') {
+          if (background_color !== 'none') {
             newSpan.style.backgroundColor = background_color;
           }
-          if (text_color !== '') {
+          if (text_color !== 'none') {
             newSpan.style.color = text_color;
           }
           newSpan.appendChild(document.createTextNode(term));
@@ -1338,20 +1338,20 @@ function addTextSetting(key, name, description, myDefault, maxLength){
 	addBooleanSetting('ABTorrentsReqTime', 'Show required seeding time', 'Shows minimal required seeding time for torrents in their description and when size is hovered.', 'true', 'false', 'true');
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABHistColorRows', 'Color history', 'Color rows in your history according to H&R status. (Choose colors below.)', 'true', 'false', 'true');
-	addColorSetting('ABHistColorPosBG', 'Color for non-H&Rs', 'Background color for torrents in your history that are no Hit & Runs.', '#B0F0B0', 'true', '');
-	addColorSetting('ABHistColorPosFG', 'Color for non-H&Rs', 'Text color for torrents in your history that are no Hit & Runs.', '#000000', 'true', '');
-	addColorSetting('ABHistColorNeuBG', 'Color for partial downloads', 'Background color for torrents in your history with less than 10% download.', '#F0F0B0', 'true', '');
-	addColorSetting('ABHistColorNeuFG', 'Color for partial downloads', 'Text color for torrents in your history with less than 10% download.', '#000000', 'true', '');
-	addColorSetting('ABHistColorNegBG', 'Color for potential H&R', 'Background color for torrents where you have not seeded enough yet.', '#F0B0B0', 'true', '');
-	addColorSetting('ABHistColorNegFG', 'Color for potential H&R', 'Text color for torrents where you have not seeded enough yet.', '#000000', 'true', '');
+	addColorSetting('ABHistColorPosBG', 'Color for non-H&Rs', 'Background color for torrents in your history that are no Hit & Runs.', '#B0F0B0', 'true', 'none');
+	addColorSetting('ABHistColorPosFG', 'Color for non-H&Rs', 'Text color for torrents in your history that are no Hit & Runs.', '#000000', 'true', 'none');
+	addColorSetting('ABHistColorNeuBG', 'Color for partial downloads', 'Background color for torrents in your history with less than 10% download.', '#F0F0B0', 'true', 'none');
+	addColorSetting('ABHistColorNeuFG', 'Color for partial downloads', 'Text color for torrents in your history with less than 10% download.', '#000000', 'true', 'none');
+	addColorSetting('ABHistColorNegBG', 'Color for potential H&R', 'Background color for torrents where you have not seeded enough yet.', '#F0B0B0', 'true', 'none');
+	addColorSetting('ABHistColorNegFG', 'Color for potential H&R', 'Text color for torrents where you have not seeded enough yet.', '#000000', 'true', 'none');
 	addBooleanSetting('ABHistSortRows', 'Sorting of history', 'Sort your history pages for any column (seed-time column is sorted for remaining required seed-time).', 'true', 'false', 'true');
 	addBooleanSetting('ABHistDynLoad', 'Load history pages', 'Add buttons to dynamically load more pages into your history tables.', 'true', 'false', 'true');
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABForumEnhFastSearch', 'Create links to search forums', 'Add links to search forums (including or excluding direct subforums) at the top of a forums page.', 'true', 'false', 'true');
 	addBooleanSetting('ABForumSearchWorkInFS', 'Load posts into search results', 'Allows you to load posts and threads into search results, slide through posts and filter for authors.', 'true', 'false', 'true');
 	addBooleanSetting('ABForumSearchHideSubfor', 'Hide subforum selection in search', 'This will hide the subforum selection in the search until a checkbox is clicked.', 'true', 'false', 'true');
-	addColorSetting('ABForumSearchHighlightBG', 'Color for search terms', 'Background color for search terms within posts and headers.', '#FFC000', 'true', '');
-	addColorSetting('ABForumSearchHighlightFG', 'Color for search terms', 'Text color for search terms within posts and headers.', '#000000', 'true', '');
+	addColorSetting('ABForumSearchHighlightBG', 'Color for search terms', 'Background color for search terms within posts and headers.', '#FFC000', 'true', 'none');
+	addColorSetting('ABForumSearchHighlightFG', 'Color for search terms', 'Text color for search terms within posts and headers.', '#000000', 'true', 'none');
 	addBooleanSetting('ABForumEnhWorkInRest', 'Load posts into forum view', 'Allows you to load posts and threads into the general forum view.', 'true', 'false', 'false');
 	addTextSetting('ABForumLoadText', 'Text for links to be loaded', 'The text to be shown for forum links that have not been loaded yet.', '(Load)', '16');
 	addTextSetting('ABForumLoadingText', 'Text for loading links', 'The text to be shown for forum links that are currently being loaded.', '(Loading)', '16');
