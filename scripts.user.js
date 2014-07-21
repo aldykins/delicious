@@ -2,6 +2,7 @@
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
 // @version 1.63
+// @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
 // @include *animebytes.tv/*
 // @match https://*.animebytes.tv/*
