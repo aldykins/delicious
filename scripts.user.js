@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.63
+// @version 1.64
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -78,7 +78,7 @@ function createSettingsPage() {
 	addCheckbox("Delicious Keyboard Shortcuts", "Enable/Disable delicious keyboard shortcuts for easier access to Bold/Italics/Underline/Spoiler/Hide and aligning.", 'deliciouskeyboard');
 }
 
-if (window.location.pathname === '/user.php' && window.location.search.indexOf('action=edit') > -1) createSettingsPage();
+if (/\/user\.php\?.*action=edit/i.test(document.URL)) createSettingsPage();
 
 
 // A couple GM variables that need initializing
@@ -188,15 +188,42 @@ if (GM_getValue('delicioustreats') === 'true') {
 }
 
 
-// Keyboard shortcuts by Alpha
+// Keyboard shortcuts by Alpha, mod by Megure
 // Enables keyboard shortcuts for forum (new post and edit) and PM
 // Depends on injectScript
-if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('quickpost') || document.evaluate('//*[@class="post"]/form/textarea', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null))) {
+if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('quickpost') || document.querySelector('textarea'))) {
 	function keyboardshortcuts() {
+		function custom_insert_text(open, close) {
+		    var elem = document.activeElement;
+		    if (elem.tagName.toLowerCase() !== 'textarea') return;
+		    if (elem.selectionStart || elem.selectionStart == '0') {
+		        var startPos = elem.selectionStart;
+		        var endPos = elem.selectionEnd;
+		        elem.value = elem.value.substring(0, startPos) + open + elem.value.substring(startPos, endPos) + close + elem.value.substring(endPos, elem.value.length);
+		        elem.selectionStart = elem.selectionEnd = endPos + open.length + close.length;
+		        elem.focus();
+		        if (close.length == 0)
+		            elem.setSelectionRange(startPos + open.length, startPos + open.length);
+		        else
+		            elem.setSelectionRange(startPos + open.length, endPos + open.length);
+		    } else if (document.selection && document.selection.createRange) {
+		        elem.focus();
+		        sel = document.selection.createRange();
+		        sel.text = open + sel.text + close;
+		        if (close.length != 0) {
+		            sel.move("character", -close.length);
+		            sel.select();
+		        }
+		        elem.focus();
+		    } else {
+		        elem.value += open;
+		        elem.focus();
+		        elem.value += close;
+		    }
+		}
 		var ctrl = function(key, callback, args) {
 			document.addEventListener('keydown', function (e) {
-				if(!args) args=[];
-				if(e.keyCode === key.charCodeAt(0) && (e.ctrlKey || e.metaKey) && (document.activeElement === document.getElementById('quickpost') || document.activeElement === document.evaluate('//*[@class="post"]/form/textarea', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue)) {
+				if(e.keyCode === key.charCodeAt(0) && (e.ctrlKey || e.metaKey) && (document.activeElement === document.getElementById('quickpost') || document.activeElement.parentNode.parentNode.className.toLowerCase() === 'post')) {
 					e.preventDefault();
 					callback.apply(this, args);
 					return false;
@@ -207,29 +234,32 @@ if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('qui
 		 * All keyboard shortcuts based on MS Word
 		 **/
 
-		// Bold
 		var ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '&#8984;' : 'CTRL';
-		document.evaluate('//*[@id="bbcode"]/img[@title="Bold"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('title', 'Bold (' + ctrlorcmd + '+B)');
-		ctrl('B', insert_text, ['[b]', '[/b]']);
+		// Bold
+		ctrl('B', custom_insert_text, ['[b]', '[/b]']);
+		document.querySelector('#bbcode img[title="Bold"]').title += ' (' + ctrlorcmd + '+B)';
 		// Italics
-		document.evaluate('//*[@id="bbcode"]/img[@title="Italics"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('title', 'Italics (' + ctrlorcmd + '+I)');
-		ctrl('I', insert_text, ['[i]', '[/i]']);
+		ctrl('I', custom_insert_text, ['[i]', '[/i]']);
+		document.querySelector('#bbcode img[title="Italics"]').title += ' (' + ctrlorcmd + '+I)';
 		// Underline
-		document.evaluate('//*[@id="bbcode"]/img[@title="Underline"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('title', 'Underline (' + ctrlorcmd + '+U)');
-		ctrl('U', insert_text, ['[u]', '[/u]']);
+		ctrl('U', custom_insert_text, ['[u]', '[/u]']);
+		document.querySelector('#bbcode img[title="Underline"]').title += ' (' + ctrlorcmd + '+U)';
 		// Align right
-		ctrl('R', insert_text, ['[align=right]', '[/align]']);
+		ctrl('R', custom_insert_text, ['[align=right]', '[/align]']);
 		// Align left
-		ctrl('L', insert_text, ['[align=left]', '[/align]']);
+		ctrl('L', custom_insert_text, ['[align=left]', '[/align]']);
 		// Align center
-		ctrl('E', insert_text, ['[align=center]', '[/align]']);
+		ctrl('E', custom_insert_text, ['[align=center]', '[/align]']);
 		// Spoiler
-		ctrl('S', insert_text, ['[spoiler]', '[/spoiler]']);
+		ctrl('S', custom_insert_text, ['[spoiler]', '[/spoiler]']);
+		document.querySelector('#bbcode img[title="Spoilers"]').title += ' (' + ctrlorcmd + '+S)';
 		// Hide
-		ctrl('H', insert_text, ['[hide]', '[/hide]']);
+		ctrl('H', custom_insert_text, ['[hide]', '[/hide]']);
+		document.querySelector('#bbcode img[title="Hide"]').title += ' (' + ctrlorcmd + '+H)';
 	}
 	injectScript('('+keyboardshortcuts+')();', 'keyboardshortcuts');
 }
+
 
 // Three more scripts by Megure; the headers are still included
 // Search for UserScript or visit https://github.com/tubersan/AnimeBytes-Userscripts/ for details
