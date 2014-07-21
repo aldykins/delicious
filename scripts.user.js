@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.62
+// @version 1.63
 // @description Variety of userscripts to fully utilise the site and stylesheet.
 // @include *animebytes.tv/*
 // @match https://*.animebytes.tv/*
@@ -1290,8 +1290,8 @@ if(/\/user\.php\?.*action=edit/i.test(document.URL)){
 
       var __temp = document.createElement('li');
       __temp.className = '';
-      __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'><input id='" + key + "' name='" + key + "' type='checkbox' " + (function(){if(GM_getValue(key, myDefault).toString() === onValue.toString())return "checked='checked'";else return "";}).call(this) + "'> <label for='" + key + "'>" + description + "</label></span>";
-      __temp.addEventListener('change', function(ev){var ch=ev.target.checked;"boolean"===typeof ch&&(ch?GM_setValue(key,onValue):GM_setValue(key,offValue))});
+      __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'><input id='Setting_" + key + "' name='Setting_" + key + "' type='checkbox' " + (GM_getValue(key, myDefault).toString() === onValue.toString() ? "checked='checked'" : "") + "'> <label for='Setting_" + key + "'>" + description + "</label></span>";
+      __temp.addEventListener('change', function(ev){var ch = ev.target.checked; (ch === true ? GM_setValue(key, onValue) : GM_setValue(key, offValue));});
       document.getElementById('pose_list').appendChild(__temp);
     
 }
@@ -1301,20 +1301,20 @@ function addColorSetting(key, name, description, myDefault, deactivatable, deact
       var __temp = document.createElement('li');
       __temp.className = '';
       __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'>" +
-    (function(){if(deactivatable)return "<input id='CCB_" + key + "' type='checkbox' " +
-		  (function(){if(GM_getValue(key, myDefault).toString() !== deactiveDefault.toString())return "checked='checked'";else return "";}).call(this) +
-    ">";else return "";}).call(this) +
-    "<input id='" + key + "' name='" + key + "' type='color' value='" + GM_getValue(key, myDefault) + "'>" +
-    "<button type='button'>Reset</button> <label for='" + key + "'>" + description + "</label></span>";
-      __temp.addEventListener('change', function(e){var a=e.target;
-		  if(a.type==="checkbox"){if(!a.checked)GM_setValue(key,deactiveDefault);}
-		  else if(a.type==="color"){GM_setValue(key,a.value);document.getElementById('CCB' + key).checked=true;}
+    (deactivatable.toString() === 'true' ? "<input id='ColorCheckBox_" + key + "' type='checkbox' " +
+		  (GM_getValue(key, myDefault).toString() !== deactiveDefault.toString() ? "checked='checked'" : "") +
+    ">" : "") +
+    " <input id='Setting_" + key + "' name='Setting_" + key + "' type='color' value='" + (GM_getValue(key, myDefault).toString() === deactiveDefault.toString() ? myDefault : GM_getValue(key, myDefault)) + "'>" +
+    " <button type='button'>Reset</button> <label for='Setting_" + key + "'>" + description + "</label></span>";
+      __temp.addEventListener('change', function(e){var a = e.target;
+		  if(a.type === "checkbox"){ a.checked === false ? GM_setValue(key, deactiveDefault) : GM_setValue(key, document.getElementById('Setting_' + key).value) }
+		  else if(a.type === "color"){ GM_setValue(key, a.value); document.getElementById('ColorCheckBox_' + key).checked = true; }
     });
-__temp.addEventListener('click', function(e){var a=e.target;
-		  if(a.type==="button"){
+__temp.addEventListener('click', function(e){var a = e.target;
+		  if(a.type === "button"){
 		  	GM_setValue(key, myDefault);
-		  	document.getElementById('CCB_' + key).checked = true;
-		  	document.getElementById(key).value = myDefault;
+		  	document.getElementById('ColorCheckBox_' + key).checked = true;
+		  	document.getElementById('Setting_' + key).value = myDefault;
 		  }
     });
       document.getElementById('pose_list').appendChild(__temp);
@@ -1325,9 +1325,9 @@ function addTextSetting(key, name, description, myDefault, maxLength){
 
       var __temp = document.createElement('li');
       __temp.className = '';
-      __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'><input id='" + key + "' name='" + key + "' type='text' maxlength='" + maxLength + "' value='" + GM_getValue(key, myDefault) + "'> <label for='" + key + "'>" + description + "</label></span>";
-      __temp.addEventListener('keyup', function(e){var a=e.target;
-		  if(a.type==="text"){GM_setValue(key,a.value);}});
+      __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'><input id='Setting_" + key + "' name='Setting_" + key + "' type='text' maxlength='" + maxLength + "' value='" + GM_getValue(key, myDefault) + "'> <label for='Setting_" + key + "'>" + description + "</label></span>";
+      __temp.addEventListener('keyup', function(e){var a = e.target;
+		  if(a.type === "text"){ GM_setValue(key, a.value); }});
       document.getElementById('pose_list').appendChild(__temp);
     
 }
@@ -1353,9 +1353,9 @@ function addTextSetting(key, name, description, myDefault, maxLength){
 	addColorSetting('ABForumSearchHighlightBG', 'Color for search terms', 'Background color for search terms within posts and headers.', '#FFC000', 'true', 'none');
 	addColorSetting('ABForumSearchHighlightFG', 'Color for search terms', 'Text color for search terms within posts and headers.', '#000000', 'true', 'none');
 	addBooleanSetting('ABForumEnhWorkInRest', 'Load posts into forum view', 'Allows you to load posts and threads into the general forum view.', 'true', 'false', 'false');
-	addTextSetting('ABForumLoadText', 'Text for links to be loaded', 'The text to be shown for forum links that have not been loaded yet.', '(Load)', '16');
-	addTextSetting('ABForumLoadingText', 'Text for loading links', 'The text to be shown for forum links that are currently being loaded.', '(Loading)', '16');
-	addTextSetting('ABForumToggleText', 'Text for loaded links', 'The text to be shown for forum links that have been loaded and can now be toggled.', '(Toggle)', '16');
+	addTextSetting('ABForumLoadText', 'Text for links to be loaded', 'The text to be shown for forum links that have not been loaded yet.', '(Load)', '10');
+	addTextSetting('ABForumLoadingText', 'Text for loading links', 'The text to be shown for forum links that are currently being loaded.', '(Loading)', '10');
+	addTextSetting('ABForumToggleText', 'Text for loaded links', 'The text to be shown for forum links that have been loaded and can now be toggled.', '(Toggle)', '10');
 
     }).call(this);
 }
