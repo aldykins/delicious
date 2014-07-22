@@ -190,10 +190,9 @@ if (GM_getValue('delicioustreats') === 'true') {
 
 // Keyboard shortcuts by Alpha, mod by Megure
 // Enables keyboard shortcuts for forum (new post and edit) and PM
-if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('quickpost') || document.querySelector('textarea'))) {
+if (GM_getValue('deliciouskeyboard') === 'true' && document.querySelector('textarea') !== null) {
 	function custom_insert_text(open, close) {
 		var elem = document.activeElement;
-		if (elem.tagName.toLowerCase() !== 'textarea') return;
 		if (elem.selectionStart || elem.selectionStart == '0') {
 			var startPos = elem.selectionStart;
 			var endPos = elem.selectionEnd;
@@ -221,7 +220,7 @@ if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('qui
 	}
 	function ctrl(key, callback, args) {
 		document.addEventListener('keydown', function (e) {
-			if(e.keyCode === key.charCodeAt(0) && (e.ctrlKey || e.metaKey) && (document.activeElement.id === 'quickpost' || /post/i.test(document.activeElement.parentNode.parentNode.className))) {
+			if((e.ctrlKey || e.metaKey) && e.keyCode === key.charCodeAt(0) && document.activeElement.tagName.toLowerCase() === 'textarea') {
 				e.preventDefault();
 				callback.apply(this, args);
 				return false;
@@ -232,16 +231,19 @@ if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('qui
 	* All keyboard shortcuts based on MS Word
 	**/
 
-	var ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '⌘' : 'CTRL';
+	var img, ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '⌘' : 'CTRL';
 	// Bold
 	ctrl('B', custom_insert_text, ['[b]', '[/b]']);
-	document.querySelector('#bbcode img[title="Bold"]').title += ' (' + ctrlorcmd + '+B)';
+	img = document.querySelector('#bbcode img[title="Bold"]');
+	if (img !== null) img.title += ' (' + ctrlorcmd + '+B)';
 	// Italics
 	ctrl('I', custom_insert_text, ['[i]', '[/i]']);
-	document.querySelector('#bbcode img[title="Italics"]').title += ' (' + ctrlorcmd + '+I)';
+	img = document.querySelector('#bbcode img[title="Italics"]');
+	if (img !== null) img.title += ' (' + ctrlorcmd + '+I)';
 	// Underline
 	ctrl('U', custom_insert_text, ['[u]', '[/u]']);
-	document.querySelector('#bbcode img[title="Underline"]').title += ' (' + ctrlorcmd + '+U)';
+	img = document.querySelector('#bbcode img[title="Underline"]');
+	if (img !== null) img.title += ' (' + ctrlorcmd + '+U)';
 	// Align right
 	ctrl('R', custom_insert_text, ['[align=right]', '[/align]']);
 	// Align left
@@ -250,10 +252,12 @@ if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('qui
 	ctrl('E', custom_insert_text, ['[align=center]', '[/align]']);
 	// Spoiler
 	ctrl('S', custom_insert_text, ['[spoiler]', '[/spoiler]']);
-	document.querySelector('#bbcode img[title="Spoilers"]').title += ' (' + ctrlorcmd + '+S)';
+	img = document.querySelector('#bbcode img[title="Spoilers"]');
+	if (img !== null) img.title += ' (' + ctrlorcmd + '+S)';
 	// Hide
 	ctrl('H', custom_insert_text, ['[hide]', '[/hide]']);
-	document.querySelector('#bbcode img[title="Hide"]').title += ' (' + ctrlorcmd + '+H)';
+	img = document.querySelector('#bbcode img[title="Hide"]');
+	if (img !== null) img.title += ' (' + ctrlorcmd + '+H)';
 }
 
 
