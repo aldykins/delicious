@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.64
+// @version 1.65
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -76,6 +76,7 @@ function createSettingsPage() {
 	addCheckbox("Delicious Title Flip", "Enable/Disable delicious flipping of Forum title tags.", 'delicioustitleflip');
 	addCheckbox("Disgusting Treats", "Hide/Unhide those hideous treats!", 'delicioustreats');
 	addCheckbox("Delicious Keyboard Shortcuts", "Enable/Disable delicious keyboard shortcuts for easier access to Bold/Italics/Underline/Spoiler/Hide and aligning.", 'deliciouskeyboard');
+	addCheckbox("Delicious Title Notifications", "Display number of notifications in title.", 'delicioustitlenotifications');
 }
 
 if (/\/user\.php\?.*action=edit/i.test(document.URL)) createSettingsPage();
@@ -88,6 +89,7 @@ var gm_deliciousquote = initGM('deliciousquote', 'true', false);
 var gm_delicioustitleflip = initGM('delicioustitleflip', 'true', false);
 var gm_delicioustreats = initGM('delicioustreats', 'true', false);
 var gm_deliciouskeyboard = initGM('deliciouskeyboard', 'true', false);
+var gm_delicioustitlenotifications = initGM('delicioustitlenotifications', 'true', false)
 
 
 // Banners and search bar by Potatoe
@@ -258,6 +260,20 @@ if (GM_getValue('deliciouskeyboard') === 'true' && document.querySelector('texta
 	ctrl('H', custom_insert_text, ['[hide]', '[/hide]']);
 	img = document.querySelector('#bbcode img[title="Hide"]');
 	if (img !== null) img.title += ' (' + ctrlorcmd + '+H)';
+}
+
+
+// Title Notifications by Megure
+// Will prepend the number of notifications to the title
+if(GM_getValue('delicioustitlenotifications') === 'true') {
+	var new_count = 0, _i, cnt, notifications = document.querySelectorAll('#alerts .new_count'), _len = notifications.length;
+	for(_i = 0; _i < _len; _i++) {
+		cnt = parseInt(notifications[_i].textContent, 10);
+		if (!isNaN(cnt))
+			new_count += cnt;
+	}
+	if (new_count > 0)
+		document.title = '(' + new_count + ') ' + document.title;
 }
 
 
