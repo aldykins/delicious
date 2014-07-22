@@ -190,74 +190,70 @@ if (GM_getValue('delicioustreats') === 'true') {
 
 // Keyboard shortcuts by Alpha, mod by Megure
 // Enables keyboard shortcuts for forum (new post and edit) and PM
-// Depends on injectScript
 if (GM_getValue('deliciouskeyboard') === 'true' && (document.getElementById('quickpost') || document.querySelector('textarea'))) {
-	function keyboardshortcuts() {
-		function custom_insert_text(open, close) {
-		    var elem = document.activeElement;
-		    if (elem.tagName.toLowerCase() !== 'textarea') return;
-		    if (elem.selectionStart || elem.selectionStart == '0') {
-		        var startPos = elem.selectionStart;
-		        var endPos = elem.selectionEnd;
-		        elem.value = elem.value.substring(0, startPos) + open + elem.value.substring(startPos, endPos) + close + elem.value.substring(endPos, elem.value.length);
-		        elem.selectionStart = elem.selectionEnd = endPos + open.length + close.length;
-		        elem.focus();
-		        if (close.length == 0)
-		            elem.setSelectionRange(startPos + open.length, startPos + open.length);
-		        else
-		            elem.setSelectionRange(startPos + open.length, endPos + open.length);
-		    } else if (document.selection && document.selection.createRange) {
-		        elem.focus();
-		        sel = document.selection.createRange();
-		        sel.text = open + sel.text + close;
-		        if (close.length != 0) {
-		            sel.move("character", -close.length);
-		            sel.select();
-		        }
-		        elem.focus();
-		    } else {
-		        elem.value += open;
-		        elem.focus();
-		        elem.value += close;
-		    }
+	function custom_insert_text(open, close) {
+		var elem = document.activeElement;
+		if (elem.tagName.toLowerCase() !== 'textarea') return;
+		if (elem.selectionStart || elem.selectionStart == '0') {
+			var startPos = elem.selectionStart;
+			var endPos = elem.selectionEnd;
+			elem.value = elem.value.substring(0, startPos) + open + elem.value.substring(startPos, endPos) + close + elem.value.substring(endPos, elem.value.length);
+			elem.selectionStart = elem.selectionEnd = endPos + open.length + close.length;
+			elem.focus();
+			if (close.length == 0)
+				elem.setSelectionRange(startPos + open.length, startPos + open.length);
+			else
+				elem.setSelectionRange(startPos + open.length, endPos + open.length);
+		} else if (document.selection && document.selection.createRange) {
+			elem.focus();
+			sel = document.selection.createRange();
+			sel.text = open + sel.text + close;
+			if (close.length != 0) {
+				sel.move("character", -close.length);
+				sel.select();
+			}
+			elem.focus();
+		} else {
+			elem.value += open;
+			elem.focus();
+			elem.value += close;
 		}
-		var ctrl = function(key, callback, args) {
-			document.addEventListener('keydown', function (e) {
-				if(e.keyCode === key.charCodeAt(0) && (e.ctrlKey || e.metaKey) && (document.activeElement === document.getElementById('quickpost') || document.activeElement.parentNode.parentNode.className.toLowerCase() === 'post')) {
-					e.preventDefault();
-					callback.apply(this, args);
-					return false;
-				}
-			});
-		};
-		/**
-		 * All keyboard shortcuts based on MS Word
-		 **/
-
-		var ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '&#8984;' : 'CTRL';
-		// Bold
-		ctrl('B', custom_insert_text, ['[b]', '[/b]']);
-		document.querySelector('#bbcode img[title="Bold"]').title += ' (' + ctrlorcmd + '+B)';
-		// Italics
-		ctrl('I', custom_insert_text, ['[i]', '[/i]']);
-		document.querySelector('#bbcode img[title="Italics"]').title += ' (' + ctrlorcmd + '+I)';
-		// Underline
-		ctrl('U', custom_insert_text, ['[u]', '[/u]']);
-		document.querySelector('#bbcode img[title="Underline"]').title += ' (' + ctrlorcmd + '+U)';
-		// Align right
-		ctrl('R', custom_insert_text, ['[align=right]', '[/align]']);
-		// Align left
-		ctrl('L', custom_insert_text, ['[align=left]', '[/align]']);
-		// Align center
-		ctrl('E', custom_insert_text, ['[align=center]', '[/align]']);
-		// Spoiler
-		ctrl('S', custom_insert_text, ['[spoiler]', '[/spoiler]']);
-		document.querySelector('#bbcode img[title="Spoilers"]').title += ' (' + ctrlorcmd + '+S)';
-		// Hide
-		ctrl('H', custom_insert_text, ['[hide]', '[/hide]']);
-		document.querySelector('#bbcode img[title="Hide"]').title += ' (' + ctrlorcmd + '+H)';
 	}
-	injectScript('('+keyboardshortcuts+')();', 'keyboardshortcuts');
+	function ctrl(key, callback, args) {
+		document.addEventListener('keydown', function (e) {
+			if(e.keyCode === key.charCodeAt(0) && (e.ctrlKey || e.metaKey) && (document.activeElement.id === 'quickpost' || /post/i.test(document.activeElement.parentNode.parentNode.className))) {
+				e.preventDefault();
+				callback.apply(this, args);
+				return false;
+			}
+		});
+	}
+	/**
+	* All keyboard shortcuts based on MS Word
+	**/
+
+	var ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '⌘' : 'CTRL';
+	// Bold
+	ctrl('B', custom_insert_text, ['[b]', '[/b]']);
+	document.querySelector('#bbcode img[title="Bold"]').title += ' (' + ctrlorcmd + '+B)';
+	// Italics
+	ctrl('I', custom_insert_text, ['[i]', '[/i]']);
+	document.querySelector('#bbcode img[title="Italics"]').title += ' (' + ctrlorcmd + '+I)';
+	// Underline
+	ctrl('U', custom_insert_text, ['[u]', '[/u]']);
+	document.querySelector('#bbcode img[title="Underline"]').title += ' (' + ctrlorcmd + '+U)';
+	// Align right
+	ctrl('R', custom_insert_text, ['[align=right]', '[/align]']);
+	// Align left
+	ctrl('L', custom_insert_text, ['[align=left]', '[/align]']);
+	// Align center
+	ctrl('E', custom_insert_text, ['[align=center]', '[/align]']);
+	// Spoiler
+	ctrl('S', custom_insert_text, ['[spoiler]', '[/spoiler]']);
+	document.querySelector('#bbcode img[title="Spoilers"]').title += ' (' + ctrlorcmd + '+S)';
+	// Hide
+	ctrl('H', custom_insert_text, ['[hide]', '[/hide]']);
+	document.querySelector('#bbcode img[title="Hide"]').title += ' (' + ctrlorcmd + '+H)';
 }
 
 
