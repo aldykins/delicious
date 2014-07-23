@@ -75,6 +75,7 @@ function createSettingsPage() {
 	addCheckbox("Delicious Better Quote", "Enable/Disable delicious better <span style='color: green; font-family: Courier New;'>&gt;quoting</span>", 'deliciousquote');
 	addCheckbox("Delicious Title Flip", "Enable/Disable delicious flipping of Forum title tags.", 'delicioustitleflip');
 	addCheckbox("Disgusting Treats", "Hide/Unhide those hideous treats!", 'delicioustreats');
+	addCheckbox("Disgusting Poster Info", "Hide/Unhide those despicable poster infos!", 'disgustingposterinfo');
 	addCheckbox("Delicious Keyboard Shortcuts", "Enable/Disable delicious keyboard shortcuts for easier access to Bold/Italics/Underline/Spoiler/Hide and aligning.", 'deliciouskeyboard');
 	addCheckbox("Delicious Title Notifications", "Display number of notifications in title.", 'delicioustitlenotifications');
 }
@@ -88,6 +89,7 @@ var gm_deliciousbbcode = initGM('deliciousbbcode', 'true', false);
 var gm_deliciousquote = initGM('deliciousquote', 'true', false);
 var gm_delicioustitleflip = initGM('delicioustitleflip', 'true', false);
 var gm_delicioustreats = initGM('delicioustreats', 'true', false);
+var gm_disgustingposterinfo = initGM('disgustingposterinfo', 'true', false);
 var gm_deliciouskeyboard = initGM('deliciouskeyboard', 'true', false);
 var gm_delicioustitlenotifications = initGM('delicioustitlenotifications', 'true', false)
 
@@ -180,6 +182,15 @@ if (GM_getValue('deliciousquote') === 'true') {
 // Forums title inverter by Potatoe
 // Inverts the forums titles.
 if (GM_getValue('delicioustitleflip') === 'true' && document.title.indexOf(' > ') > -1) document.title = document.title.split(" :: ")[0].split(" > ").reverse().join(" < ") + " :: AnimeBytes";
+
+
+// Hide/Show forum poster info by Megure
+// Hide/Show #posts, join date, icons
+if (GM_getValue('disgustingposterinfo') !== 'true') {
+	var info = document.querySelectorAll('.user_fields.nobullet');
+	for (var _i = 0, _len = info.length; _i < _len; _i++)
+		info[_i].style.display = 'inline';
+}
 
 
 // Hide treats by Alpha
