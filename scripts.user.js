@@ -1349,7 +1349,7 @@ if(/\/user\.php\?.*action=edit/i.test(document.URL)){
 
       var __temp = document.createElement('li');
       __temp.className = '';
-      __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'><input id='Setting_" + key + "' name='Setting_" + key + "' type='checkbox' " + (GM_getValue(key, myDefault).toString() === onValue.toString() ? "checked='checked'" : "") + "'> <label for='Setting_" + key + "'>" + description + "</label></span>";
+      __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'><input id='Setting_" + key + "' name='Setting_" + key + "' type='checkbox'" + (GM_getValue(key, myDefault).toString() === onValue.toString() ? " checked='checked'" : "") + "> <label for='Setting_" + key + "'>" + description + "</label></span>";
       __temp.addEventListener('change', function(ev){var ch = ev.target.checked; (ch === true ? GM_setValue(key, onValue) : GM_setValue(key, offValue));});
       document.getElementById('pose_list').appendChild(__temp);
     
