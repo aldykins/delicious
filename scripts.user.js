@@ -78,6 +78,7 @@ function createSettingsPage() {
 	addCheckbox("Disgusting Poster Info", "Hide/Unhide those despicable poster infos!", 'disgustingposterinfo');
 	addCheckbox("Delicious Keyboard Shortcuts", "Enable/Disable delicious keyboard shortcuts for easier access to Bold/Italics/Underline/Spoiler/Hide and aligning.", 'deliciouskeyboard');
 	addCheckbox("Delicious Title Notifications", "Display number of notifications in title.", 'delicioustitlenotifications');
+	addCheckbox("Delicious Stylesheet Preview", "Allows you to easily preview and select delicious stylesheets.", 'deliciousstylesheetpreview');
 }
 
 if (/\/user\.php\?.*action=edit/i.test(document.URL)) createSettingsPage();
@@ -91,12 +92,79 @@ var gm_delicioustitleflip = initGM('delicioustitleflip', 'true', false);
 var gm_delicioustreats = initGM('delicioustreats', 'true', false);
 var gm_disgustingposterinfo = initGM('disgustingposterinfo', 'true', false);
 var gm_deliciouskeyboard = initGM('deliciouskeyboard', 'true', false);
-var gm_delicioustitlenotifications = initGM('delicioustitlenotifications', 'true', false)
+var gm_delicioustitlenotifications = initGM('delicioustitlenotifications', 'true', false);
+var gm_deliciousstylesheetpreview = initGM('deliciousstylesheetpreview', 'true', false);
 
 
 // Banners and search bar by Potatoe
 // Fixes the placement of the search bars when a banner is in use.
 if (document.getElementById('bannerimg')) document.getElementById('searchbars').children[0].style.top = '-258px';
+
+
+// Add delicous stylesheets to stylesheet dropdown menu including preview by Megure
+// LINKS ARE HARDCODED TO aldy.nope.bz AND /static/styles/, CHANGE IF NECESSARY!
+if (GM_getValue('deliciousstylesheetpreview', 'true') === 'true' && /\/user\.php\?.*action=edit/i.test(document.URL)) {
+	var source = 'https://aldy.nope.bz/',
+	    ABSource = '/static/styles/',
+	    deliciousStylesheets = ['Milky Way', 'Toblerone', 'Dream', 'Tentaclebytes', 'Coaltastic'],
+	    stylesheet = document.getElementById('stylesheet'),
+	    originalNoSS = stylesheet.children.length,
+	    styleurl = document.getElementById('styleurl'),
+	    input = document.createElement('input');
+	input.type = 'text';
+	input.name = stylesheet.name;
+	input.value = stylesheet.value;
+	input.style.display = 'none';
+	stylesheet.parentNode.insertBefore(input, stylesheet);
+	stylesheet.removeAttribute('name');
+	stylesheet.removeAttribute('onchange');
+	// Store the source for all current children into attribute src
+	for (var i = 0, len = stylesheet.children.length; i < len; i++) {
+		var elem = stylesheet.children[i];
+		elem.setAttribute('src', ABSource + elem.textContent.trim().toLowerCase() + '.css');
+	}
+	// Add delicious stylesheets and store source in src
+	for (var i = 0, len = deliciousStylesheets.length; i < len; i++) {
+		var sheet = deliciousStylesheets[i],
+		    option = document.createElement('option'),
+		    src = source + sheet.replace(/\s/g, '').toLowerCase() + '.css';
+		option.textContent = 'Delicious ' + sheet;
+		option.setAttribute('src', src);
+		option.value = stylesheet.children.length + 1;
+		stylesheet.appendChild(option);
+		if (styleurl.value === src)
+			stylesheet.value = option.value;
+	}
+	stylesheet.addEventListener('change', function(event) {
+		var id = this.value,
+		    src = this.children[parseInt(id, 10) - 1].getAttribute('src'),
+		    link = document.querySelector('link[title][rel="stylesheet"]');
+		if (link !== null) link.href = src;
+		if (src.indexOf(source) !== -1)
+			styleurl.value = src;
+		else
+			styleurl.value = '';
+		// Banners are only available for the original stylesheets, so default to Coaltastic "1", which has all banners
+		if (parseInt(id, 10) > originalNoSS)
+			id = '1';
+		input.value = id;
+		$j.ajax({
+			url: '/banners.php',
+			type: 'POST',
+			data: {
+				styleid: id
+			},
+			success: function(data) {
+				$j('#banner').children().remove();
+				var BannersArray = data.split(',');
+				for (i = 0; i < BannersArray.length; i += 2)
+					$j('#banner').append($j('<option></option>').val(BannersArray[i]).html(BannersArray[i + 1]));
+				$j('#banner :first').attr('selected', 'selected');
+				Banner();
+			}
+		});
+	});
+}
 
 
 // Hover smileys by Potatoe, ported by aldy
