@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.65
+// @version 1.70
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -101,7 +101,7 @@ var gm_deliciousstylesheetpreview = initGM('deliciousstylesheetpreview', 'true',
 if (document.getElementById('bannerimg')) document.getElementById('searchbars').children[0].style.top = '-258px';
 
 
-// Add delicous stylesheets to stylesheet dropdown menu including preview by Megure
+// Add delicious stylesheets to stylesheet dropdown menu including preview by Megure
 // LINKS ARE HARDCODED TO aldy.nope.bz AND /static/styles/, CHANGE IF NECESSARY!
 if (GM_getValue('deliciousstylesheetpreview', 'true') === 'true' && /\/user\.php\?.*action=edit/i.test(document.URL)) {
 	var source = 'https://aldy.nope.bz/',
@@ -136,8 +136,8 @@ if (GM_getValue('deliciousstylesheetpreview', 'true') === 'true' && /\/user\.php
 			stylesheet.value = option.value;
 	}
 	stylesheet.addEventListener('change', function(event) {
-		var id = this.value,
-		    src = this.children[parseInt(id, 10) - 1].getAttribute('src'),
+		var id = stylesheet.value,
+		    src = stylesheet.children[parseInt(id, 10) - 1].getAttribute('src'),
 		    link = document.querySelector('link[title][rel="stylesheet"]');
 		if (link !== null) link.href = src;
 		if (src.indexOf(source) !== -1)
@@ -212,36 +212,76 @@ if (GM_getValue('deliciousbbcode') === 'true') {
 }
 
 
-// Better quote by Potatoe
+// Better quote by Potatoe, multi-quote by Megure
 // Makes the quoting feature on AnimeBytes better by including links back to posts and the posted date.
 // Depends on injectScript
 if (GM_getValue('deliciousquote') === 'true') {
+	var quotes = document.querySelectorAll('.com-quote');
+	for (var i = 0, len = quotes.length; i < len; i++) {
+		var elem = quotes[i],
+		    args = elem.getAttribute('onClick').match(/Quote\s*\((?:\s*'(\d+)'\s*)?(?:,\s*'([^']*)'\s*)?(?:,\s*'([^']*)'\s*)?\)/i),
+		    cb = document.createElement('input');
+		cb.type = 'checkbox';
+		cb.className = 'com-quote-multiquoteCB';
+		if (args[1] === undefined) args[1] = '';
+		if (args[2] === undefined) args[2] = '';
+		if (args[3] === undefined) args[3] = '';
+		cb.setAttribute('postid', args[1]);
+		cb.setAttribute('username', args[2]);
+		cb.setAttribute('surround', args[3]);
+		elem.parentNode.insertBefore(cb, elem);
+	}
 	function Quote(postid, username, surround) {
-		$j.ajax({
-			url: window.location.pathname,
-			data: {
-				action: 'get_post',
-				post: postid
-			},
-			success: function (response) {
-				function replaceImg(text){if(text.match(/^([^]*)(\[img\][^\[]+\[\/img\])([^]*)$/mi)!=null){return text.replace(/^([^]*)(\[img\][^\[]+\[\/img\])([^]*)$/mi,function(full,$1,$2,$3){var tmp="BQTMPBQ"+new Date().getTime()+"BQTMPBQ",ssm=$1.match(/\[hide(=[^\]]*)?\]/mgi),sem=$1.match(/\[\/hide\]/mgi),esm=$3.match(/\[hide(=[^\]]*)?\]/mgi),eem=$3.match(/\[\/hide\]/mgi),ssm=(ssm!=null)?ssm.length:0,sem=(sem!=null)?sem.length:0,esm=(esm!=null)?esm.length:0,eem=(eem!=null)?eem.length:0,hsm=ssm-sem,hem=esm-eem,tmptxt=replaceImg($1+tmp+$3);$1=tmptxt.substring(0,tmptxt.search(tmp));$3=tmptxt.substring(tmptxt.search(tmp)+tmp.length,tmptxt.length);if(hsm>=hem&&hsm>0)return $1+$2+$3;return $1+'[hide=Image]'+$2+'[/hide]'+$3})}return text}
-				function replaceYouTube(text){if(text.match(/^([^]*)(\[youtube\][^\[]+\[\/youtube\])([^]*)$/mi)!=null){return text.replace(/^([^]*)(\[youtube\][^\[]+\[\/youtube\])([^]*)$/mi,function(full,$1,$2,$3){var tmp="BQTMPBQ"+new Date().getTime()+"BQTMPBQ",ssm=$1.match(/\[hide(=[^\]]*)?\]/mgi),sem=$1.match(/\[\/hide\]/mgi),esm=$3.match(/\[hide(=[^\]]*)?\]/mgi),eem=$3.match(/\[\/hide\]/mgi),ssm=(ssm!=null)?ssm.length:0,sem=(sem!=null)?sem.length:0,esm=(esm!=null)?esm.length:0,eem=(eem!=null)?eem.length:0,hsm=ssm-sem,hem=esm-eem,tmptxt=replaceYouTube($1+tmp+$3);$1=tmptxt.substring(0,tmptxt.search(tmp));$3=tmptxt.substring(tmptxt.search(tmp)+tmp.length,tmptxt.length);if(hsm>=hem&&hsm>0)return $1+$2+$3;return $1+'[hide=YouTube Video]'+$2+'[/hide]'+$3})}return text}
-				response = replaceYouTube(replaceImg(response));
-				var date = document.evaluate("//div[@id='post"+postid+"']/div/div/p[@class='posted_info']/span", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-				if (date) {
-					date = new Date(date.title.replace(/-/g,'/')).toUTCString().substring(5, 25).split(' ');
-					date = date[1]+" "+date[0]+" "+date[2]+", "+date[3].substring(0,5);
-				} else { date = ""; }
-				var userid = document.evaluate("//span/a[text()='"+username+"' and starts-with(@href, '/user.php?id=')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.href;
-				var quoteText = '[b][user=' + userid + ']' + username + '[/user][/b] [url=' + window.location.pathname + window.location.search + '#post' + postid + ']wrote' + ((date)?' on '+date:'') + '[/url]:\n[quote]' + response + '[/quote]\n';
-				if (surround && surround.length > 0) quoteText = '[' + surround + ']' + quoteText + '[/' + surround + ']';
-				insert_text(quoteText, '');
-			},
-			error: function () {
-				insert_text("error retrieving post", '');
-			},
-			dataType: 'html'
-		});
+		var result = [],
+		    results = 0,
+		    multiQuote,
+		    temp = document.querySelector('input.com-quote-multiquoteCB[postid="' + postid + '"]');
+		if (temp !== null)
+			temp.checked = true;
+		multiQuote = document.querySelectorAll('.com-quote-multiquoteCB:checked');
+		for (var i = 0, len = multiQuote.length; i < len; i++) {
+			var elem = multiQuote[i],
+			    postid = elem.getAttribute('postid'),
+			    username = elem.getAttribute('username'),
+			    surround = elem.getAttribute('surround');
+			retrievePost(postid, username, surround, i);
+		}
+		function checkResult() {
+			if (multiQuote.length === ++results) {
+				insert_text(result.join('\n\n\n'), '');
+				for (var i = 0, len = multiQuote.length; i < len; i++)
+					multiQuote[i].checked = false;
+			}
+		}
+		function retrievePost(postid, username, surround, index) {
+			$j.ajax({
+				url: window.location.pathname,
+				data: {
+					action: 'get_post',
+					post: postid
+				},
+				success: function (response) {
+					function replaceImg(text){if(text.match(/^([^]*)(\[img\][^\[]+\[\/img\])([^]*)$/mi)!=null){return text.replace(/^([^]*)(\[img\][^\[]+\[\/img\])([^]*)$/mi,function(full,$1,$2,$3){var tmp="BQTMPBQ"+new Date().getTime()+"BQTMPBQ",ssm=$1.match(/\[hide(=[^\]]*)?\]/mgi),sem=$1.match(/\[\/hide\]/mgi),esm=$3.match(/\[hide(=[^\]]*)?\]/mgi),eem=$3.match(/\[\/hide\]/mgi),ssm=(ssm!=null)?ssm.length:0,sem=(sem!=null)?sem.length:0,esm=(esm!=null)?esm.length:0,eem=(eem!=null)?eem.length:0,hsm=ssm-sem,hem=esm-eem,tmptxt=replaceImg($1+tmp+$3);$1=tmptxt.substring(0,tmptxt.search(tmp));$3=tmptxt.substring(tmptxt.search(tmp)+tmp.length,tmptxt.length);if(hsm>=hem&&hsm>0)return $1+$2+$3;return $1+'[hide=Image]'+$2+'[/hide]'+$3})}return text}
+					function replaceYouTube(text){if(text.match(/^([^]*)(\[youtube\][^\[]+\[\/youtube\])([^]*)$/mi)!=null){return text.replace(/^([^]*)(\[youtube\][^\[]+\[\/youtube\])([^]*)$/mi,function(full,$1,$2,$3){var tmp="BQTMPBQ"+new Date().getTime()+"BQTMPBQ",ssm=$1.match(/\[hide(=[^\]]*)?\]/mgi),sem=$1.match(/\[\/hide\]/mgi),esm=$3.match(/\[hide(=[^\]]*)?\]/mgi),eem=$3.match(/\[\/hide\]/mgi),ssm=(ssm!=null)?ssm.length:0,sem=(sem!=null)?sem.length:0,esm=(esm!=null)?esm.length:0,eem=(eem!=null)?eem.length:0,hsm=ssm-sem,hem=esm-eem,tmptxt=replaceYouTube($1+tmp+$3);$1=tmptxt.substring(0,tmptxt.search(tmp));$3=tmptxt.substring(tmptxt.search(tmp)+tmp.length,tmptxt.length);if(hsm>=hem&&hsm>0)return $1+$2+$3;return $1+'[hide=YouTube Video]'+$2+'[/hide]'+$3})}return text}
+					response = replaceYouTube(replaceImg(response));
+					var date = document.evaluate("//div[@id='post"+postid+"']/div/div/p[@class='posted_info']/span", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+					if (date) {
+						date = new Date(date.title.replace(/-/g,'/')).toUTCString().substring(5, 25).split(' ');
+						date = date[1]+" "+date[0]+" "+date[2]+", "+date[3].substring(0,5);
+					} else { date = ""; }
+					var userid = document.evaluate("//span/a[text()='"+username+"' and starts-with(@href, '/user.php?id=')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.href;
+					var quoteText = '[b][user=' + userid + ']' + username + '[/user][/b] [url=' + window.location.pathname + window.location.search + '#post' + postid + ']wrote' + ((date)?' on '+date:'') + '[/url]:\n[quote]' + response + '[/quote]\n';
+					if (surround && surround.length > 0) quoteText = '[' + surround + ']' + quoteText + '[/' + surround + ']';
+					result[index] = quoteText;
+					checkResult();
+				},
+				error: function () {
+					result[index] = 'error retrieving post #' + postid;
+					checkResult();
+				},
+				dataType: 'html'
+			});
+		}
 	}
 	injectScript(Quote, 'BetterQuote');
 }
