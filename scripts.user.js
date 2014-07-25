@@ -108,6 +108,7 @@ if (GM_getValue('deliciousstylesheetpreview', 'true') === 'true' && /\/user\.php
 	    ABSource = '/static/styles/',
 	    deliciousStylesheets = ['Milky Way', 'Toblerone', 'Dream', 'Tentaclebytes', 'Coaltastic'],
 	    stylesheet = document.getElementById('stylesheet'),
+	    currentLink = document.querySelector('link[rel=stylesheet]'),
 	    originalNoSS = stylesheet.children.length,
 	    styleurl = document.getElementById('styleurl'),
 	    input = document.createElement('input');
@@ -135,11 +136,33 @@ if (GM_getValue('deliciousstylesheetpreview', 'true') === 'true' && /\/user\.php
 		if (styleurl.value === src)
 			stylesheet.value = option.value;
 	}
+	// Pre-load the stylesheets on focus of dropdown
+	stylesheet.addEventListener('focus', function(event) {
+		for (var i = 0, len = stylesheet.children.length; i < len; i++) {
+			var elem = stylesheet.children[i],
+			    src = elem.getAttribute('src');
+			if (currentLink.href !== src) {
+				var newLink = document.createElement('link');
+				newLink.href = src;
+				newLink.media = 'screen';
+				newLink.rel = 'alternate stylesheet';
+				newLink.title = elem.textContent;
+				newLink.type = 'text/css';
+				currentLink.parentNode.insertBefore(newLink, currentLink);
+				newLink.disabled = true;
+			}
+		}
+	});
 	stylesheet.addEventListener('change', function(event) {
 		var id = stylesheet.value,
 		    src = stylesheet.children[parseInt(id, 10) - 1].getAttribute('src'),
-		    link = document.querySelector('link[title][rel="stylesheet"]');
-		if (link !== null) link.href = src;
+		    activeLink = document.querySelector('link[href="' + src + '"]');
+		if (activeLink !== null) {
+			var allLinks = document.querySelectorAll('link[title][rel~="stylesheet"]');
+			for (var i = 0, len = allLinks.length; i < len; i++)
+				allLinks[i].disabled = true;
+			activeLink.disabled = false;
+		}
 		if (src.indexOf(source) !== -1)
 			styleurl.value = src;
 		else
