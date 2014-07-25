@@ -1979,8 +1979,12 @@ div.post_controls ul li {
     vertical-align: middle;
 }
 
-.mass_del {
+.mass_del, .com-quote-multiquoteCB {
     vertical-align: top;
+}
+
+.com-quote-multiquoteCB {
+    margin-right: 4px;
 }
 
 .post_controls a, .post_id a[href="#header"] {
