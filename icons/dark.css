@@ -200,6 +200,7 @@ span.usercomment_posttime {
     text-align: right;
     margin-bottom: 15px;
     height: 21px;
+    font-size: 2px;
 }
 
 #user_comments a[onclick^="Edit_Form"] {
