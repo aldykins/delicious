@@ -320,7 +320,7 @@ if (GM_getValue('delicioustitleflip') === 'true' && document.title.indexOf(' > '
 if (GM_getValue('disgustingposterinfo') !== 'true') {
 	var info = document.querySelectorAll('.user_fields.nobullet');
 	for (var _i = 0, _len = info.length; _i < _len; _i++)
-		info[_i].style.display = 'inline';
+		info[_i].style.display = 'inherit';
 }
 
 
