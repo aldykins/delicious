@@ -2542,14 +2542,22 @@ td.center {
     word-wrap: break-word;
 }
 
-table.mediainfo {
+#torrents table.mediainfo {
     margin: -15px 0px 1em !important;
+}
+
+#forums table.mediainfo {
+    margin: -5px 0px 1em !important;
 }
 
 table.mediainfo table, table.mediainfo table td {
     border: none !important;
     padding: 0;
     margin: 0;
+}
+
+#forums table.mediainfo tr:nth-child(2n) {
+    background: none;
 }
 
 table.mediainfo table caption {
