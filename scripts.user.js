@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.70
+// @version 1.71
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -73,6 +73,7 @@ function createSettingsPage() {
 	addCheckbox("Delicious Hover Smileys", "Enable/Disable delicious smileys that appear on hover.", 'delicioussmileys');
 	addCheckbox("Delicious BBCode", "Enable/Disable delicious [hide] button and modify [url] and [quote] buttons.", 'deliciousbbcode');
 	addCheckbox("Delicious Better Quote", "Enable/Disable delicious better <span style='color: green; font-family: Courier New;'>&gt;quoting</span>", 'deliciousquote');
+	addCheckbox("Delicious HYPER Quote", "Enable/Disable experimental HYPER quoting: select text and press CTRL+V to instant-quote. [EXPERIMENTAL]", 'delicioushyperquote');
 	addCheckbox("Delicious Title Flip", "Enable/Disable delicious flipping of Forum title tags.", 'delicioustitleflip');
 	addCheckbox("Disgusting Treats", "Hide/Unhide those hideous treats!", 'delicioustreats');
 	addCheckbox("Disgusting Poster Info", "Hide/Unhide those despicable poster infos!", 'disgustingposterinfo');
@@ -88,6 +89,7 @@ if (/\/user\.php\?.*action=edit/i.test(document.URL)) createSettingsPage();
 var gm_delicioussmileys = initGM('delicioussmileys', 'true', false);
 var gm_deliciousbbcode = initGM('deliciousbbcode', 'true', false);
 var gm_deliciousquote = initGM('deliciousquote', 'true', false);
+var gm_delicioushyperquote = initGM('delicioushyperquote', 'true', false);
 var gm_delicioustitleflip = initGM('delicioustitleflip', 'true', false);
 var gm_delicioustreats = initGM('delicioustreats', 'true', false);
 var gm_disgustingposterinfo = initGM('disgustingposterinfo', 'true', false);
@@ -307,6 +309,149 @@ if (GM_getValue('deliciousquote') === 'true') {
 		}
 	}
 	injectScript(Quote, 'BetterQuote');
+}
+
+
+// HYPER QUOTE by Megure
+// Select text and press CTRL+V to quote
+if (GM_getValue('delicioushyperquote') === 'true') {
+	function QUOTEALL() {
+		var sel = window.getSelection();
+		for(var i = 0; i < sel.rangeCount; i++) {
+			QUOTEONE(sel.getRangeAt(i));
+		}
+		sel = document.getElementById('quickpost');
+		if (sel !== null)
+			sel.scrollIntoView();
+	}
+
+
+	function QUOTEONE(range) {
+		function removeChildren(node, prev) {
+			if (node === null || node.parentNode === null) return;
+			if (prev === true)
+				while (node.parentNode.firstChild !== node)
+					node.parentNode.removeChild(node.parentNode.firstChild);
+			else
+				while (node.parentNode.lastChild !== node)
+					node.parentNode.removeChild(node.parentNode.lastChild);
+			removeChildren(node.parentNode, prev);
+		}
+		function inArray(arr, elem) {
+			for (var i = 0; i < arr.length; i++) {
+				if (arr[i] === elem)
+					return i;
+			}
+			return -1;
+		}
+
+		if (range.collapsed === true) return;
+
+		var content, copy, res, start = [], end = [], startNode, endNode;
+		content = range.startContainer;
+		while (content !== null && /content\d+/i.test(content.id) === false) {
+			start.push(inArray(content.parentNode.childNodes, content));
+			content = content.parentNode;
+		}
+		if (content === null) return;
+		content = range.endContainer;
+		while (content !== null && /content\d+/i.test(content.id) === false) {
+			end.push(inArray(content.parentNode.childNodes, content));
+			content = content.parentNode;
+		}
+		if (content === null) return;
+		copy = content.cloneNode(true);
+		startNode = copy;
+		for (var i = start.length - 1; i >= 0; i--)
+			startNode = startNode.childNodes[start[i]];
+
+		endNode = copy;
+		for (var i = end.length - 1; i >= 0; i--)
+			endNode = endNode.childNodes[end[i]];
+
+		if (endNode.nodeType === 3)
+			endNode.data = endNode.data.substr(0, range.endOffset);
+		else if (endNode.nodeType === 1)
+			for (var i = endNode.childNodes.length; i > range.endOffset; i--)
+				endNode.removeChild(endNode.lastChild);
+		if (range.startOffset > 0) {
+			if (startNode.nodeType === 3)
+				startNode.data = startNode.data.substr(range.startOffset);
+			else if (startNode.nodeType === 1)
+				for (var i = 0; i < range.startOffset; i++)
+					startNode.removeChild(startNode.firstChild);
+		}
+
+		removeChildren(startNode, true);
+		removeChildren(endNode, false);
+
+		function HTMLtoBB(str) {
+			// Order is somewhat relevant
+			var ret = str.replace(/<span class="smiley-.+?" title="(.+?)"><\/span>/ig, function(html, smiley) {
+						var smileyNode = document.querySelector('img[alt="' + smiley + '"]');
+						if (smileyNode !== null && smileyNode.parentNode !== null) {
+							smileyNode = smileyNode.parentNode.getAttribute('onclick').match(/'(.+?)'/i);
+							if (smileyNode !== null)
+								return smileyNode[1];
+						}
+						return ':' + smiley + ':';
+					}).
+					replace(/<iframe.*?src="([^?"]*).*?".*?><\/iframe>/ig, '[youtube]$1[/youtube]').
+					replace(/<([^\s>]+)[^>]*>\s*<\/([^>]+?)>/ig, function(html, match1, match2) {
+						if (match1 === match2)
+							return '';
+						return html;
+					}).
+					replace(/<ul><li>(.+?)<\/li><\/ul>/ig, '[*]$1').
+					replace(/<br.*?>/ig, '').
+					replace(/<a.*?href="(.*?)".*?>([\s\S]*?)<\/a>/ig, '[url=$1]$2[/url]').
+					replace(/<strong>([\s\S]*?)<\/strong>/ig, '[b]$1[/b]').
+					replace(/<em>([\s\S]*?)<\/em>/ig, '[i]$1[/i]').
+					replace(/<u>([\s\S]*?)<\/u>/ig, '[u]$1[/u]').
+					replace(/<s>([\s\S]*?)<\/s>/ig, '[s]$1[/s]').
+					replace(/<div style="text-align: center;">([\s\S]*?)<\/div>/ig, '[align=center]$1[/align]').
+					replace(/<div style="text-align: left;">([\s\S]*?)<\/div>/ig, '[align=left]$1[/align]').
+					replace(/<div style="text-align: right;">([\s\S]*?)<\/div>/ig, '[align=right]$1[/align]').
+					replace(/<span class="size(.*?)">([\s\S]*?)<\/span>/ig, '[size=$1]$2[/size]').
+					replace(/<blockquote class="blockquote">([\s\S]*?)<\/blockquote>/ig, '[quote]$1[/quote]').
+					replace(/<div class="spoilerContainer"><input.*?><div class="spoiler">([\s\S]*?)<\/div><\/div>/ig, '[spoiler]$1[/spoiler]').
+					replace(/<div class="spoilerContainer hideContainer"><input.*?value="Show (.*?)".*?><div class="spoiler">([\s\S]*?)<\/div><\/div>/ig, '[hide=$1]$2[/hide]').
+					replace(/<img.*?src="(.*?)".*?>/ig, '[img]$1[/img]');
+			if (ret !== str) return HTMLtoBB(ret);
+			else return ret;
+		}
+
+		res = '[quote]' + HTMLtoBB(copy.innerHTML).trim() + '[/quote]\n\n';
+
+		while (content !== null && /post\d+/i.test(content.id) === false)
+			content = content.parentNode;
+		if (content !== null) {
+			var author = content.className.match(/user_(\d+)/i);
+			if (author !== null)
+				author = '[b][user]' + author[1] + '[/user][/b] ';
+			else {
+				author = content.querySelector('span.num_author > a');
+				if (author !== null)
+					author = '[b][user]' + author.href.match(/id=(\d+)/i) + '[/user][/b] ';
+				else
+					author = '';
+			}
+			var creation = content.querySelector('p.posted_info > span');
+			if (creation !== null) {
+				creation = new Date(creation.title.replace(/-/g,'/')).toUTCString().split(' ');
+				creation = creation[1] + ' ' + creation[2] + ' ' + creation[3] + ", " + creation[4].substring(0, 5) + ' ' + creation[5];
+			}
+			var postid = content.id.match(/post(\d+)/i)[1];
+			res = author + '[url=' + window.location.pathname + window.location.search + '#post' + postid + ']wrote' + (creation !== null ? ' on ' + creation : '') + '[/url]:\n' + res;
+		}
+
+		document.getElementById('quickpost').innerHTML += res;
+	}
+
+	document.addEventListener('keydown', function (e) {
+		if((e.ctrlKey || e.metaKey) && e.keyCode === 'V'.charCodeAt(0))
+			QUOTEALL();
+	});
 }
 
 
