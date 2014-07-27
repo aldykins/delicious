@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.72
+// @version 1.73
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -349,11 +349,10 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 	function QUOTEALL() {
 		var sel = window.getSelection();
 		for(var i = 0; i < sel.rangeCount; i++)
-			QUOTEONE(sel.getRangeAt(i));
+			QUOTEMANY(sel.getRangeAt(i));
 	}
 
-
-	function QUOTEONE(range) {
+	function QUOTEMANY(range) {
 		function removeChildren(node, prev) {
 			if (node === null || node.parentNode === null) return;
 			if (prev === true)
@@ -374,27 +373,30 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 
 		if (range.collapsed === true) return;
 
-		var content, copy, res, start = [], end = [], startNode, endNode;
-		content = range.startContainer;
-		while (content !== null && /post\d+/i.test(content.id) === false) {
-			start.push(inArray(content.parentNode.childNodes, content));
-			content = content.parentNode;
+		var html1, html2, copy, res, start = [], end = [], startNode, endNode;
+		html1 = range.startContainer;
+		while (html1.parentNode !== null) {
+			start.push(inArray(html1.parentNode.childNodes, html1));
+			html1 = html1.parentNode;
 		}
-		if (content === null) return;
-		content = range.endContainer;
-		while (content !== null && /post\d+/i.test(content.id) === false) {
-			end.push(inArray(content.parentNode.childNodes, content));
-			content = content.parentNode;
+		html2 = range.endContainer;
+		while (html2.parentNode !== null) {
+			end.push(inArray(html2.parentNode.childNodes, html2));
+			html2 = html2.parentNode;
 		}
-		if (content === null) return;
-		copy = content.cloneNode(true);
-		startNode = copy;
-		for (var i = start.length - 1; i >= 0; i--)
-			startNode = startNode.childNodes[start[i]];
+		if (html1 !== html2 || html1 === null) return;
+		copy = html1.cloneNode(true);
 
+		startNode = copy;
+		for (var i = start.length - 1; i >= 0; i--) {
+			if (start[i] === -1) return;
+			startNode = startNode.childNodes[start[i]];
+		}
 		endNode = copy;
-		for (var i = end.length - 1; i >= 0; i--)
+		for (var i = end.length - 1; i >= 0; i--) {
+			if (end[i] === -1) return;
 			endNode = endNode.childNodes[end[i]];
+		}
 
 		if (endNode.nodeType === 3)
 			endNode.data = endNode.data.substr(0, range.endOffset);
@@ -412,6 +414,13 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 		removeChildren(startNode, true);
 		removeChildren(endNode, false);
 
+		var posts = copy.querySelectorAll('div[id^="post"],div[id^="msg"]');
+		for (var i = 0; i < posts.length; i++)
+			QUOTEONE(posts[i]);
+	}
+
+
+	function QUOTEONE(post) {
 		function HTMLtoBB(str) {
 			// Order is somewhat relevant
 			var ret = str.replace(/<strong><a.*?>.*?<\/a><\/strong> <a.*?>wrote on (.*?)<\/a>/ig, function(html, dateString) {
@@ -460,31 +469,40 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 			else return ret;
 		}
 
-		res = HTMLtoBB(copy.querySelector('div.post').innerHTML).trim();
+		var res = HTMLtoBB(post.querySelector('div.post,div.body').innerHTML).trim(),
+		    author, creation, postid;
 		if (res === '') return;
 
 		res = '[quote]' + res + '[/quote]\n\n';
 
-		while (content !== null && /post\d+/i.test(content.id) === false)
-			content = content.parentNode;
-		if (content !== null) {
-			var author = content.className.match(/user_(\d+)/i);
-			if (author !== null)
-				author = '[b][user]' + author[1] + '[/user][/b] ';
-			else {
-				author = content.querySelector('span.num_author > a');
+		postid = post.id.match(/post\d+|msg\d+/i);
+		if (postid !== null)
+			postid = postid[0];
+		else
+			return;
+
+		author = post.className.match(/user_(\d+)/i);
+		if (author !== null)
+			author = '[b][user]' + author[1] + '[/user][/b] ';
+		else {
+			author = document.querySelector('#' + postid + ' a[href^="/user.php?"]');
+			if (author !== null) {
+				author = author.href.match(/id=(\d+)/i);
 				if (author !== null)
-					author = '[b][user]' + author.href.match(/id=(\d+)/i) + '[/user][/b] ';
+					author = '[b][user]' + author[1] + '[/user][/b] ';
 				else
 					author = '';
 			}
-			var creation = content.querySelector('p.posted_info > span');
-			if (creation !== null) {
-				creation = formattedUTCString(creation.title.replace(/-/g,'/'));
-			}
-			var postid = content.id.match(/post(\d+)/i)[1];
-			res = author + '[url=' + window.location.pathname + window.location.search + '#post' + postid + ']wrote' + (creation !== null ? ' on ' + creation : '') + '[/url]:\n' + res;
+			else
+				author = '';
 		}
+		creation = document.querySelector('#' + postid + ' p.posted_info > span');
+		if (creation !== null)
+			creation = ' on ' + formattedUTCString(creation.title.replace(/-/g,'/'));
+		else
+			creation = '';
+
+		res = author + '[url=' + window.location.pathname + window.location.search + '#' + postid + ']wrote' + creation + '[/url]:\n' + res;
 
 		document.getElementById('quickpost').value += res;
 
