@@ -314,12 +314,12 @@ if (GM_getValue('deliciousquote') === 'true') {
 
 // HYPER QUOTE by Megure
 // Select text and press CTRL+V to quote
-if (GM_getValue('delicioushyperquote') === 'true') {
+if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('quickpost') !== null) {
 	function QUOTEALL() {
 		var sel = window.getSelection();
-		for(var i = 0; i < sel.rangeCount; i++) {
+		for(var i = 0; i < sel.rangeCount; i++)
 			QUOTEONE(sel.getRangeAt(i));
-		}
+
 		sel = document.getElementById('quickpost');
 		if (sel !== null)
 			sel.scrollIntoView();
