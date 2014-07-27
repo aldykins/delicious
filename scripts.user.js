@@ -98,9 +98,12 @@ var gm_delicioustitlenotifications = initGM('delicioustitlenotifications', 'true
 var gm_deliciousstylesheetpreview = initGM('deliciousstylesheetpreview', 'true', false);
 
 
-// Banners and search bar by Potatoe
+// Banners and search bar by Megure
 // Fixes the placement of the search bars when a banner is in use.
-if (document.getElementById('bannerimg')) document.getElementById('searchbars').children[0].style.top = '-258px';
+if (document.getElementById('bannerimg') !== null) {
+	var parent = document.getElementById('bannerimg').parentNode;
+	parent.parentNode.insertBefore(document.getElementById('searchbars'), parent);
+}
 
 
 // Add delicious stylesheets to stylesheet dropdown menu including preview by Megure
