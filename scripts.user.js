@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.71
+// @version 1.72
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -389,6 +389,14 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 			// Order is somewhat relevant
 			var ret = str.replace(/<span class="smiley-.+?" title="(.+?)"><\/span>/ig, function(html, smiley) {
 						var smileyNode = document.querySelector('img[alt="' + smiley + '"]');
+						if (smileyNode === null)
+							smileyNode = document.querySelector('img[src$="' + smiley + '.png"]');
+						if (smileyNode === null)
+							smileyNode = document.querySelector('img[src$="' + smiley.replace(/-/g, '_') + '.png"]');
+						if (smileyNode === null)
+							smileyNode = document.querySelector('img[src$="' + smiley.replace(/-/g, '_').toLowerCase() + '.png"]');
+						if (smileyNode === null)
+							smileyNode = document.querySelector('img[src$="' + smiley.replace(/face/g, '~_~') + '.png"]');
 						if (smileyNode !== null && smileyNode.parentNode !== null) {
 							smileyNode = smileyNode.parentNode.getAttribute('onclick').match(/'(.+?)'/i);
 							if (smileyNode !== null)
@@ -448,7 +456,7 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 			res = author + '[url=' + window.location.pathname + window.location.search + '#post' + postid + ']wrote' + (creation !== null ? ' on ' + creation : '') + '[/url]:\n' + res;
 		}
 
-		document.getElementById('quickpost').innerHTML += res;
+		document.getElementById('quickpost').value += res;
 	}
 
 	document.addEventListener('keydown', function (e) {
