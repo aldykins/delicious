@@ -364,10 +364,6 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 		var sel = window.getSelection();
 		for(var i = 0; i < sel.rangeCount; i++)
 			QUOTEONE(sel.getRangeAt(i));
-
-		sel = document.getElementById('quickpost');
-		if (sel !== null)
-			sel.scrollIntoView();
 	}
 
 
@@ -505,6 +501,10 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 		}
 
 		document.getElementById('quickpost').value += res;
+
+		sel = document.getElementById('quickpost');
+		if (sel !== null)
+			sel.scrollIntoView();
 	}
 
 	document.addEventListener('keydown', function (e) {
