@@ -336,27 +336,13 @@ if (GM_getValue('deliciousquote') === 'true') {
 // HYPER QUOTE by Megure
 // Select text and press CTRL+V to quote
 if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('quickpost') !== null) {
-	var postRefs = document.querySelectorAll('a[href^="/forums.php"]');
-	for (var i = postRefs.length - 1; i > 0; i--) {
-		var elem = postRefs[i];
-		if (elem.textContent.indexOf('GMT') !== -1 && elem.textContent.indexOf('wrote on ') !== -1) {
-			var text = elem.textContent.split('wrote on ')[1],
-			    newText = new Date(text);
-			if (!isNaN(newText.getTime())) {
-				newText = newText.toLocaleString();
-				newText = newText.substring(0, newText.length - 3);
-				elem.textContent = elem.textContent.replace(text, newText);
-			}
-		}
-	}
-
-	function formattedUTCString(date) {
+	function formattedUTCString(date, timezone) {
 		var creation = new Date(date);
 		if (isNaN(creation.getTime()))
 			return date;
 		else {
 			creation = creation.toUTCString().split(' ');
-			return creation[1] + ' ' + creation[2] + ' ' + creation[3] + ", " + creation[4].substring(0, 5) + ' ' + creation[5];
+			return creation[1] + ' ' + creation[2] + ' ' + creation[3] + ', ' + creation[4].substring(0, 5) + (timezone !== false ? ' ' + creation[5] : '');
 		}
 	}
 
@@ -505,6 +491,18 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 		sel = document.getElementById('quickpost');
 		if (sel !== null)
 			sel.scrollIntoView();
+	}
+
+	var postRefs = document.querySelectorAll('a[href^="/forums.php"]');
+	for (var i = postRefs.length - 1; i > 0; i--) {
+		var elem = postRefs[i];
+		if (elem.textContent.indexOf('GMT') !== -1 && elem.textContent.indexOf('wrote on ') !== -1) {
+			var text = elem.textContent.split('wrote on ')[1],
+			    newText = new Date(text);
+			if (!isNaN(newText.getTime()))
+				// Manually subtract timezone
+				elem.textContent = elem.textContent.replace(text, formattedUTCString(newText.getTime() - 60000 * newText.getTimezoneOffset(), false));
+		}
 	}
 
 	document.addEventListener('keydown', function (e) {
