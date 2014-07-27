@@ -336,6 +336,30 @@ if (GM_getValue('deliciousquote') === 'true') {
 // HYPER QUOTE by Megure
 // Select text and press CTRL+V to quote
 if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('quickpost') !== null) {
+	var postRefs = document.querySelectorAll('a[href^="/forums.php"]');
+	for (var i = postRefs.length - 1; i > 0; i--) {
+		var elem = postRefs[i];
+		if (elem.textContent.indexOf('GMT') !== -1 && elem.textContent.indexOf('wrote on ') !== -1) {
+			var text = elem.textContent.split('wrote on ')[1],
+			    newText = new Date(text);
+			if (!isNaN(newText.getTime())) {
+				newText = newText.toLocaleString();
+				newText = newText.substring(0, newText.length - 3);
+				elem.textContent = elem.textContent.replace(text, newText);
+			}
+		}
+	}
+
+	function formattedUTCString(date) {
+		var creation = new Date(date);
+		if (isNaN(creation.getTime()))
+			return date;
+		else {
+			creation = creation.toUTCString().split(' ');
+			return creation[1] + ' ' + creation[2] + ' ' + creation[3] + ", " + creation[4].substring(0, 5) + ' ' + creation[5];
+		}
+	}
+
 	function QUOTEALL() {
 		var sel = window.getSelection();
 		for(var i = 0; i < sel.rangeCount; i++)
@@ -408,7 +432,10 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 
 		function HTMLtoBB(str) {
 			// Order is somewhat relevant
-			var ret = str.replace(/<span class="smiley-.+?" title="(.+?)"><\/span>/ig, function(html, smiley) {
+			var ret = str.replace(/<strong><a.*?>.*?<\/a><\/strong> <a.*?>wrote on (.*?)<\/a>/ig, function(html, dateString) {
+						return html.replace(dateString, formattedUTCString(dateString));
+					}).
+					replace(/<span class="smiley-.+?" title="(.+?)"><\/span>/ig, function(html, smiley) {
 						var smileyNode = document.querySelector('img[alt="' + smiley + '"]');
 						if (smileyNode === null)
 							smileyNode = document.querySelector('img[src$="' + smiley + '.png"]');
@@ -471,8 +498,7 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 			}
 			var creation = content.querySelector('p.posted_info > span');
 			if (creation !== null) {
-				creation = new Date(creation.title.replace(/-/g,'/')).toUTCString().split(' ');
-				creation = creation[1] + ' ' + creation[2] + ' ' + creation[3] + ", " + creation[4].substring(0, 5) + ' ' + creation[5];
+				creation = formattedUTCString(creation.title.replace(/-/g,'/'));
 			}
 			var postid = content.id.match(/post(\d+)/i)[1];
 			res = author + '[url=' + window.location.pathname + window.location.search + '#post' + postid + ']wrote' + (creation !== null ? ' on ' + creation : '') + '[/url]:\n' + res;
