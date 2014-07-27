@@ -459,6 +459,7 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 					replace(/<div style="text-align: center;">([\s\S]*?)<\/div>/ig, '[align=center]$1[/align]').
 					replace(/<div style="text-align: left;">([\s\S]*?)<\/div>/ig, '[align=left]$1[/align]').
 					replace(/<div style="text-align: right;">([\s\S]*?)<\/div>/ig, '[align=right]$1[/align]').
+					replace(/<span style="color:\s*(.*?);?">([\s\S]*?)<\/span>/ig, '[color=$1]$2[/color]').
 					replace(/<span class="size(.*?)">([\s\S]*?)<\/span>/ig, '[size=$1]$2[/size]').
 					replace(/<blockquote class="blockquote">([\s\S]*?)<\/blockquote>/ig, '[quote]$1[/quote]').
 					replace(/<div class="spoilerContainer"><input.*?><div class="spoiler">([\s\S]*?)<\/div><\/div>/ig, '[spoiler]$1[/spoiler]').
