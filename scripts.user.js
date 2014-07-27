@@ -469,7 +469,7 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 					replace(/<div class="spoilerContainer"><input.*?><div class="spoiler">([\s\S]*?)<\/div><\/div>/ig, '[spoiler]$1[/spoiler]').
 					replace(/<div class="spoilerContainer hideContainer"><input.*?value="Show (.*?)".*?><div class="spoiler">([\s\S]*?)<\/div><\/div>/ig, '[hide=$1]$2[/hide]').
 					replace(/<img.*?src="(.*?)".*?>/ig, '[img]$1[/img]').
-					replace(/<span class="last-edited">[\s\S]*?<\/span>/ig, '');
+					replace(/<span class="last-edited">[\s\S]*$/ig, '');
 			if (ret !== str) return HTMLtoBB(ret);
 			else return ret;
 		}
