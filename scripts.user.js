@@ -493,12 +493,12 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 			sel.scrollIntoView();
 	}
 
-	var postRefs = document.querySelectorAll('a[href^="/forums.php"]');
+	var postRefs = document.querySelectorAll('a[href^="/forums.php?"]');
 	for (var i = postRefs.length - 1; i > 0; i--) {
 		var elem = postRefs[i];
-		if (elem.textContent.indexOf('GMT') !== -1 && elem.textContent.indexOf('wrote on ') !== -1) {
+		if (/^wrote on /i.test(elem.textContent)) {
 			var text = elem.textContent.split('wrote on ')[1],
-			    newText = new Date(text);
+			    newText = new Date(text + (/GMT$/i.test(elem.textContent) ? '' : ' GMT'));
 			if (!isNaN(newText.getTime()))
 				// Manually subtract timezone
 				elem.textContent = elem.textContent.replace(text, formattedUTCString(newText.getTime() - 60000 * newText.getTimezoneOffset(), false));
