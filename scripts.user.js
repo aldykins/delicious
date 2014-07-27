@@ -183,15 +183,33 @@ if (GM_getValue('deliciousstylesheetpreview', 'true') === 'true' && /\/user\.php
 				styleid: id
 			},
 			success: function(data) {
+				var currentBanner = $j('#banner :selected').text(),
+				    bannerVal = '';
 				$j('#banner').children().remove();
 				var BannersArray = data.split(',');
-				for (i = 0; i < BannersArray.length; i += 2)
+				for (i = 0; i < BannersArray.length; i += 2) {
 					$j('#banner').append($j('<option></option>').val(BannersArray[i]).html(BannersArray[i + 1]));
-				$j('#banner :first').attr('selected', 'selected');
-				Banner();
+					if (currentBanner === BannersArray[i + 1])
+						bannerVal = BannersArray[i];
+				}
+				currentBanner = document.querySelector('#banner option[value="' + bannerVal + '"]');
+				if (currentBanner === null)
+					$j('#banner :first').attr('selected', 'selected');
+				else
+					currentBanner.selected = true;
+				showBanner();
 			}
 		});
 	});
+	function showBanner() {
+		var banner = document.querySelector('#bannerimg img'),
+		    pseudoSS = document.querySelector('#stylesheet option[value="' + input.value + '"]');
+		if (banner !== null && pseudoSS !== null)
+			banner.src = "static/styles/" + pseudoSS.textContent.toLowerCase() + "/images/" + $j("#banner :selected").text() + ".png";
+	}
+	var banner = document.getElementById('banner');
+	banner.removeAttribute('onchange');
+	banner.addEventListener('change', function(event) { showBanner(); });
 }
 
 
