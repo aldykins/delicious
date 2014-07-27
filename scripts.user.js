@@ -349,13 +349,13 @@ if (GM_getValue('delicioushyperquote') === 'true') {
 
 		var content, copy, res, start = [], end = [], startNode, endNode;
 		content = range.startContainer;
-		while (content !== null && /content\d+/i.test(content.id) === false) {
+		while (content !== null && /post\d+/i.test(content.id) === false) {
 			start.push(inArray(content.parentNode.childNodes, content));
 			content = content.parentNode;
 		}
 		if (content === null) return;
 		content = range.endContainer;
-		while (content !== null && /content\d+/i.test(content.id) === false) {
+		while (content !== null && /post\d+/i.test(content.id) === false) {
 			end.push(inArray(content.parentNode.childNodes, content));
 			content = content.parentNode;
 		}
@@ -421,7 +421,10 @@ if (GM_getValue('delicioushyperquote') === 'true') {
 			else return ret;
 		}
 
-		res = '[quote]' + HTMLtoBB(copy.innerHTML).trim() + '[/quote]\n\n';
+		res = HTMLtoBB(copy.querySelector('div.post').innerHTML).trim();
+		if (res === '') return;
+
+		res = '[quote]' + res + '[/quote]\n\n';
 
 		while (content !== null && /post\d+/i.test(content.id) === false)
 			content = content.parentNode;
