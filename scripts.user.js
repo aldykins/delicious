@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.73
+// @version 1.74
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -262,10 +262,10 @@ if (GM_getValue('deliciousbbcode') === 'true') {
 // Makes the quoting feature on AnimeBytes better by including links back to posts and the posted date.
 // Depends on injectScript
 if (GM_getValue('deliciousquote') === 'true') {
-	var quotes = document.querySelectorAll('.com-quote');
+	var quotes = document.querySelectorAll('a[onclick^="Quote"]');
 	for (var i = 0, len = quotes.length; i < len; i++) {
 		var elem = quotes[i],
-		    args = elem.getAttribute('onClick').match(/Quote\s*\((?:\s*'(\d+)'\s*)?(?:,\s*'([^']*)'\s*)?(?:,\s*'([^']*)'\s*)?\)/i),
+		    args = elem.getAttribute('onClick').match(/Quote\s*\((?:\s*'([^']*)'\s*)?(?:,\s*'([^']*)'\s*)?(?:,\s*'([^']*)'\s*)?\)/i),
 		    cb = document.createElement('input');
 		cb.type = 'checkbox';
 		cb.className = 'com-quote-multiquoteCB';
@@ -275,6 +275,9 @@ if (GM_getValue('deliciousquote') === 'true') {
 		cb.setAttribute('postid', args[1]);
 		cb.setAttribute('username', args[2]);
 		cb.setAttribute('surround', args[3]);
+		// Hide it if usercomment
+		if (/usercomment/i.test(elem.className))
+			cb.style.display = 'none';
 		elem.parentNode.insertBefore(cb, elem);
 	}
 	function Quote(postid, username, surround) {
@@ -285,12 +288,17 @@ if (GM_getValue('deliciousquote') === 'true') {
 		if (temp !== null)
 			temp.checked = true;
 		multiQuote = document.querySelectorAll('.com-quote-multiquoteCB:checked');
-		for (var i = 0, len = multiQuote.length; i < len; i++) {
-			var elem = multiQuote[i],
-			    postid = elem.getAttribute('postid'),
-			    username = elem.getAttribute('username'),
-			    surround = elem.getAttribute('surround');
-			retrievePost(postid, username, surround, i);
+		if (multiQuote.length > 0) {
+			for (var i = 0, len = multiQuote.length; i < len; i++) {
+				var elem = multiQuote[i],
+						postid = elem.getAttribute('postid'),
+						username = elem.getAttribute('username'),
+						surround = elem.getAttribute('surround');
+				retrievePost(postid, username, surround, i);
+			}
+		} else {
+			multiQuote = [document.createElement('input')];
+			retrievePost(postid, username, surround, 0);
 		}
 		function checkResult() {
 			if (multiQuote.length === ++results) {
@@ -310,13 +318,15 @@ if (GM_getValue('deliciousquote') === 'true') {
 					function replaceImg(text){if(text.match(/^([^]*)(\[img\][^\[]+\[\/img\])([^]*)$/mi)!=null){return text.replace(/^([^]*)(\[img\][^\[]+\[\/img\])([^]*)$/mi,function(full,$1,$2,$3){var tmp="BQTMPBQ"+new Date().getTime()+"BQTMPBQ",ssm=$1.match(/\[hide(=[^\]]*)?\]/mgi),sem=$1.match(/\[\/hide\]/mgi),esm=$3.match(/\[hide(=[^\]]*)?\]/mgi),eem=$3.match(/\[\/hide\]/mgi),ssm=(ssm!=null)?ssm.length:0,sem=(sem!=null)?sem.length:0,esm=(esm!=null)?esm.length:0,eem=(eem!=null)?eem.length:0,hsm=ssm-sem,hem=esm-eem,tmptxt=replaceImg($1+tmp+$3);$1=tmptxt.substring(0,tmptxt.search(tmp));$3=tmptxt.substring(tmptxt.search(tmp)+tmp.length,tmptxt.length);if(hsm>=hem&&hsm>0)return $1+$2+$3;return $1+'[hide=Image]'+$2+'[/hide]'+$3})}return text}
 					function replaceYouTube(text){if(text.match(/^([^]*)(\[youtube\][^\[]+\[\/youtube\])([^]*)$/mi)!=null){return text.replace(/^([^]*)(\[youtube\][^\[]+\[\/youtube\])([^]*)$/mi,function(full,$1,$2,$3){var tmp="BQTMPBQ"+new Date().getTime()+"BQTMPBQ",ssm=$1.match(/\[hide(=[^\]]*)?\]/mgi),sem=$1.match(/\[\/hide\]/mgi),esm=$3.match(/\[hide(=[^\]]*)?\]/mgi),eem=$3.match(/\[\/hide\]/mgi),ssm=(ssm!=null)?ssm.length:0,sem=(sem!=null)?sem.length:0,esm=(esm!=null)?esm.length:0,eem=(eem!=null)?eem.length:0,hsm=ssm-sem,hem=esm-eem,tmptxt=replaceYouTube($1+tmp+$3);$1=tmptxt.substring(0,tmptxt.search(tmp));$3=tmptxt.substring(tmptxt.search(tmp)+tmp.length,tmptxt.length);if(hsm>=hem&&hsm>0)return $1+$2+$3;return $1+'[hide=YouTube Video]'+$2+'[/hide]'+$3})}return text}
 					response = replaceYouTube(replaceImg(response));
-					var date = document.evaluate("//div[@id='post"+postid+"']/div/div/p[@class='posted_info']/span", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-					if (date) {
-						date = new Date(date.title.replace(/-/g,'/')).toUTCString().substring(5, 25).split(' ');
-						date = date[1]+" "+date[0]+" "+date[2]+", "+date[3].substring(0,5);
-					} else { date = ""; }
+					var date = document.querySelector('div#post' + postid + ' > div > div > p.posted_info > span');
+					if (date === null)
+						date = document.querySelector('div#post' + postid + ' > div > span > span.usercomment_posttime');
+					if (date !== null) {
+						date = new Date(date.title.replace(/-/g,'/')).toUTCString().split(' ');
+						date = date[1] + ' ' + date[2] + ' ' + date[3] + ', ' + date[4].substring(0,5) + ' ' + date[5];
+					}
 					var userid = document.evaluate("//span/a[text()='"+username+"' and starts-with(@href, '/user.php?id=')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.href;
-					var quoteText = '[b][user=' + userid + ']' + username + '[/user][/b] [url=' + window.location.pathname + window.location.search + '#post' + postid + ']wrote' + ((date)?' on '+date:'') + '[/url]:\n[quote]' + response + '[/quote]\n';
+					var quoteText = '[b][user=' + userid + ']' + username + '[/user][/b] [url=' + window.location.pathname + window.location.search + '#post' + postid + ']wrote' + ((date !== null) ? ' on ' + date : '') + '[/url]:\n[quote]' + response + '[/quote]\n';
 					if (surround && surround.length > 0) quoteText = '[' + surround + ']' + quoteText + '[/' + surround + ']';
 					result[index] = quoteText;
 					checkResult();
