@@ -477,14 +477,17 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 					replace(/<img.*?src="(.*?)".*?>/ig, '[img]$1[/img]').
 					replace(/<span class="last-edited">[\s\S]*$/ig, '');
 			if (ret !== str) return HTMLtoBB(ret);
-			else return ret;
+			else {
+				// Decode HTML
+				var tempDiv = document.createElement('div');
+				tempDiv.innerHTML = ret;
+				return tempDiv.textContent.trim();
+			}
 		}
 
-		var res = HTMLtoBB(post.querySelector('div.post,div.body').innerHTML).trim(),
+		var res = HTMLtoBB(post.querySelector('div.post,div.body').innerHTML),
 		    author, creation, postid;
 		if (res === '') return;
-
-		res = '[quote]' + res + '[/quote]\n\n';
 
 		postid = post.id.match(/post\d+|msg\d+/i);
 		if (postid !== null)
@@ -513,7 +516,7 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 		else
 			creation = '';
 
-		res = author + '[url=' + window.location.pathname + window.location.search + '#' + postid + ']wrote' + creation + '[/url]:\n' + res;
+		res = author + '[url=' + window.location.pathname + window.location.search + '#' + postid + ']wrote' + creation + '[/url]:\n[quote]' + res + '[/quote]\n\n';
 
 		document.getElementById('quickpost').value += res;
 
