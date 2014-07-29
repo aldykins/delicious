@@ -525,10 +525,10 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 			sel.scrollIntoView();
 	}
 
-	var postRefs = document.querySelectorAll('a[href^="/forums.php?"]');
+	var postRefs = document.querySelectorAll('#content a[href^="/"]');
 	for (var i = postRefs.length - 1; i > 0; i--) {
 		var elem = postRefs[i];
-		if (/^wrote on /i.test(elem.textContent)) {
+		if (/^wrote on /.test(elem.textContent)) {
 			var text = elem.textContent.split('wrote on ')[1],
 			    newText = new Date(text + (/GMT$/i.test(elem.textContent) ? '' : ' GMT'));
 			if (!isNaN(newText.getTime()))
