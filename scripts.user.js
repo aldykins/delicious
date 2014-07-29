@@ -447,7 +447,6 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 		function HTMLtoBB(str) {
 			// Order is somewhat relevant
 			var ret = str.replace(/(?:<strong><a.*?>.*?<\/a><\/strong> <a.*?>wrote on (.*?)<\/a>|<strong>Added on (.*?):?<\/strong>)/ig, function(html, dateString1, dateString2) {
-						console.log(arguments);
 						if (dateString1 !== '')
 							return html.replace(dateString1, formattedUTCString(dateString1));
 						else if (dateString2 !== '')
@@ -473,7 +472,7 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 						return ':' + smiley + ':';
 					}).
 					replace(/<iframe.*?src="([^?"]*).*?".*?><\/iframe>/ig, '[youtube]$1[/youtube]').
-					replace(/<([^\s>]+)[^>]*>\s*<\/([^>]+?)>/ig, function(html, match1, match2) {
+					replace(/<([^\s>\/]+)[^>]*>\s*<\/([^>]+)>/ig, function(html, match1, match2) {
 						if (match1 === match2)
 							return '';
 						return html;
@@ -491,8 +490,13 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 					replace(/<span style="color:\s*(.*?);?">([\s\S]*?)<\/span>/ig, '[color=$1]$2[/color]').
 					replace(/<span class="size(.*?)">([\s\S]*?)<\/span>/ig, '[size=$1]$2[/size]').
 					replace(/<blockquote class="blockquote">([\s\S]*?)<\/blockquote>/ig, '[quote]$1[/quote]').
-					replace(/<div class="spoilerContainer"><input.*?><div class="spoiler">([\s\S]*?)<\/div><\/div>/ig, '[spoiler]$1[/spoiler]').
-					replace(/<div class="spoilerContainer hideContainer"><input.*?value="Show (.*?)".*?><div class="spoiler">([\s\S]*?)<\/div><\/div>/ig, '[hide=$1]$2[/hide]').
+					replace(/<div.*?class=".*?spoilerContainer.*?hideContainer.*?".*?><input.*?value="(?:Show\s*|Hide\s*)(.*?)".*?><div.*?class=".*?spoiler.*?".*?>([\s\S]*?)<\/div><\/div>/ig, function(html, button, content) {
+						if (button !== '')
+							return '[hide=' + button + ']' + content + '[/hide]';
+						else
+							return '[hide]' + content + '[/hide]';
+					}).
+					replace(/<div.*?class=".*?spoilerContainer.*?".*?><input.*?><div.*?class=".*?spoiler.*?".*?>([\s\S]*?)<\/div><\/div>/ig, '[spoiler]$1[/spoiler]').
 					replace(/<img.*?src="(.*?)".*?>/ig, '[img]$1[/img]').
 					replace(/<span class="last-edited">[\s\S]*$/ig, '');
 			if (ret !== str) return HTMLtoBB(ret);
