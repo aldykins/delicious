@@ -433,8 +433,14 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 	function QUOTEONE(post) {
 		function HTMLtoBB(str) {
 			// Order is somewhat relevant
-			var ret = str.replace(/<strong><a.*?>.*?<\/a><\/strong> <a.*?>wrote on (.*?)<\/a>/ig, function(html, dateString) {
-						return html.replace(dateString, formattedUTCString(dateString));
+			var ret = str.replace(/(?:<strong><a.*?>.*?<\/a><\/strong> <a.*?>wrote on (.*?)<\/a>|<strong>Added on (.*?):?<\/strong>)/ig, function(html, dateString1, dateString2) {
+						console.log(arguments);
+						if (dateString1 !== '')
+							return html.replace(dateString1, formattedUTCString(dateString1));
+						else if (dateString2 !== '')
+							return html.replace(dateString2, formattedUTCString(dateString2));
+						else
+							return html;
 					}).
 					replace(/<span class="smiley-.+?" title="(.+?)"><\/span>/ig, function(html, smiley) {
 						var smileyNode = document.querySelector('img[alt="' + smiley + '"]');
@@ -525,15 +531,14 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 			sel.scrollIntoView();
 	}
 
-	var postRefs = document.querySelectorAll('#content a[href^="/"]');
+	var postRefs = document.querySelectorAll('#content a[href^="/"],#content strong');
 	for (var i = postRefs.length - 1; i > 0; i--) {
 		var elem = postRefs[i];
-		if (/^wrote on /.test(elem.textContent)) {
-			var text = elem.textContent.split('wrote on ')[1],
-			    newText = new Date(text + (/GMT$/i.test(elem.textContent) ? '' : ' GMT'));
-			if (!isNaN(newText.getTime()))
-				// Manually subtract timezone
-				elem.textContent = elem.textContent.replace(text, formattedUTCString(newText.getTime() - 60000 * newText.getTimezoneOffset(), false));
+		var match = elem.textContent.match(/^(wrote on |Added on )(.*?)(:?)$/i);
+		if (match !== null) {
+			var dateTime = new Date(match[2] + (/GMT$/i.test(match[2]) ? '' : ' GMT'));
+			if (isNaN(dateTime.getTime()) === false)
+				elem.textContent = match[1] + formattedUTCString(dateTime.getTime() - 60000 * dateTime.getTimezoneOffset(), false) + match[3];
 		}
 	}
 
