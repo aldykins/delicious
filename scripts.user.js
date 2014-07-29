@@ -98,11 +98,24 @@ var gm_delicioustitlenotifications = initGM('delicioustitlenotifications', 'true
 var gm_deliciousstylesheetpreview = initGM('deliciousstylesheetpreview', 'true', false);
 
 
-// Banners and search bar by Megure
-// Fixes the placement of the search bars when a banner is in use.
+// Banners, notifications and search bar by Megure
+// Fixes the placement of the search bars and notifications when a banner is in use.
 if (document.getElementById('bannerimg') !== null) {
-	var parent = document.getElementById('bannerimg').parentNode;
-	parent.parentNode.insertBefore(document.getElementById('searchbars'), parent);
+	var parent = document.getElementById('bannerimg').parentNode,
+	    searchbars = document.getElementById('searchbars'),
+	    alerts = document.getElementById('alerts');
+	if (alerts !== null) {
+		if (alerts.nextSibling !== null)
+			alerts.parentNode.insertBefore(parent, alerts.nextSibling);
+		else
+			alerts.parentNode.appendChild(parent);
+	}
+	else if (searchbars !== null) {
+		if (searchbars.nextSibling !== null)
+			searchbars.parentNode.insertBefore(parent, searchbars.nextSibling);
+		else
+			searchbars.appendChild(parent);
+	}
 }
 
 
