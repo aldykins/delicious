@@ -516,7 +516,7 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 			else
 				author = '';
 		}
-		var creation = document.querySelector('div#' + postid + ' > div > div > p.posted_info > span');
+		creation = document.querySelector('div#' + postid + ' > div > div > p.posted_info > span');
 		if (creation === null)
 			creation = document.querySelector('div#' + postid + ' > div > span > span.usercomment_posttime');
 		if (creation !== null)
