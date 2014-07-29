@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.74
+// @version 1.75
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -516,7 +516,9 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 			else
 				author = '';
 		}
-		creation = document.querySelector('#' + postid + ' p.posted_info > span');
+		var creation = document.querySelector('div#' + postid + ' > div > div > p.posted_info > span');
+		if (creation === null)
+			creation = document.querySelector('div#' + postid + ' > div > span > span.usercomment_posttime');
 		if (creation !== null)
 			creation = ' on ' + formattedUTCString(creation.title.replace(/-/g,'/'));
 		else
