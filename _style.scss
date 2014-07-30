@@ -211,7 +211,7 @@ input[type="checkbox"] {
     border-radius: 3px;
 }
 
-input[type='button'],input[type='submit'] {
+input[type='button'],input[type='submit'],#screenshots .submit a {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
@@ -231,7 +231,7 @@ img {
     border: none;
 }
 
-input[type='button'],input[type='submit'] {
+input[type='button'],input[type='submit'],#screenshots .submit a {
     border: none;
 }
 
@@ -353,7 +353,7 @@ select, #user input {
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.7);
 }
 
-input[type='submit']:hover,input[type='button']:hover {
+input[type='submit']:hover,input[type='button']:hover,#screenshots .submit a:hover {
     cursor: pointer;
     cursor: hand;
     -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
@@ -366,7 +366,7 @@ th.torrent_properties a:hover {
     cursor: hand;
 }
 
-input[type='submit']::-moz-focus-inner,input[type='button']::-moz-focus-inner {
+input[type='submit']::-moz-focus-inner,input[type='button']::-moz-focus-inner,#screenshots .submit a::-moz-focus-inner {
     padding: 0;
     border: 0;
 }
@@ -402,7 +402,7 @@ input[type='submit']::-moz-focus-inner,input[type='button']::-moz-focus-inner {
     padding: 4px;
 }
 
-input[type='button'],input[type='submit'] {
+input[type='button'],input[type='submit'],#screenshots .submit a {
     background: #dddddd;
     padding: 8px;
     color: #333333;
@@ -601,11 +601,16 @@ tr.head td,tr.colhead td,tr.colhead_dark td {
     background: $primarybackground;
 }
 
-input[type='button'],input[type='submit'] {
+input[type='button'],input[type='submit'],#screenshots .submit a {
     background: #e6e6e6;
     background: -moz-linear-gradient(top, #f5f5f5 0%, #dddddd 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f5f5f5), color-stop(100%, #dddddd));
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F5F5F5', endColorstr='#DDDDDD',GradientType=0 );
+}
+
+#screenshots .submit input,#screenshots .submit a {
+    font-family: inherit;
+    padding: 6px;
 }
 
 tr.head td:first-child,tr.colhead td:first-child,tr.colhead_dark td:first-child {
@@ -828,7 +833,7 @@ pre.php {
     white-space: normal;
 }
 
-.spoilerContainer.hideContainer>input[type="button"] {
+.spoilerContainer.hideContainer>input[type='button'] {
     background: $hideborder;
 }
     
