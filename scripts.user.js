@@ -101,20 +101,29 @@ var gm_deliciousstylesheetpreview = initGM('deliciousstylesheetpreview', 'true',
 // Banners, notifications and search bar by Megure
 // Fixes the placement of the search bars and notifications when a banner is in use.
 if (document.getElementById('bannerimg') !== null) {
-	var parent = document.getElementById('bannerimg').parentNode,
+	var bannerimg = document.getElementById('bannerimg'),
+	    img = bannerimg.querySelector('img'),
+	    content = document.getElementById('content'),
 	    searchbars = document.getElementById('searchbars'),
 	    alerts = document.getElementById('alerts');
-	if (alerts !== null) {
+	if (alerts !== null && alerts.textContent.trim() !== '') {
 		if (alerts.nextSibling !== null)
-			alerts.parentNode.insertBefore(parent, alerts.nextSibling);
+			alerts.parentNode.insertBefore(bannerimg.parentNode, alerts.nextSibling);
 		else
-			alerts.parentNode.appendChild(parent);
+			alerts.parentNode.appendChild(bannerimg.parentNode);
+		if (img !== null) {
+			img.style.paddingTop = '0';
+			if (img.width > content.clientWidth) {
+				img.style.position = 'relative';
+				img.style.left = Math.round((content.clientWidth - bannerimg.children[0].width) / 2) + 'px';
+			}
+		}
 	}
 	else if (searchbars !== null) {
 		if (searchbars.nextSibling !== null)
-			searchbars.parentNode.insertBefore(parent, searchbars.nextSibling);
+			searchbars.parentNode.insertBefore(bannerimg.parentNode, searchbars.nextSibling);
 		else
-			searchbars.appendChild(parent);
+			searchbars.appendChild(bannerimg.parentNode);
 	}
 }
 
