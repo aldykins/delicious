@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.75
+// @version 1.76
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -451,13 +451,20 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 	function QUOTEONE(post) {
 		function HTMLtoBB(str) {
 			// Order is somewhat relevant
-			var ret = str.replace(/(?:<strong><a.*?>.*?<\/a><\/strong> <a.*?>wrote on (.*?)<\/a>|<strong>Added on (.*?):?<\/strong>)/ig, function(html, dateString1, dateString2) {
-						if (dateString1 !== '')
-							return html.replace(dateString1, formattedUTCString(dateString1));
-						else if (dateString2 !== '')
-							return html.replace(dateString2, formattedUTCString(dateString2));
+			var ret = str.replace(/<br.*?>/ig, '').
+					replace(/<strong><a.*?>.*?<\/a><\/strong> <a.*?href="(.*?)#(?:msg|post)(.*?)".*?>wrote(?: on )?(.*?)<\/a>:?\s*<blockquote class="blockquote">([\s\S]*?)<\/blockquote>/ig, function(html, href, id, dateString, quote) {
+						var type = '';
+						if (/\/forums\.php/i.test(href)) type = '#';
+						if (/\/user\.php/i.test(href)) type = '*';
+						if (/\/torrents\.php/i.test(href)) type = '-1';
+						if (/\/torrents2\.php/i.test(href)) type = '-2';
+						if (type !== '')
+							return '[quote=' + type + id + ']' + quote + '[/quote]';
 						else
-							return html;
+							return html.replace(dateString, formattedUTCString(dateString));
+					}).
+					replace(/<strong>Added on (.*?):?<\/strong>/ig, function(html,dateString) {
+						return html.replace(dateString, formattedUTCString(dateString));
 					}).
 					replace(/<span class="smiley-.+?" title="(.+?)"><\/span>/ig, function(html, smiley) {
 						var smileyNode = document.querySelector('img[alt="' + smiley + '"]');
@@ -483,7 +490,6 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 						return html;
 					}).
 					replace(/<ul><li>(.+?)<\/li><\/ul>/ig, '[*]$1').
-					replace(/<br.*?>/ig, '').
 					replace(/<a.*?href="(.*?)".*?>([\s\S]*?)<\/a>/ig, '[url=$1]$2[/url]').
 					replace(/<strong>([\s\S]*?)<\/strong>/ig, '[b]$1[/b]').
 					replace(/<em>([\s\S]*?)<\/em>/ig, '[i]$1[/i]').
