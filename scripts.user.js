@@ -514,39 +514,43 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 		}
 
 		var res = HTMLtoBB(post.querySelector('div.post,div.body').innerHTML),
-		    author, creation, postid;
+		    author, creation, postid, type = '';
 		if (res === '') return;
 
-		postid = post.id.match(/post\d+|msg\d+/i);
-		if (postid !== null)
-			postid = postid[0];
-		else
+		postid = post.id.match(/(?:msg|post)(\d+)/i);
+		if (postid === null)
 			return;
 
-		author = post.className.match(/user_(\d+)/i);
-		if (author !== null)
-			author = '[b][user]' + author[1] + '[/user][/b] ';
+		if (window.location.pathname === '/forums.php') type = '#';
+		if (window.location.pathname === '/user.php') type = '*';
+		if (window.location.pathname === '/torrents.php') type = '-1';
+		if (window.location.pathname === '/torrents2.php') type = '-2';
+		if (type !== '')
+			res = '[quote=' + type + postid[1] + ']' + res + '[/quote]';
 		else {
-			author = document.querySelector('#' + postid + ' a[href^="/user.php?"]');
-			if (author !== null) {
-				author = author.href.match(/id=(\d+)/i);
-				if (author !== null)
-					author = '[b][user]' + author[1] + '[/user][/b] ';
+			author = post.className.match(/user_(\d+)/i);
+			if (author !== null)
+				author = '[b][user]' + author[1] + '[/user][/b] ';
+			else {
+				author = document.querySelector('#' + postid[0] + ' a[href^="/user.php?"]');
+				if (author !== null) {
+					author = author.href.match(/id=(\d+)/i);
+					author = (author !== null ? '[b][user]' + author[1] + '[/user][/b] ' : '');
+				}
 				else
 					author = '';
 			}
-			else
-				author = '';
-		}
-		creation = document.querySelector('div#' + postid + ' > div > div > p.posted_info > span');
-		if (creation === null)
-			creation = document.querySelector('div#' + postid + ' > div > span > span.usercomment_posttime');
-		if (creation !== null)
-			creation = ' on ' + formattedUTCString(creation.title.replace(/-/g,'/'));
-		else
-			creation = '';
 
-		res = author + '[url=' + window.location.pathname + window.location.search + '#' + postid + ']wrote' + creation + '[/url]:\n[quote]' + res + '[/quote]\n\n';
+			creation = document.querySelector('div#' + postid[0] + ' > div > div > p.posted_info > span');
+			if (creation === null)
+				creation = document.querySelector('div#' + postid[0] + ' > div > span > span.usercomment_posttime');
+			if (creation !== null)
+				creation = ' on ' + formattedUTCString(creation.title.replace(/-/g,'/'));
+			else
+				creation = '';
+
+			res = author + '[url=' + window.location.pathname + window.location.search + '#' + postid[0] + ']wrote' + creation + '[/url]:\n[quote]' + res + '[/quote]\n\n';
+		}
 
 		document.getElementById('quickpost').value += res;
 
