@@ -340,15 +340,11 @@ if (GM_getValue('deliciousquote') === 'true') {
 					function replaceImg(text){if(text.match(/^([^]*)(\[img\][^\[]+\[\/img\])([^]*)$/mi)!=null){return text.replace(/^([^]*)(\[img\][^\[]+\[\/img\])([^]*)$/mi,function(full,$1,$2,$3){var tmp="BQTMPBQ"+new Date().getTime()+"BQTMPBQ",ssm=$1.match(/\[hide(=[^\]]*)?\]/mgi),sem=$1.match(/\[\/hide\]/mgi),esm=$3.match(/\[hide(=[^\]]*)?\]/mgi),eem=$3.match(/\[\/hide\]/mgi),ssm=(ssm!=null)?ssm.length:0,sem=(sem!=null)?sem.length:0,esm=(esm!=null)?esm.length:0,eem=(eem!=null)?eem.length:0,hsm=ssm-sem,hem=esm-eem,tmptxt=replaceImg($1+tmp+$3);$1=tmptxt.substring(0,tmptxt.search(tmp));$3=tmptxt.substring(tmptxt.search(tmp)+tmp.length,tmptxt.length);if(hsm>=hem&&hsm>0)return $1+$2+$3;return $1+'[hide=Image]'+$2+'[/hide]'+$3})}return text}
 					function replaceYouTube(text){if(text.match(/^([^]*)(\[youtube\][^\[]+\[\/youtube\])([^]*)$/mi)!=null){return text.replace(/^([^]*)(\[youtube\][^\[]+\[\/youtube\])([^]*)$/mi,function(full,$1,$2,$3){var tmp="BQTMPBQ"+new Date().getTime()+"BQTMPBQ",ssm=$1.match(/\[hide(=[^\]]*)?\]/mgi),sem=$1.match(/\[\/hide\]/mgi),esm=$3.match(/\[hide(=[^\]]*)?\]/mgi),eem=$3.match(/\[\/hide\]/mgi),ssm=(ssm!=null)?ssm.length:0,sem=(sem!=null)?sem.length:0,esm=(esm!=null)?esm.length:0,eem=(eem!=null)?eem.length:0,hsm=ssm-sem,hem=esm-eem,tmptxt=replaceYouTube($1+tmp+$3);$1=tmptxt.substring(0,tmptxt.search(tmp));$3=tmptxt.substring(tmptxt.search(tmp)+tmp.length,tmptxt.length);if(hsm>=hem&&hsm>0)return $1+$2+$3;return $1+'[hide=YouTube Video]'+$2+'[/hide]'+$3})}return text}
 					response = replaceYouTube(replaceImg(response));
-					var date = document.querySelector('div#post' + postid + ' > div > div > p.posted_info > span');
-					if (date === null)
-						date = document.querySelector('div#post' + postid + ' > div > span > span.usercomment_posttime');
-					if (date !== null) {
-						date = new Date(date.title.replace(/-/g,'/')).toUTCString().split(' ');
-						date = date[1] + ' ' + date[2] + ' ' + date[3] + ', ' + date[4].substring(0,5) + ' ' + date[5];
-					}
-					var userid = document.evaluate("//span/a[text()='"+username+"' and starts-with(@href, '/user.php?id=')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.href;
-					var quoteText = '[b][user=' + userid + ']' + username + '[/user][/b] [url=' + window.location.pathname + window.location.search + '#post' + postid + ']wrote' + ((date !== null) ? ' on ' + date : '') + '[/url]:\n[quote]' + response + '[/quote]\n';
+					if (window.location.pathname === '/forums.php') var type = '#';
+					if (window.location.pathname === '/user.php') var type = '*';
+					if (window.location.pathname === '/torrents.php') var type = '-1';
+					if (window.location.pathname === '/torrents2.php') var type = '-2';
+					var quoteText = '[quote=' + type + postid + ']' + response + '[/quote]';
 					if (surround && surround.length > 0) quoteText = '[' + surround + ']' + quoteText + '[/' + surround + ']';
 					result[index] = quoteText;
 					checkResult();
