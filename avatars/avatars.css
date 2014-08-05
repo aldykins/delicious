@@ -8,18 +8,18 @@
     overflow: visible !important;
 }
 
-/**** aldy **** /
+/**** aldy ****/
 .post_block.user_17317 .avatar img {
     width: 0px;
-    height: 400px;
+    height: 445px;
     padding-left: 368px;
-    margin-left: -188px;
+    margin-left: -190px;
     background: transparent url('aldy.png') top right no-repeat;
 }
 
 #user_leftcol .center:first-child img[title^="aldy"] {
     width: 0px;
-    height: 400px;
+    height: 445px;
     padding-left: 368px;
     margin-left: -148px;
     background: transparent url('aldy.png') top right no-repeat;
