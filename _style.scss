@@ -3338,6 +3338,7 @@ img[src*='coverflow-error.jpg'] {
 }
 
 #footer {
+    clear: both;
     width: 988px;
     margin: -20px auto 10px;
     color: $secondaryfontcolour;
