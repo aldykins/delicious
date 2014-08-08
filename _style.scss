@@ -193,28 +193,95 @@ input[type="checkbox"] {
     overflow: hidden;
 }
 
-.btn-sub {
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+@mixin background-gradient($colorTop, $colorBottom) {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($colorTop)}', endColorstr='#{ie-hex-str($colorBottom)}');
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $colorTop), color-stop(100%, $colorBottom));
+    background: -ms-linear-gradient($colorTop, $colorBottom);
+    background: -moz-linear-gradient($colorTop, $colorBottom);
+    background: linear-gradient($colorTop, $colorBottom);
 }
 
-.btn-sub[type='submit'],.btn-sub[type='button'] {
+@mixin button-variant($color, $background, $border) {
+    border: $border;
+
+    cursor: pointer;
+    cursor: hand;
+
+    display: inline-block;
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
+
+    padding: 8px;
+
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: bold;
+
+    line-height: 1.0;
+
+    color: $color;
+
+    -webkit-box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow:    inset 0px 0px 3px rgba(0, 0, 0, 0.3);
+    box-shadow:         inset 0px 0px 3px rgba(0, 0, 0, 0.3);
+
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    background: $background;
+    @include background-gradient(lighten($background, 10%), darken($background, 10%));
+
+    &:hover {
+        @include background-gradient(lighten($background, 5%), darken($background, 15%));
+
+        -webkit-box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.6);
+        -moz-box-shadow:    inset 0px 0px 3px rgba(0, 0, 0, 0.6);
+        box-shadow:         inset 0px 0px 3px rgba(0, 0, 0, 0.6);
+    }
+
+    &:active,&:focus {
+        outline: thin dotted;
+        outline: 5px auto -webkit-focus-ring-color;
+        outline-offset: -2px;
+    }
+
+    &::-moz-focus-inner {
+        padding: 0;
+        border: 0;
+    }
+
+    &.btn-sub {
+        background: #50ACA7;
+        color: white;
+    }
+
+    &.btn-sub:hover {
+        background: darken(#50ACA7, 5%);
+    }
+
+    &.btn-delete {
+        background: #AF001C;
+        color: white;
+    }
+
+    &.btn-delete:hover {
+        background: darken(#AF001C, 5%);
+    }
+
+    &.btn-small,.sidebar & {
+        padding: 4px;
+    }
+
+    &.hidden {
+        display: none;
+    }
 }
 
-.btn-delete[type='submit'],.btn-delete[type='button'] {
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-}
-
-input[type='button'],input[type='submit'],#screenshots .submit a {
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+button,input[type='button'],input[type='submit'],input[type='reset'],#screenshots .submit a {
+    @include button-variant(#333333, #dddddd, $primaryborder);
 }
 
 #index .tabs .selected,.tabs ul li.selected a,#edit_menu ul li a,#browse_search,.filter_torrents,.placeholder,.torrent_table .pad blockquote,#quickpostform, #edit_menu li.ui-state-active a, #edit_menu li.ui-tabs-active a, #userform ul.ue_tabs a.selected {
@@ -227,15 +294,7 @@ img {
     border: none;
 }
 
-.btn-sub {
-    border: none;
-}
-
-input[type='button'],input[type='submit'],#screenshots .submit a {
-    border: none;
-}
-
-#searchbars input,table,#footer hr,pre.php,.codeBox,.spoilerContainer,.spoiler,.spoilerContainer input[type='button'],fieldset,.tabs div > div,.group.discog td,.filter_torrents td,#requests .center form td,#collage .center form td,#top10 .center form td,.collage_screenshots td,#request_div table td,.collage td {
+#searchbars input,table,#footer hr,pre.php,.codeBox,.spoilerContainer,.spoiler,fieldset,.tabs div > div,.group.discog td,.filter_torrents td,#requests .center form td,#collage .center form td,#top10 .center form td,.collage_screenshots td,#request_div table td,.collage td {
     border: none;
 }
 
@@ -281,7 +340,6 @@ input[type='button'],input[type='submit'],#screenshots .submit a {
 }
 
 #quickreplybuttons .btn-sub {
-    float: center;
     margin-right: 8px;
 }
 
@@ -337,77 +395,9 @@ select, #user input {
     padding: 3px;
 }
 
-.btn-sub[type='submit']:hover,.btn-sub[type='button']:hover {
-    cursor: pointer;
-    cursor: hand;
-    -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.7);
-    -moz-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.7);
-    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.7);
-}
-
-.btn-delete[type='submit']:hover,.btn-delete[type='button']:hover {
-    cursor: pointer;
-    cursor: hand;
-    -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.7);
-    -moz-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.7);
-    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.7);
-}
-
-input[type='submit']:hover,input[type='button']:hover,#screenshots .submit a:hover {
-    cursor: pointer;
-    cursor: hand;
-    -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
-    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
-}
-
 th.torrent_properties a:hover {
     cursor: pointer;
     cursor: hand;
-}
-
-input[type='submit']::-moz-focus-inner,input[type='button']::-moz-focus-inner,#screenshots .submit a::-moz-focus-inner {
-    padding: 0;
-    border: 0;
-}
-
-.btn-sub {
-    background: #50ACA7;
-    padding: 8px;
-    color: #fff;
-    font-size: 1.05em;
-    border: 0px none !important;
-}
-
-.btn-sub[type='submit'],.btn-sub[type='button'] {
-    background: #50ACA7;
-    padding: 8px;
-    color: #fff;
-    font-size: 1.05em;
-    border: 1px solid #50ACA7 !important;
-}
-
-.btn-delete[type='submit'],.btn-delete[type='button'] {
-    padding: 8px;
-    background: #AF001C;
-    color: white;
-    border: 0px none !important;
-}
-
-#staffpm .btn-delete[type='submit'].btn-small {
-    padding: 4px;
-}
-
-.sidebar input[type='button'],.sidebar input[type='submit'] {
-    padding: 4px;
-}
-
-input[type='button'],input[type='submit'],#screenshots .submit a {
-    background: #dddddd;
-    padding: 8px;
-    color: #333333;
-    font-size: 1.05em;
-    font-weight: bold;
 }
 
 .dropdown,.up-control a,.down-control a  {
@@ -599,18 +589,6 @@ tr.head td,tr.colhead td,tr.colhead_dark td {
 
 #filter .tabs,.keywords,.up-control a,.down-control a,.page-link,.next-prev {
     background: $primarybackground;
-}
-
-input[type='button'],input[type='submit'],#screenshots .submit a {
-    background: #e6e6e6;
-    background: -moz-linear-gradient(top, #f5f5f5 0%, #dddddd 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f5f5f5), color-stop(100%, #dddddd));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F5F5F5', endColorstr='#DDDDDD',GradientType=0 );
-}
-
-#screenshots .submit input,#screenshots .submit a {
-    font-family: inherit;
-    padding: 6px;
 }
 
 tr.head td:first-child,tr.colhead td:first-child,tr.colhead_dark td:first-child {
@@ -822,6 +800,7 @@ pre.php {
     background: $spoilerborder;
     color: white;
     margin: 0 !important;
+    outline: thin none;
     text-shadow: none;
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
@@ -833,8 +812,16 @@ pre.php {
     white-space: normal;
 }
 
+.spoilerContainer input[type='button']:hover {
+    background: darken($spoilerborder, 5%);
+}
+
 .spoilerContainer.hideContainer>input[type='button'] {
     background: $hideborder;
+}
+
+.spoilerContainer.hideContainer>input[type='button']:hover {
+    background: darken($hideborder, 5%);
 }
     
 .spoiler {
