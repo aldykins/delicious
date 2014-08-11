@@ -3288,6 +3288,14 @@ img[src*='coverflow-error.jpg'] {
     padding: 5px;
 }
 
+#screenshots #fancybox-wrap {
+    height: 110px !important;
+}
+
+#screenshots #fancybox-inner {
+    height: 110px !important;
+}
+
 #collage_table td {
     border: none;
 }
