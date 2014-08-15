@@ -17,7 +17,12 @@ pre, blockquote {
     color: $primaryfontcolour !important;
 }
 
-blockquote:before,blockquote:after,q:before,q:after {
+blockquote:before,blockquote:after {
+    content: '';
+    content: none;
+}
+
+q:before,q:after { 
     content: '';
     content: none;
 }
@@ -71,6 +76,7 @@ body {
     text-align: left;
     font-size: 0.75em;
     color: $primaryfontcolour;
+    min-width: 988px;
     line-height: 1.5em;
     @include background();
 }
@@ -171,12 +177,6 @@ a.scaledImg {
     border: none !important;
 }
 
-@media (max-width: 999px) {
-    img.scaledImg {
-        max-width: 100% !important;
-    }
-}
-
 input[type='text'] {
     margin: 0 5px 0 0;
 }
@@ -195,13 +195,11 @@ input[type="checkbox"] {
 
 @mixin background-gradient($color, $offset) {
     background: $color;
-    @media (min-width: 1000px) {
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str(lighten($color, $offset))}', endColorstr='#{ie-hex-str(darken($color, $offset))}');
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, lighten($color, $offset)), color-stop(100%, darken($color, $offset)));
-        background: -ms-linear-gradient(lighten($color, $offset), darken($color, $offset));
-        background: -moz-linear-gradient(lighten($color, $offset), darken($color, $offset));
-        background: linear-gradient(lighten($color, $offset), darken($color, $offset));
-    }
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str(lighten($color, $offset))}', endColorstr='#{ie-hex-str(darken($color, $offset))}');
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, lighten($color, $offset)), color-stop(100%, darken($color, $offset)));
+    background: -ms-linear-gradient(lighten($color, $offset), darken($color, $offset));
+    background: -moz-linear-gradient(lighten($color, $offset), darken($color, $offset));
+    background: linear-gradient(lighten($color, $offset), darken($color, $offset));
 }
 
 @mixin button-variant($color, $background, $bgDiff, $darkenHover, $border) {
@@ -396,6 +394,11 @@ select, #user input {
     padding: 3px;
 }
 
+th.torrent_properties a:hover {
+    cursor: pointer;
+    cursor: hand;
+}
+
 .dropdown,.up-control a,.down-control a  {
     border: $primaryborder;
 }
@@ -452,18 +455,6 @@ select, #user input {
     margin-left: 3px;
 }
 
-@media (max-width: 999px) {
-    #user_leftcol {
-        float: none !important;
-        margin-right: 0 !important;
-        width: auto !important;
-    }
-
-    #user_rightcol {
-        margin-left: 0px !important;
-    }
-}
-
 #user_leftcol .box,#user_rightcol .box, #user_leftcol .ucontact {
     overflow: hidden;
     background-color: $primarybackground;
@@ -479,12 +470,6 @@ select, #user input {
 
 #user_comments.clearcont, #user_comments br + h3 + .box.pad {
     overflow: visible !important;
-}
-
-@media (max-width: 999px) {
-    .clearcont {
-        min-width: 0 !important;
-    }
 }
 
 #user_leftcol .box .center {
@@ -883,6 +868,7 @@ pre.php {
 
 #header {
     width: 100%;
+    min-width: 988px;
     padding: 0;
     margin: 0px;
     background: $headerbackground;
@@ -891,20 +877,13 @@ pre.php {
 }
 
 #logo {
-    float: left;
-    margin: 0 0 0 10px;
-}
-
-@media (min-width: 1000px) {
-    #logo {
-        position: absolute;
-        top: 27px;
-        right: 0;
-        left: 10px;
-        margin: 0 auto;
-        width: 988px;
-        height: 25px;
-    }
+    position: absolute;
+    top: 27px;
+    right: 0;
+    left: 10px;
+    margin: 0 auto;
+    width: 988px;
+    height: 25px;
 }
 
 #logo a {
@@ -935,9 +914,7 @@ pre.php {
     position: relative;
     margin: 0 auto;
     padding: 0;
-    @media (min-width: 1000px) {
-        width: 988px;
-    }
+    width: 988px;
     height: 25px;
     z-index: 95;
     font-size: 0.9em;
@@ -1110,10 +1087,6 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 #menu {
-    clear: both;
-    @media (min-width: 1000px) {
-        clear: none;
-    }
     height: 30px;
     z-index: 5;
     display: block;
@@ -1131,9 +1104,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     line-height: 32px;
     margin: 0 auto;
     text-align: left;
-    @media (min-width: 1000px) {
-        width: 724px;
-    }
+    width: 724px;
 }
 
 #menu ul:after {
@@ -1159,12 +1130,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     background: none;
     float: left;
     border-right: $secondaryborder;
-    width: 80px;
-    max-width: 80px;
-    @media (min-width: 1000px) {
-        width: 100px;
-        max-width: 100px;
-    }
+    width: 100px;
     text-align: center;
 }
 
@@ -1174,17 +1140,12 @@ a[href^='alltorrents.php?action=history&userid='] {
 
 .main-menu a {
     display: inline-block;
-    padding: 0px;
-    @media (min-width: 1000px) {
-        padding: 0px 20px;
-    }
+    padding: 0px 20px;
     color: $tertiaryfontcolour;
 }
 
-@media (min-width: 1000px) {
-    .navmenu {
-        padding-right: 10px;
-    }
+.navmenu {
+    padding-right: 10px;
 }
 
 .navmenu a {
@@ -1228,12 +1189,8 @@ a[href^='alltorrents.php?action=history&userid='] {
     margin: 0;
     padding: 0;
     float: left;
-    width: 90px;
-    max-width: 90px;
-    @media (min-width: 1000px) {
-        width: 110px;
-        max-width: 110px;
-    }
+    width: 110px;
+    max-width: 110px;
     border-right: $secondaryborder;
     border-left: $secondaryborder;
     border-bottom: $secondaryborder;
@@ -1244,24 +1201,16 @@ a[href^='alltorrents.php?action=history&userid='] {
     margin: 0;
     padding: 0;
     clear: both;
-    width: 90px;
-    max-width: 90px;
-    @media (min-width: 1000px) {
-        width: 110px;
-        max-width: 110px;
-    }
+    width: 110px;
+    max-width: 110px;
     display: block;
     border-right: none;
 }
 
 #menu ul.subnav li a {
     float: left;
-    width: 90px;
-    max-width: 90px;
-    @media (min-width: 1000px) {
-        width: 110px;
-        max-width: 110px;
-    }
+    width: 110px;
+    max-width: 110px;
     padding: 0px !important;
     font-weight: normal !important;
 }
@@ -1344,19 +1293,14 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 #bannerimg img {
-    display: none;
-    @media (min-width: 1000px) {
-        display: block;
-    }
+    display: block;
     margin: 0 auto;
     padding: 10px 0;
 }
 
 #searchbars {
     margin: 0 auto;
-    @media (min-width: 1000px) {
-        width: 988px;
-    }
+    width: 988px;
     position: relative;
     text-align: left;
     z-index: 91;
@@ -1432,11 +1376,9 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 #content {
-    @media (min-width: 1000px) {
-        width: 988px;
-        min-width: 988px;
-        max-width: 988px;
-    }
+    width: 988px;
+    min-width: 988px;
+    max-width: 988px;
     margin: 0px auto;
     background: none;
     padding: 20px 0 0;
@@ -1657,11 +1599,9 @@ a[href^='alltorrents.php?action=history&userid='] {
     font-size: 10px;
 }
 
-@media (min-width: 1000px) {
-    .main_column {
-        margin: 0px 308px 10px 0px;
-        width: 676px;
-    }
+.main_column {
+    margin: 0px 308px 10px 0px;
+    width: 676px;
 }
 
 #devblog .main_column,#kb .main_column {
@@ -1689,11 +1629,9 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 .sidebar {
-    @media (min-width: 1000px) {
-        float: right;
-        width: 284px;
-        min-width: 284px;
-    }
+    float: right;
+    width: 284px;
+    min-width: 284px;
     height: 100%;
 }
 
@@ -1718,18 +1656,14 @@ a[href^='alltorrents.php?action=history&userid='] {
     color: $header;
     font-size: 1.15em;
     font-weight: bold;
-    @media (min-width: 1000px) {
-        width: 250px;
-    }
+    width: 250px;
     padding: 10px 0px 5px 0;
     margin-bottom: 10px;
 }
 
 .sidebar .box .head + div {
-    @media (min-width: 1000px) {
-        width: 250px;
-        max-width: 200px;
-    }
+    width: 250px;
+    max-width: 200px;
     padding-left: 0;
     padding-right: 0;
     margin: 0 auto;
@@ -1741,9 +1675,7 @@ a[href^='alltorrents.php?action=history&userid='] {
 
 #torrents .sidebar .box .stats,#torrents .sidebar .box .body {
     padding: 0px;
-    @media (min-width: 1000px) {
-        max-width: 250px;
-    }
+    max-width: 250px;
     margin: 0 auto;
 }
 
@@ -1756,17 +1688,13 @@ a[href^='alltorrents.php?action=history&userid='] {
     list-style: none;
     margin: 0 auto;
     padding: 0px;
-    @media (min-width: 1000px) {
-        width: 250px;
-        max-width: 250px;
-    }
+    width: 250px;
+    max-width: 250px;
 }
 
 .sidebar #tag_listing {
     padding: 0px;
-    @media (min-width: 1000px) {
-        max-width: 250px;
-    }
+    max-width: 250px;
     margin: 0 auto;
 }
 
@@ -1774,10 +1702,8 @@ a[href^='alltorrents.php?action=history&userid='] {
     padding: 0 !important;
     margin: 0 auto;
     list-style-position: inside;
-    @media (min-width: 1000px) {
-        width: 250px;
-        max-width: 250px;
-    }
+    width: 250px;
+    max-width: 250px;
 }
 
 .sidebar .head + ul,.sidebar p {
@@ -1797,10 +1723,6 @@ a[href^='alltorrents.php?action=history&userid='] {
     list-style: none;
     margin: 0;
     padding: 10px;
-    overflow: auto;
-    @media (min-width: 1000px) {
-         overflow: visible;
-    }
 }
 
 .sidebar ol {
@@ -1819,23 +1741,15 @@ a[href^='alltorrents.php?action=history&userid='] {
 }
 
 .sidebar .box .stats li {
-    float: left;
-    margin: 0 10px;
+    border-bottom: $primaryborder;
+    margin: 0 0 10px 0;
+    padding-bottom: 10px;
 }
 
-@media (min-width: 1000px) {
-    .sidebar .box .stats li {
-        float: none;
-        border-bottom: $primaryborder;
-        margin: 0 0 10px 0;
-        padding-bottom: 10px;
-    }
-
-    .sidebar .box li:last-child {
-        margin: 0;
-        border-bottom: none;
-        padding-bottom: 0px;
-    }
+.sidebar .box li:last-child {
+    margin: 0;
+    border-bottom: none;
+    padding-bottom: 0px;
 }
 
 .sidebar form input {
@@ -2110,9 +2024,7 @@ ul.dropdown ul {
 }
 
 #forums ul.dropdown {
-    @media (min-width: 1000px) {
-        width: 978px;
-    }
+    width: 978px;
     margin-top: 25px;
     margin-bottom: -20px;
 }
@@ -2317,38 +2229,13 @@ tr.freeleech a[title='Download']:after {
     display: none !important;
 }
 
-#browse_nav_top,#browse_nav_bottom,.group_cont {
-    @media (max-width: 999px) {
-        min-width: 0 !important;
-    }
-    width: auto !important;
+#browse_nav_top,.group_cont {
+    width: 100% !important;
 }
 
 #browse_nav_bottom {
-    text-align: center;
-}
-
-#browse_nav_bottom dl dt {
-    float: left;
-    width: auto;
-    position: relative;
-    left: 0;
-    top: 0;
-}
-
-#browse_nav_bottom dl dd {
-    margin: 0 0 20px 150px;
-    @media (min-width: 1000px) {
-        margin: 0 0 20px 200px;
-    }
-}
-
-@media (min-width: 1000px) {
-    #browse_nav_bottom {
-        text-align: left;
-        width: 800px !important;
-        margin: 10px auto !important;
-    }
+    width: 800px !important;
+    margin: 10px auto !important;
 }
 
 #browse_nav_sections {
@@ -3084,16 +2971,9 @@ img[src='/static/common/caticons/pv.png'] {
 
 #user_comments textarea {
     margin-top: 0 !important;
+    width: 610px !important;
+    max-width: 610px !important;
     margin-bottom: 10px;
-    width: auto !important;
-    max-width: none !important;
-}
-
-@media (min-width: 1000px) {
-    #user_comments textarea {
-        width: 610px !important;
-        max-width: 610px !important;
-    }
 }
 
 #user_comments input, .post_body input {
@@ -3181,40 +3061,19 @@ ul.trophies li {
     padding: 5px 10px 5px 10px;
 }
 
-@media (max-width: 999px) {
-    .aot {
-        min-width: 0 !important;
-        max-width: none !important;
-        width: auto !important;
-        text-align: center;
-    }
+.fpleft {
+    float: left !important;
+    width: 480px !important;
+    max-width: 480px !important;
+    min-width: 480px !important;
 }
 
-.fpleft,.fpright {
-    width: auto !important;
-}
-
-@media (min-width: 1000px) {
-    .fpleft {
-        float: left !important;
-        width: 480px !important;
-        max-width: 480px !important;
-        min-width: 480px !important;
-    }
-
-    .fpright {
-        float: left !important;
-        width: 480px !important;
-        max-width: 480px !important;
-        min-width: 480px !important;
-        margin-left: 20px !important;
-    }
-}
-
-@media (max-width: 999px) {
-    .floatleft,.floatright {
-        float: none !important;
-    }
+.fpright {
+    float: left !important;
+    width: 480px !important;
+    max-width: 480px !important;
+    min-width: 480px !important;
+    margin-left: 20px !important;
 }
 
 .fstats .head {
@@ -3490,9 +3349,7 @@ img[src*='coverflow-error.jpg'] {
 
 #footer {
     clear: both;
-    @media (min-width: 1000px) {
-        width: 988px;
-    }
+    width: 988px;
     margin: -20px auto 10px;
     color: $secondaryfontcolour;
     text-align: left;
@@ -4297,7 +4154,10 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
     padding: 5px;
 }
 
-@media (max-width: 999px) {
+@media all and (max-width: 1018px) and (min-width: 840px) {
+    #forums #logo, #scholarapp #logo {
+        display: none !important;
+    }
 
     #forums, #forums #content, #forums #header, #forums #footer, #forums #searchbars, #forums #logo, #forums #userinfo, #forums #menu ul, #wrapper > a,
     #scholarapp, #scholarapp #content, #scholarapp #header, #scholarapp #footer, #scholarapp #searchbars, #scholarapp #logo, #scholarapp #userinfo, #scholarapp #menu ul {
