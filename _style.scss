@@ -249,6 +249,7 @@ input[type="checkbox"] {
 
     &.btn-sub {
         background: #50ACA7;
+        border: 1px solid #50ACA7 !important;
         color: white;
     }
 
@@ -258,6 +259,7 @@ input[type="checkbox"] {
 
     &.btn-delete {
         background: #AF001C;
+        border: 1px solid #AF001C !important;
         color: white;
     }
 
@@ -275,7 +277,7 @@ input[type="checkbox"] {
 }
 
 button,input[type='button'],input[type='submit'],input[type='reset'],#screenshots .submit a {
-    @include button-variant(#333333, #e6e6e6, 20%, 15%, $primaryborder);
+    @include button-variant(#333333, #e6e6e6, 10%, 5%, $primaryborder);
 }
 
 #index .tabs .selected,.tabs ul li.selected a,#edit_menu ul li a,#browse_search,.filter_torrents,.placeholder,.torrent_table .pad blockquote,#quickpostform, #edit_menu li.ui-state-active a, #edit_menu li.ui-tabs-active a, #userform ul.ue_tabs a.selected {
@@ -327,6 +329,10 @@ img {
     overflow: hidden;
     margin-top: 10px;
     text-align: center;
+}
+
+#quickreplybuttons input {
+    font-size: 1.05em;
 }
 
 #quickreplycreateoptions {
