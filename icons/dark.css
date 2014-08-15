@@ -18,6 +18,22 @@
     margin-bottom: -5px;
 }
 
+.unread-posted {
+    background: url('dark.png') 0px -299px no-repeat;
+    height: 15px;
+    width: 15px;
+    display: inline-block;
+    margin-bottom: -5px;
+}
+
+.read-posted {
+    background: url('dark.png') 0px -323px no-repeat;
+    height: 15px;
+    width: 15px;
+    display: inline-block;
+    margin-bottom: -5px;
+}
+
 .locked {
     background: url('dark.png') -2px -171px no-repeat;
     height: 15px;
@@ -41,14 +57,7 @@
     height: 12px;
     width: 14px;
     vertical-align: middle;
-    float: right;
-}
-
-@media (min-width: 1000px) {
-    .go-last-read {
-        float: none;
-        margin-top: -1px;
-    }
+    margin-top: -1px;
 }
 
 .com-edit {
