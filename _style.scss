@@ -171,6 +171,10 @@ a.scaledImg {
     border: none !important;
 }
 
+#torrent_comments .scaledImg {
+    max-width: 100% !important;
+}
+
 @media (max-width: 999px) {
     img.scaledImg {
         max-width: 100% !important;
@@ -189,7 +193,7 @@ input[type="checkbox"] {
     background: inherit;
 }
 
-#userinfo .subnav,.post_controls,#edit_menu,.tabs ul,#friendnav,.friends_right li,.permissions {
+.post_controls,#edit_menu,.tabs ul,#friendnav,.friends_right li,.permissions {
     overflow: hidden;
 }
 
@@ -745,19 +749,13 @@ hr {
     margin: 10px 0px;
 }
 
-
-.signature {
-    border-top: $primaryborder;
-}
-
-#forums .signature {
-    display: block;
-    margin: 18px 0 0 !important;
-    max-height: 200px;
-    overflow: hidden;
-    padding: 9px 15px !important;
-    width: auto !important;
-    word-wrap: break-word;
+@media (min-width: 800px) {
+    div.signature {
+        border-top: $primaryborder;
+        margin: 1em auto 0 !important;
+        padding: 0.5em !important;
+        width: auto !important;
+    }
 }
 
 @media (max-width: 799px) {
@@ -897,29 +895,26 @@ pre.php {
     overflow: visible;
 }
 
-#logo {
-    float: left;
-    margin: 0 0 0 10px;
-}
-
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
     #logo {
-        position: absolute;
-        top: 27px;
-        left: 10px;
-        right: 0;
         margin: 0 auto;
-        @media (min-width: 1024px) {
-            width: 988px;
-        }
-        height: 25px;
+        width: 988px;
     }
 }
 
 #logo a {
     display: block;
     z-index: 99;
+    float: left;
     position: relative;
+    @media (min-width: 900px) {
+        position: absolute;
+        top: 2em;
+    }
+    margin: 0 1em;
+    @media (min-width: 1024px) {
+        margin: 0;
+    }
     width: 107px;
     height: 25px;
     background: url("images/logo4.png") 0px 0px no-repeat;
@@ -936,47 +931,33 @@ pre.php {
     background: url("images/logo4.png") 0px -35px no-repeat;
 }
 
-.navmenu:hover .subnav {
-    display: block !important;
-}
-
 #userinfo {
-    position: absolute;
-    @media (min-width: 900px) {
-        position: relative;
-    }
     margin: 0 auto;
     padding: 0;
-    width: 100%;
     @media (min-width: 1024px) {
         width: 988px;
     }
-    height: 25px;
     z-index: 95;
     font-size: 0.9em;
     background: $headerbackground;
 }
 
-.userinfonav {
-    padding: 0 0px 3px 0px;
-    -moz-border-radius-bottomright: 3px;
-    -moz-border-radius-bottomleft: 3px;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-}
-
-#userinfo ul {
+#userinfo_minor {
+    padding: 0;
     z-index: 300;
     float: right;
 }
 
-#userinfo ul li {
+#userinfo_minor > li {
+    padding: 0 0.8em;
+}
+
+#userinfo > ul > li {
     position: relative;
     display: block;
     float: left;
     margin: 0;
-    line-height: 23px;
-    height: 25px;
+    line-height: 2.2em;
     vertical-align: middle;
     color: $tertiaryfontcolour;
 }
@@ -990,102 +971,87 @@ pre.php {
     color: $tertiaryfontcolour;
 }
 
-#userinfo .navmenu,#userinfo #yen_count {
+#userinfo_minor > li {
     border-right: $secondaryborder;
-    padding: 0 7px 0 8px;
 }
 
 #userinfo .navmenu:hover,#userinfo #yen_count:hover {
     background: rgba($navigationbackground,0.1);
 }
 
-#userinfo .navmenu.nojs:hover,#userinfo .navmenu.selected,#userinfo #yen_count.nojs:hover,#userinfo #yen_count.selected {
-    border-bottom: $secondaryborder;
-    border-left: none;
-}
-
-#userinfo .userinfonav #username_menu,#userinfo .userinfonav li.navmenu:first-child {
-    border-left: $secondaryborder;
-    padding: 0 7px 0 8px;
-}
-
-#userinfo .userinfonav #username_menu.nojs:hover,#userinfo .userinfonav #username_menu.selected,#userinfo .userinfonav li.navmenu:first-child.nojs:hover,#userinfo .userinfonav li.navmenu:first-child.selected {
+.userinfonav > li:first-child, #username_menu, .main-menu > li:first-child, #nav_torrents {
     border-left: $secondaryborder;
 }
 
-#userinfo #quicklinks + li {
-    padding: 0 8px;
+.subnav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    padding: 0;
+    width: auto;
+    min-width: 100px;
+    overflow: hidden;
+    text-align: left;
+    list-style: none;
+    -webkit-border-top-right-radius: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-bottomright: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border: $secondaryborder;
+    z-index: 300;
 }
 
-#userinfo #quicklinks {
-    margin-left: -1px;
+*:hover > .subnav, .nojs:hover .subnav {
+    display: block !important;
 }
 
 #userinfo .subnav {
     background: $headerbackground;
-    -moz-border-radius-topright: 4px;
-    -webkit-border-top-right-radius: 4px;
-    border-top-right-radius: 4px;
-    position: absolute;
-    top: 20px;
-    left: -1px;
-    margin: 0;
-    padding: 5px 0;
-    width: auto;
-    min-width: 100px;
-    text-align: left;
-    list-style: none;
-    -webkit-border-bottom-right-radius: 4px;
-    -webkit-border-bottom-left-radius: 4px;
-    -moz-border-radius-bottomright: 4px;
-    -moz-border-radius-bottomleft: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-    margin-top: 5px;
-    border: $secondaryborder;
 }
 
-#userinfo_minor li:nth-child(4) ul.subnav {
-    left: 0px;
+#userinfo .subnav > li {
+    line-height: 2em;
 }
 
-#userinfo .subnav li {
-    font-weight: normal;
+.main-menu .subnav {
+    background: $menubackground;
+    -webkit-border-top-right-radius: 0;
+    -moz-border-radius-topright: 0;
+    border-top-right-radius: 0;
+}
+
+.subnav > li {
     float: none;
-    white-space: nowrap;
-    display: block;
-    padding: 0px;
-    margin: 0;
-    line-height: 18px;
-    height: auto;
+    width: auto;
 }
 
-#userinfo .subnav a,#userinfo .subnav span {
-    display: block;
-    padding: 0 10px;
+.subnav > li > * {
+    display: inline-block;
+    padding: 0 1em;
+    white-space: nowrap;
+    width: 100%;
+}
+
+#userinfo .subnav > li > a:hover {
+    color: $linkhover;
 }
 
 #userinfo .dropit {
     margin: 1px 0 0 5px;
 }
 
-#userinfo ul.subnav li a:hover {
-    color: $linkhover;
-}
-
 a[href^='alltorrents.php?action=history&userid='] {
     font-weight: bold;
 }
 
-.subnav a[href^='alltorrents.php?action=history&userid='],#quicklinks li.center {
+#userinfo .subnav > li:last-child {
     border-top: $primaryborder;
-    padding: 5px 0px 0 0px;
-    margin: 5px 0 0 0px;
-    font-weight: normal;
-}
-
-.subnav a[href^='alltorrents.php?action=history&userid='] {
-    padding: 5px 5px 0 12px !important;
 }
 
 .navmenu strong {
@@ -1103,36 +1069,13 @@ a[href^='alltorrents.php?action=history&userid='] {
     display: block !important;
 }
 
-.subnav {
-    display: none;
-}
-
-.subnav li {
-    -moz-border-radius: 0px;
-    -webkit-border-radius: 0px;
-    border-radius: 0px;
-}
-
-.nojs:hover .subnav {
-    display: block;
-}
-
-#menu span.dropit.clickmenu:hover,#userinfo span.dropit.clickmenu:hover {
-    cursor: pointer;
-    cursor: hand;
-}
-
 #menu {
     clear: both;
-    @media (min-width: 900px) {
-        clear: none;
-    }
-    height: 30px;
     z-index: 5;
     display: block;
     position: relative;
     width: 100%;
-    margin: 0px auto;
+    margin: 0 auto;
     font-size: 1.1em;
     text-align: left;
     background: $menubackground;
@@ -1140,10 +1083,9 @@ a[href^='alltorrents.php?action=history&userid='] {
     border-bottom: $secondaryborder;
 }
 
-#menu ul {
-    line-height: 32px;
+#menu > ul {
     margin: 0 auto;
-    text-align: left;
+    width: auto;
     @media (min-width: 900px) {
         width: 600px;
     }
@@ -1152,7 +1094,7 @@ a[href^='alltorrents.php?action=history&userid='] {
     }
 }
 
-#menu ul:after {
+#menu > ul:after {
     content: ".";
     display: block;
     height: 0;
@@ -1160,49 +1102,30 @@ a[href^='alltorrents.php?action=history&userid='] {
     visibility: hidden;
 }
 
-#nav_torrents {
-    margin-left: -1px;
-}
-
-.main-menu li {
+.main-menu > li {
     position: relative;
-    height: 30px;
-    line-height: 30px;
+    line-height: 2em;
     vertical-align: top;
     color: #fff;
-    margin-right: 0;
     z-index: 95;
     background: none;
     float: left;
     border-right: $secondaryborder;
-    width: 80px;
+    padding: 0 0.5em;
+    width: auto;
     @media (min-width: 1024px) {
-        width: 100px;
+        padding: 0;
+        min-width: 100px;
     }
     text-align: center;
 }
 
-.main-menu li#nav_torrents {
-    border-left: $secondaryborder;
-}
-
 .main-menu a {
-    display: inline-block;
-    padding: 0px;
-    @media (min-width: 1024px) {
-        padding: 0px 20px;
-    }
     color: $tertiaryfontcolour;
 }
 
-@media (min-width: 1024px) {
-    .navmenu {
-        padding-right: 10px;
-    }
-}
-
-.navmenu a {
-    padding-right: 5px!important;
+.navmenu > a {
+    padding-right: 5px;
 }
 
 .main-menu li:hover a {
@@ -1217,67 +1140,13 @@ a[href^='alltorrents.php?action=history&userid='] {
     display: inline-block;
 }
 
-#menu span.dropit.clickmenu:hover,#userinfo span.dropit.clickmenu:hover {
+#header span.dropit.clickmenu {
     cursor: pointer;
     cursor: hand;
 }
 
 #menu li.nojs:hover a {
     color: #fff;
-}
-
-.subnav {
-    display: none;
-}
-
-.nojs:hover .subnav {
-    display: block;
-}
-
-.main-menu ul.subnav {
-    list-style: none;
-    position: absolute;
-    left: -1px;
-    top: 30px;
-    margin: 0;
-    padding: 0;
-    float: left;
-    width: 90px;
-    max-width: 90px;
-    @media (min-width: 1024px) {
-        width: 110px;
-        max-width: 110px;
-    }
-    border-right: $secondaryborder;
-    border-left: $secondaryborder;
-    border-bottom: $secondaryborder;
-    background: $menubackground;
-}
-
-#menu ul.subnav li {
-    margin: 0;
-    padding: 0;
-    clear: both;
-    width: 90px;
-    max-width: 90px;
-    @media (min-width: 1024px) {
-        width: 110px;
-        max-width: 110px;
-    }
-    display: block;
-    border-right: none;
-}
-
-#menu ul.subnav li a {
-    float: left;
-    width: 90px;
-    max-width: 90px;
-    @media (min-width: 1024px) {
-        width: 110px;
-        max-width: 110px;
-    }
-    padding: 0px !important;
-    font-weight: normal !important;
 }
 
 #menu ul.subnav li a:hover,#menu ul.subnav li:hover {
@@ -1366,6 +1235,10 @@ a[href^='alltorrents.php?action=history&userid='] {
 
 #searchbars {
     margin: 0 auto;
+    width: 280px;
+    @media (min-width: 600px) {
+        width: 100%;
+    }
     @media (min-width: 1024px) {
         width: 988px;
     }
@@ -1416,13 +1289,15 @@ a[href^='alltorrents.php?action=history&userid='] {
     width: 255px;
     overflow: hidden;
     position: absolute;
-    top: -28px;
-    right: 0;
+    @media (min-width: 600px) {
+        top: -2.2em;
+        right: 0;
+    }
     z-index: 91;
     background: $searchbackground url("images/searchmg.png") 5px 3px no-repeat;
     padding: 0 0 0 25px;
     border: $secondaryborder;
-    height: 22px;
+    height: 2em;
 }
 
 #searchbars input:focus {
@@ -3870,45 +3745,29 @@ ul.ue_tabs {
 
 .poll {
     list-style: none;
-    padding: 10px 0px;
-    margin: 5px 0 -20px;
+    padding: 0.5em 0 0;
+    margin: 0.5em 0 -2em;
 }
 
 .poll .graph {
-    padding: 0 0 15px 0;
     overflow: hidden;
-    width: 100%;
 }
 
-.poll .graph span {
-    display: block;
-    height: 12px;
-    float: left;
+.left_poll,.right_poll {
+    display: none;
 }
 
-.left_poll,.center_poll,.right_poll {
-    width: 4px;
+.center_poll {
     background: #689E31;
-}
-
-.left_poll {
-    width: 4px;
-    -moz-border-radius-topleft: 2px;
-    -moz-border-radius-bottomleft: 2px;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
-}
-
-.right_poll {
-    width: 4px;
-    -moz-border-radius-topright: 2px;
-    -moz-border-radius-bottomright: 2px;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em / 0.5em;
+    display: block;
+    height: 1em;
 }
 
 #threadpoll {
-    margin-bottom: -15px;
+    margin-bottom: -2em;
 }
 
 #user label {
