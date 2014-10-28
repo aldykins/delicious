@@ -1497,6 +1497,10 @@ a[href^='alltorrents.php?action=history&userid='] {
     position: relative;
 }
 
+.achieveTxt .achName {
+    color: $secondaryfontcolour !important;
+}
+
 .achievementBox {
     overflow: hidden;
     width: 100%;
