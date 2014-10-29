@@ -4115,6 +4115,14 @@ a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
     margin-right: 1px;
 }
 
+#scholarapp select.laz-o-matic {
+    margin-top: 5px;
+}
+
+#scholarapp textarea#comment {
+    height: 150px;
+}
+
 #reports input[value="Update"] {
     margin-top: 10px;
 }
