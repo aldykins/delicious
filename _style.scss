@@ -37,6 +37,10 @@ strong a:hover, a:hover strong {
     color: $boldhover;
 }
 
+.important-text {
+    color: #f00;
+}
+
 blockquote strong, .blockquote strong, blockquote strong a, .blockquote strong a, .spoilerContainer strong, .spoilerContainer strong a {
     color: $primaryfontcolour !important;
 }
