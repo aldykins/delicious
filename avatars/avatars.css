@@ -248,3 +248,8 @@
     height: 190px;
     margin-left: -35px;
 }
+
+/**** Green ****/
+a[href="/user.php?id=15890"] {
+    color: #00DE00;
+}
