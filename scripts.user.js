@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.76
+// @version 1.77
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -563,17 +563,6 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 		sel = document.getElementById('quickpost');
 		if (sel !== null)
 			sel.scrollIntoView();
-	}
-
-	var postRefs = document.querySelectorAll('#content a[href^="/"],#content strong');
-	for (var i = postRefs.length - 1; i > 0; i--) {
-		var elem = postRefs[i];
-		var match = elem.textContent.match(/^(wrote on |Added on )(.*?)(:?)$/i);
-		if (match !== null) {
-			var dateTime = new Date(match[2] + (/GMT$/i.test(match[2]) ? '' : ' GMT'));
-			if (isNaN(dateTime.getTime()) === false)
-				elem.textContent = match[1] + formattedUTCString(dateTime.getTime() - 60000 * dateTime.getTimezoneOffset(), false) + match[3];
-		}
 	}
 
 	document.addEventListener('keydown', function (e) {
