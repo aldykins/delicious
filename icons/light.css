@@ -88,6 +88,24 @@
     display: inline-block;
 }
 
+#friends .ftopright form {
+    display: inline;
+}
+
+#friends .com-add-friend {
+    background: url('friends.png') 0px 0px no-repeat;
+    height: 50px;
+    width: 50px;
+    display: inline-block;
+}
+
+#friends .com-delete {
+    background: url('friends.png') 0px -50px no-repeat;
+    height: 50px;
+    width: 50px;
+    display: inline-block;
+}
+
 .com-report {
     background: url('light.png') 0px -84px no-repeat;
     height: 16px;
@@ -97,6 +115,13 @@
 
 .com-delete {
     background: url('light.png') 0px -105px no-repeat;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+}
+
+.com-revert {
+    background: url('light.png') 0px -341px no-repeat;
     height: 16px;
     width: 16px;
     display: inline-block;

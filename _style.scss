@@ -2154,6 +2154,10 @@ ul.dropdown #no_drop:hover {
     vertical-align: middle !important;
 }
 
+#forums .mediainfo td {
+    vertical-align: top !important;
+}
+
 span.download_link a,a[title='Download'] {
     background: $link;
     color: white !important;
@@ -2204,7 +2208,7 @@ span.freeleech {
 }
 
 .deleted_post {
-    opacity: 0.35 !important;
+    opacity: 0.45 !important;
 }
 
 .pruned {
@@ -3029,10 +3033,6 @@ ul.trophies li {
     text-align: center;
 }
 
-.achieveTxtHolder, .achieveFill, #achievements #headerContent {
-    background-color: $primarybackground;
-}
-
 .aot_inner {
     padding: 0px !important;
 }
@@ -3289,6 +3289,10 @@ img[src*='coverflow-error.jpg'] {
     height: 110px !important;
 }
 
+#fancybox-outer, .dialog {
+    background: $primarybackground;
+}
+
 #collage_table td {
     border: none;
 }
@@ -3319,14 +3323,12 @@ img[src*='coverflow-error.jpg'] {
     padding: 8px 0px !important;
     margin: 0px !important;
     width: 100% !important;
+    min-height: 50px;
+    background: $primarybackground;
 }
 
 .ftopright input {
     border: 0 !important;
-}
-
-.friendcont {
-    background: $primarybackground;
 }
 
 .friends_right li {
