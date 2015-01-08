@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.77
+// @version 1.78
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -344,7 +344,10 @@ if (GM_getValue('deliciousquote') === 'true') {
 					if (window.location.pathname === '/user.php') var type = '*';
 					if (window.location.pathname === '/torrents.php') var type = '-1';
 					if (window.location.pathname === '/torrents2.php') var type = '-2';
-					var quoteText = '[quote=' + type + postid + ']' + response + '[/quote]';
+					if (typeof type === 'undefined')
+						var quoteText = '[quote=' + username + ']' + response + '[/quote]';
+					else
+						var quoteText = '[quote=' + type + postid + ']' + response + '[/quote]';
 					if (surround && surround.length > 0) quoteText = '[' + surround + ']' + quoteText + '[/' + surround + ']';
 					result[index] = quoteText;
 					checkResult();
