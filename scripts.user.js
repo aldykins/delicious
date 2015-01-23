@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.78
+// @version 1.80
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -80,6 +80,9 @@ function createSettingsPage() {
 	addCheckbox("Delicious Keyboard Shortcuts", "Enable/Disable delicious keyboard shortcuts for easier access to Bold/Italics/Underline/Spoiler/Hide and aligning.", 'deliciouskeyboard');
 	addCheckbox("Delicious Title Notifications", "Display number of notifications in title.", 'delicioustitlenotifications');
 	addCheckbox("Delicious Stylesheet Preview", "Allows you to easily preview and select delicious stylesheets.", 'deliciousstylesheetpreview');
+	addCheckbox("Delicious Yen per X", "Shows how much yen you receive per X, and as upload equivalent. Also adds raw download, raw upload and raw ratio.", 'deliciousyenperx');
+	addCheckbox("Delicious Freeleech Pool", "Shows current freeleech pool status in navbar (updated once an hour or when freeleech pool site is visited).", 'deliciousfreeleechpool');
+	addCheckbox("Delicious Freeleech Pie Chart", "Adds a dropdown with pie-chart to the navbar, too. (Doesn't look too good with most stylesheets.)", 'delicousnavbarpiechart');
 }
 
 if (/\/user\.php\?.*action=edit/i.test(document.URL)) createSettingsPage();
@@ -96,7 +99,9 @@ var gm_disgustingposterinfo = initGM('disgustingposterinfo', 'true', false);
 var gm_deliciouskeyboard = initGM('deliciouskeyboard', 'true', false);
 var gm_delicioustitlenotifications = initGM('delicioustitlenotifications', 'true', false);
 var gm_deliciousstylesheetpreview = initGM('deliciousstylesheetpreview', 'true', false);
-
+var gm_deliciousyenperx = initGM('deliciousyenperx', 'true', false);
+var gm_deliciousfreeleechpool = initGM('deliciousfreeleechpool', 'true', false);
+var gm_delicousnavbarpiechart = initGM('delicousnavbarpiechart', 'false', false);
 
 // Banners, notifications and search bar by Megure
 // Fixes the placement of the search bars and notifications when a banner is in use.
@@ -681,6 +686,273 @@ if(GM_getValue('delicioustitlenotifications') === 'true') {
 	}
 	if (new_count > 0)
 		document.title = '(' + new_count + ') ' + document.title;
+}
+
+
+// Freeleech Pool Status by Megure, inspired by Lemma, Alpha, NSC
+// Shows current freeleech pool status in navbar with a pie-chart
+// Updates only once every hour or when pool site is visited, showing a pie-chart on pool site
+if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
+	function getFLInfo() {
+		function parseFLInfo(elem) {
+			var boxes = elem.querySelectorAll('#content .box.pad');
+			if (boxes.length < 3) return;
+
+			var match = boxes[0].textContent.match(/have ([0-9,]+) \/ ([0-9,]+) yen/i);
+			if (match == null) return;
+			var current = parseInt(match[1].replace(/,/g, ''), 10),
+					max = parseInt(match[2].replace(/,/g, ''), 10);
+
+			var box = boxes[2],
+					firstP = box.querySelector('p'),
+					tr = box.querySelector('table').querySelectorAll('tbody > tr');
+
+			var titles = [], hrefs = [], amounts = [], colors = [], sum = 0;
+			for (var i = 0; i < tr.length; i++) {
+				var el = tr[i],
+						td = el.querySelectorAll('td');
+
+				titles[i] = td[0].textContent;
+				hrefs[i] = td[0].querySelector('a').href;
+				amounts[i] = parseInt(td[1].textContent.replace(/,/g, ''), 10);
+				colors[i] = 'red';
+				sum += amounts[i];
+			}
+
+			titles[tr.length] = 'Other';
+			hrefs[tr.length] = 'https://animebytes.tv/konbini.php?action=pool';
+			amounts[tr.length] = current - sum;
+			colors[tr.length] = 'lightgrey';
+			titles[tr.length + 1] = 'Missing';
+			hrefs[tr.length + 1] = 'https://animebytes.tv/konbini.php?action=pool';
+			amounts[tr.length + 1] = max - current;
+			colors[tr.length + 1] = 'black';
+
+			GM_setValue('FLPoolLastUpdate', Date.now());
+			GM_setValue('FLPoolTitles', titles);
+			GM_setValue('FLPoolHrefs', hrefs);
+			GM_setValue('FLPoolAmounts', JSON.stringify(amounts));
+			GM_setValue('FLPoolColors', colors);
+			GM_setValue('FLPoolCurrent', current);
+			GM_setValue('FLPoolMax', max);
+		}
+
+		if (/konbini\.php\?action=pool$/i.test(document.URL))
+			parseFLInfo(document);
+		else if (Date.now() - parseInt(GM_getValue('FLPoolLastUpdate', '0'), 10) > 3600000) {
+			var xhr = new XMLHttpRequest(), parser = new DOMParser();
+			xhr.open('GET', "https://animebytes.tv/konbini.php?action=pool", true);
+			xhr.send();
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4) {
+					parseFLInfo(parser.parseFromString(xhr.responseText, 'text/html'));
+					updatePieChart();
+				}
+			};
+		}
+		else return;
+	}
+
+	function getPieChart() {
+		function niceNumber(num) {
+			var res = '';
+			while (num >= 1000) {
+				res = ',' + ('00' + (num % 1000)).slice(-3) + res;
+				num = Math.floor(num / 1000);
+			}
+			return num + res;
+		}
+
+		function circlePart(diff, title, href, color) {
+			var x = Math.sin(phi), y = Math.cos(phi);
+			phi -= 2 * Math.PI * diff / max;
+			var v = Math.sin(phi), w = Math.cos(phi);
+			var z = 0;
+			if (2 * diff > max)
+				z = 1; // use long arc
+			var perc = (100 * diff / max).toFixed(1) + '%\n' + niceNumber(diff) + ' ¥';
+			return '<a xlink:href="' + href + '"><path title="' + title + '\n' + perc + '" stroke-width="0.01" stroke="grey" fill="' + color + '" d="M0,0 L' + v + ',' + w + ' A1,1 0 ' + z + ',0 ' + x + ',' + y + 'z">\n' +
+				'<animate begin="mouseover" attributeName="d" to="M0,0 L' + 1.1 * v + ',' + 1.1 * w + ' A1.1,1.1 0 ' + z + ',0 ' + 1.1 * x + ',' + 1.1 * y + 'z" dur="0.3s" fill="freeze" />\n' +
+				'<animate begin="mouseout"  attributeName="d" to="M0,0 L' + v + ',' + w + ' A1,1 0 ' + z + ',0 ' + x + ',' + y + 'z" dur="0.3s" fill="freeze" />\n' +
+				'</path></a>\n\n';
+		}
+
+		var str = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-1.11 -1.11 2.22 2.22" height="200px" width="100%">' +
+				'<title>Most Donated To This Box Pie-Chart</title>';
+		var phi = Math.PI, max = parseInt(GM_getValue('FLPoolMax'), 10),
+				titles = GM_getValue('FLPoolTitles').split(','),
+				hrefs = GM_getValue('FLPoolHrefs').split(','),
+				amounts = JSON.parse(GM_getValue('FLPoolAmounts')),
+				colors = GM_getValue('FLPoolColors').split(',');
+		for (var i = 0; i < titles.length; i++) {
+			str += circlePart(amounts[i], titles[i], hrefs[i], colors[i]);
+		}
+		return str + '</svg>';
+	}
+
+	function updatePieChart() {
+		var pieChart = getPieChart();
+		p.innerHTML = pieChart;
+		if (GM_getValue('delicousnavbarpiechart', 'false') === 'true') {
+			li.innerHTML = pieChart;
+		}
+		a.textContent = 'FL: ' + (100 * parseInt(GM_getValue('FLPoolCurrent', '0'), 10) / parseInt(GM_getValue('FLPoolMax', '50000000'), 10)).toFixed(1) + '%';
+		nav.replaceChild(a, nav.firstChild);
+	}
+
+	getFLInfo();
+	var p = document.createElement('p'),
+			nav = document.createElement('li'),
+			a = document.createElement('a'),
+			ul = document.createElement('ul'),
+			li = document.createElement('li');
+	a.href = '/konbini.php?action=pool';
+	nav.appendChild(a);
+	if (GM_getValue('delicousnavbarpiechart', 'false') === 'true') {
+		nav.innerHTML += '<span class="dropit hover clickmenu"><span class="stext">▼</span></span>';
+		ul.appendChild(li);
+		ul.className = 'subnav nobullet';
+		nav.appendChild(ul);
+		nav.className = 'navmenu';
+	}
+	document.querySelector('.main-menu').appendChild(nav);
+
+	updatePieChart()
+
+	if (/konbini\.php\?action=pool$/i.test(document.URL)) {
+		var firstP = document.querySelector('.thin').children[5].querySelector('p');
+		firstP.parentNode.insertBefore(p, firstP.nextSibling);
+	}
+}
+
+
+// Yen per X, by Megure, Lemma, NSC, et al.
+if(GM_getValue('deliciousyenperx', 'true') === 'true' && /user\.php\?id=/i.test(document.URL)) {
+	function compoundInterest(years) {
+		return (Math.pow(2, years) - 1) / Math.log(2);
+	}
+	function formatInteger(num) {
+		var res = '';
+		while (num >= 1000) {
+			res = ',' + ('00' + (num % 1000)).slice(-3) + res;
+			num = Math.floor(num / 1000);
+		}
+		return num + res;
+	}
+	function bytecount(num, unit) {
+		switch (unit) {
+			case 'B':
+				return num * Math.pow(1024, 0);
+			case 'KB':
+				return num * Math.pow(1024, 1);
+			case 'MB':
+				return num * Math.pow(1024, 2);
+			case 'GB':
+				return num * Math.pow(1024, 3);
+			case 'TB':
+				return num * Math.pow(1024, 4);
+			case 'PB':
+				return num * Math.pow(1024, 5);
+			case 'EB':
+				return num * Math.pow(1024, 6);
+		}
+	}
+	function humancount(num) {
+		if (num == 0) return '0 B';
+		var i = Math.floor(Math.log(Math.abs(num)) / Math.log(1024));
+		num = (num / Math.pow(1024, i)).toFixed(2);
+		switch (i) {
+			case 0:
+				return num + ' B';
+			case 1:
+				return num + ' KB';
+			case 2:
+				return num + ' MB';
+			case 3:
+				return num + ' GB';
+			case 4:
+				return num + ' TB';
+			case 5:
+				return num + ' PB';
+			case 6:
+				return num + ' EB';
+			default:
+				return num + ' * 1024^' + i + ' B';
+		}
+	}
+	function addDefinitionAfter(after, definition, value, cclass) {
+		dt = document.createElement('dt');
+		dt.appendChild(document.createTextNode(definition));
+		dd = document.createElement('dd');
+		if (cclass !== undefined) dd.className += cclass;
+		dd.appendChild(document.createTextNode(value));
+		after.parentNode.insertBefore(dd, after.nextElementSibling.nextSibling);
+		after.parentNode.insertBefore(dt, after.nextElementSibling.nextSibling);
+		return dt;
+	}
+	function addDefinitionBefore(before, definition, value, cclass) {
+		dt = document.createElement('dt');
+		dt.appendChild(document.createTextNode(definition));
+		dd = document.createElement('dd');
+		if (cclass !== undefined) dd.className += cclass;
+		dd.appendChild(document.createTextNode(value));
+		before.parentNode.insertBefore(dt, before);
+		before.parentNode.insertBefore(dd, before);
+		return dt;
+	}
+	function addRawStats() {
+		var tw, regExp;
+		// Find comments with stats
+		regExp = /Uploaded:\s*(([\d,.]+)\s*([A-Z]+)\s*\(([^)]*)\)).*\s*.*Downloaded:\s*(([\d,.]+)\s*([A-Z]+)\s*\(([^)]*)\))/i;
+		tw = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT, { acceptNode: function(node) { return regExp.test(node.textContent); } });
+		if (tw.nextNode() == null) return;
+		var match = tw.currentNode.textContent.match(regExp);
+		tw = document.createTreeWalker(document.getElementById('content'), NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /^\s*Ratio/i.test(node.data); } });
+		if (tw.nextNode() == null) return;
+		var ratioNode = tw.currentNode.parentNode;
+		tw = document.createTreeWalker(document.getElementById('content'), NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /^\s*Uploaded/i.test(node.data); } });
+		if (tw.nextNode() == null) return;
+		var ulNode = tw.currentNode.parentNode;
+		tw = document.createTreeWalker(document.getElementById('content'), NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /^\s*Downloaded/i.test(node.data); } });
+		if (tw.nextNode() == null) return;
+		var dlNode = tw.currentNode.parentNode;
+		regExp = /([\d,.]+)\s*([A-Z]+)\s*\(([^)]*)\)/i;
+		var ul = ulNode.nextElementSibling.textContent.match(regExp);
+		var dl = dlNode.nextElementSibling.textContent.match(regExp);
+		var buff = humancount(bytecount(parseFloat(ul[1].replace(/,/g, '')), ul[2].toUpperCase()) - bytecount(parseFloat(dl[1].replace(/,/g, '')), dl[2].toUpperCase()));
+		var realBuff = humancount(bytecount(parseFloat(match[2].replace(/,/g, '')), match[3].toUpperCase()) - bytecount(parseFloat(match[6].replace(/,/g, '')), match[7].toUpperCase()));
+		var rawRatio = (bytecount(parseFloat(match[2].replace(/,/g, '')), match[3].toUpperCase()) / bytecount(parseFloat(match[6].replace(/,/g, '')), match[7].toUpperCase())).toFixed(2);
+
+		// Color ratio
+		var color = 'r99';
+		if (rawRatio < 1)
+			color = 'r' + ('0' + Math.ceil(10 * rawRatio)).slice(-2);
+		else if (rawRatio < 5)
+			color = 'r20';
+		else if (rawRatio < 99)
+			color = 'r50';
+
+		// Add to user stats after ratio
+		var rawRatioNode = addDefinitionAfter(ratioNode, 'Raw Ratio:', rawRatio, color);
+		addDefinitionAfter(ratioNode, 'Raw Downloaded:', match[5]);
+		addDefinitionAfter(ratioNode, 'Raw Uploaded:', match[1]);
+		ratioNode.nextElementSibling.title = 'Buffer: ' + buff;
+		rawRatioNode.nextElementSibling.title = 'Raw Buffer: ' + realBuff;
+	}
+	function addYenPerStats() {
+		var dpy = 365.256363; // days per year
+		var tw = document.createTreeWalker(document.getElementById('content'), NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /Yen per day/i.test(node.data); } });
+		if (tw.nextNode() == null) return;
+		var ypdNode = tw.currentNode.parentNode;
+		var ypy = parseInt(ypdNode.nextElementSibling.textContent, 10) * dpy; // Yen per year
+		addDefinitionAfter(ypdNode, 'Yen per year:', formatInteger(Math.round(ypy * compoundInterest(1))));
+		addDefinitionAfter(ypdNode, 'Yen per month:', formatInteger(Math.round(ypy * compoundInterest(1 / 12))));
+		addDefinitionAfter(ypdNode, 'Yen per week:', formatInteger(Math.round(ypy * compoundInterest(7 / dpy))));
+		addDefinitionBefore(ypdNode, 'Yen as upload:', humancount(Math.pow(1024, 2) * ypy * compoundInterest(1 / dpy / 24 / 60 / 60)) + '/s');
+		addDefinitionBefore(ypdNode, 'Yen per hour:', (ypy * compoundInterest(1 / dpy / 24)).toFixed(1));
+	}
+	addRawStats();
+	addYenPerStats();
 }
 
 
