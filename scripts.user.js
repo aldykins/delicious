@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.80
+// @version 1.81
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -61,6 +61,22 @@ function createSettingsPage() {
 		poselistNode.appendChild(newLi);
 		return newLi;
 	}
+	function addDropdown(title, description, varName, list, def) {
+		var newLi = document.createElement('li'), innerHTML = '';
+		this[varName] = initGM(varName, def, false);
+		innerHTML += "<span class='ue_left strong'>"+title+"</span>\n<span class='ue_right'><select name='"+varName+"' id='"+varName+"'>";
+		for (var i = 0; i < list.length; i++) {
+			var el = list[i], selected = '';
+			if (el[1] === GM_getValue(varName)) selected = " selected='selected'";
+			innerHTML += "<option value='"+el[1]+"'"+selected+">"+el[0]+"</option>";
+		}
+		innerHTML += "</select><label for='"+varName+"'>"+description+"</label></span>";
+		newLi.innerHTML = innerHTML;
+		newLi.addEventListener('change', function(e) { GM_setValue(varName, e.target.value); });
+		var poseList = document.getElementById('pose_list');
+		poseList.appendChild(newLi);
+		return newLi;
+	}
 	function relink(){$j(function(){var stuff=$j('#tabs > div');$j('ul.ue_tabs a').click(function(){stuff.hide().filter(this.hash).show();$j('ul.ue_tabs a').removeClass('selected');$j(this).addClass('selected');return false;}).filter(':first,a[href="'+window.location.hash+'"]').slice(-1)[0].click();});}
 	var pose = document.createElement('div');
 	pose.id = "potatoes_settings";
@@ -81,8 +97,9 @@ function createSettingsPage() {
 	addCheckbox("Delicious Title Notifications", "Display number of notifications in title.", 'delicioustitlenotifications');
 	addCheckbox("Delicious Stylesheet Preview", "Allows you to easily preview and select delicious stylesheets.", 'deliciousstylesheetpreview');
 	addCheckbox("Delicious Yen per X", "Shows how much yen you receive per X, and as upload equivalent. Also adds raw download, raw upload and raw ratio.", 'deliciousyenperx');
-	addCheckbox("Delicious Freeleech Pool", "Shows current freeleech pool status in navbar (updated once an hour or when freeleech pool site is visited).", 'deliciousfreeleechpool');
-	addCheckbox("Delicious Freeleech Pie Chart", "Adds a dropdown with pie-chart to the navbar, too. (Doesn't look too good with most stylesheets.)", 'delicousnavbarpiechart');
+	addCheckbox("Delicious Freeleech Pool", "Shows current freeleech pool progress in the navbar and on user pages (updated once an hour or when freeleech pool site is visited).", 'deliciousfreeleechpool');
+	addDropdown("FL Pool Navbar Position", "Select position of freeleech pool progress in the navbar or disable it.", 'deliciousflpoolposition', [['Before user info', 'before #userinfo_minor'], ['After user info', 'after #userinfo_minor'], ['Before menu', 'before .main-menu.nobullet'], ['After menu', 'after .main-menu.nobullet'], ['Don\'t display', 'none']], 'after #userinfo_minor');
+	addCheckbox("Delicious Freeleech Pie Chart", "Adds a dropdown with pie-chart to the freeleech pool progress in the navbar. (Doesn't look too good with most stylesheets.)", 'delicousnavbarpiechart');
 }
 
 if (/\/user\.php\?.*action=edit/i.test(document.URL)) createSettingsPage();
@@ -102,6 +119,7 @@ var gm_deliciousstylesheetpreview = initGM('deliciousstylesheetpreview', 'true',
 var gm_deliciousyenperx = initGM('deliciousyenperx', 'true', false);
 var gm_deliciousfreeleechpool = initGM('deliciousfreeleechpool', 'true', false);
 var gm_delicousnavbarpiechart = initGM('delicousnavbarpiechart', 'false', false);
+
 
 // Banners, notifications and search bar by Megure
 // Fixes the placement of the search bars and notifications when a banner is in use.
@@ -693,16 +711,30 @@ if(GM_getValue('delicioustitlenotifications') === 'true') {
 // Shows current freeleech pool status in navbar with a pie-chart
 // Updates only once every hour or when pool site is visited, showing a pie-chart on pool site
 if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
+	function niceNumber(num) {
+		var res = '';
+		while (num >= 1000) {
+			res = ',' + ('00' + (num % 1000)).slice(-3) + res;
+			num = Math.floor(num / 1000);
+		}
+		return num + res;
+	}
 	function getFLInfo() {
 		function parseFLInfo(elem) {
 			var boxes = elem.querySelectorAll('#content .box.pad');
 			if (boxes.length < 3) return;
 
+			// The first box holds the current amount, the max amount and the user's individual all-time contribution
 			var match = boxes[0].textContent.match(/have ([0-9,]+) \/ ([0-9,]+) yen/i);
 			if (match == null) return;
 			var current = parseInt(match[1].replace(/,/g, ''), 10),
-					max = parseInt(match[2].replace(/,/g, ''), 10);
+					max = parseInt(match[2].replace(/,/g, ''), 10),
+					contribution = 0;
+			match = boxes[0].textContent.match(/you've donated ([0-9,]+) yen/i);
+			if (match != null)
+				contribution = parseInt(match[1].replace(/,/g, ''), 10);
 
+			// The third box holds the top 10 donators for the current box
 			var box = boxes[2],
 					firstP = box.querySelector('p'),
 					tr = box.querySelector('table').querySelectorAll('tbody > tr');
@@ -719,6 +751,7 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 				sum += amounts[i];
 			}
 
+			// Also add others and missing to the arrays
 			titles[tr.length] = 'Other';
 			hrefs[tr.length] = 'https://animebytes.tv/konbini.php?action=pool';
 			amounts[tr.length] = current - sum;
@@ -734,9 +767,11 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 			GM_setValue('FLPoolAmounts', JSON.stringify(amounts));
 			GM_setValue('FLPoolColors', colors);
 			GM_setValue('FLPoolCurrent', current);
+			GM_setValue('FLPoolContribution', contribution);
 			GM_setValue('FLPoolMax', max);
 		}
 
+		// Either parse document or retrieve freeleech pool site 60*60*1000 ms after last retrieval
 		if (/konbini\.php\?action=pool$/i.test(document.URL))
 			parseFLInfo(document);
 		else if (Date.now() - parseInt(GM_getValue('FLPoolLastUpdate', '0'), 10) > 3600000) {
@@ -750,19 +785,9 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 				}
 			};
 		}
-		else return;
 	}
 
 	function getPieChart() {
-		function niceNumber(num) {
-			var res = '';
-			while (num >= 1000) {
-				res = ',' + ('00' + (num % 1000)).slice(-3) + res;
-				num = Math.floor(num / 1000);
-			}
-			return num + res;
-		}
-
 		function circlePart(diff, title, href, color) {
 			var x = Math.sin(phi), y = Math.cos(phi);
 			phi -= 2 * Math.PI * diff / max;
@@ -793,35 +818,66 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 	function updatePieChart() {
 		var pieChart = getPieChart();
 		p.innerHTML = pieChart;
+		p3.innerHTML = pieChart;
 		if (GM_getValue('delicousnavbarpiechart', 'false') === 'true') {
 			li.innerHTML = pieChart;
 		}
+		p2.innerHTML = 'There currently are ' + niceNumber(parseInt(GM_getValue('FLPoolCurrent', '0'), 10)) + ' / ' + niceNumber(parseInt(GM_getValue('FLPoolMax', '50000000'), 10)) + ' yen in the donation box.<br/>';
+		p2.innerHTML += '(That means it is ' + niceNumber(parseInt(GM_getValue('FLPoolMax', '50000000'), 10) - parseInt(GM_getValue('FLPoolCurrent', '0'), 10)) + ' yen away from getting sitewide freeleech!)<br/>';
+		p2.innerHTML += 'In total, you\'ve donated ' + niceNumber(parseInt(GM_getValue('FLPoolContribution', '0'), 10)) + ' yen to the freeleech pool.<br/>';
+		p2.innerHTML += 'Last Update: ' + Math.round((Date.now() - parseInt(GM_getValue('FLPoolLastUpdate', Date.now()), 10)) / 60000) + ' minutes ago.';
 		a.textContent = 'FL: ' + (100 * parseInt(GM_getValue('FLPoolCurrent', '0'), 10) / parseInt(GM_getValue('FLPoolMax', '50000000'), 10)).toFixed(1) + '%';
 		nav.replaceChild(a, nav.firstChild);
 	}
+	
+	var pos = GM_getValue('deliciousflpoolposition');
 
-	getFLInfo();
-	var p = document.createElement('p'),
-			nav = document.createElement('li'),
-			a = document.createElement('a'),
-			ul = document.createElement('ul'),
-			li = document.createElement('li');
-	a.href = '/konbini.php?action=pool';
-	nav.appendChild(a);
-	if (GM_getValue('delicousnavbarpiechart', 'false') === 'true') {
-		nav.innerHTML += '<span class="dropit hover clickmenu"><span class="stext">▼</span></span>';
-		ul.appendChild(li);
-		ul.className = 'subnav nobullet';
-		nav.appendChild(ul);
-		nav.className = 'navmenu';
-	}
-	document.querySelector('.main-menu').appendChild(nav);
+	if (pos !== 'none' || /user\.php\?id=/i.test(document.URL) || /konbini\.php\?action=pool/i.test(document.URL)) {
+		getFLInfo();
+		var p = document.createElement('p'),
+				p2 = document.createElement('center'),
+				p3 = document.createElement('p'),
+				nav = document.createElement('li'),
+				a = document.createElement('a'),
+				ul = document.createElement('ul'),
+				li = document.createElement('li');
+		a.href = '/konbini.php?action=pool';
+		nav.appendChild(a);
+		if (GM_getValue('delicousnavbarpiechart', 'false') === 'true') {
+			nav.innerHTML += '<span class="dropit hover clickmenu"><span class="stext">▼</span></span>';
+			ul.appendChild(li);
+			ul.className = 'subnav nobullet';
+			nav.appendChild(ul);
+			nav.className = 'navmenu';
+		}
+		if (pos !== 'none') {
+			pos = pos.split(' ');
+			var parent = document.querySelector(pos[1]);
+			if (pos[0] === 'after')
+				parent.appendChild(nav);
+			if (pos[0] === 'before')
+				parent.insertBefore(nav, parent.firstChild);
+		}
 
-	updatePieChart()
+		updatePieChart()
+		
+		if (/user\.php\?id=/i.test(document.URL)) {
+			// Only do so on the user's own profile page
+			var tw = document.createTreeWalker(document.getElementById('content'), NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /Yen per day/i.test(node.data); } });
+			if (tw.nextNode() != null) {
+				var cNode = document.querySelector('.userstatsleft > .userprofile_list');
+				cNode.appendChild(document.createElement('hr'));
+				cNode.appendChild(p2);
+				cNode.appendChild(p3);
+			}
+		}
 
-	if (/konbini\.php\?action=pool$/i.test(document.URL)) {
-		var firstP = document.querySelector('.thin').children[5].querySelector('p');
-		firstP.parentNode.insertBefore(p, firstP.nextSibling);
+		if (/konbini\.php\?action=pool/i.test(document.URL)) {
+			var tw = document.createTreeWalker(document.getElementById('content'), NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /^\s*Most Donated to This Box\s*$/i.test(node.data); } });
+			if (tw.nextNode() !== null) {
+				tw.currentNode.parentNode.insertBefore(p, tw.currentNode.nextSibling);
+			}
+		}
 	}
 }
 
