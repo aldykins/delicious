@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.81
+// @version 1.82
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
 // @include *animebytes.tv/*
 // @match https://*.animebytes.tv/*
 // @icon http://animebytes.tv/favicon.ico
+// @grant none
 // ==/UserScript==
 
 
@@ -762,10 +763,10 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 			colors[tr.length + 1] = 'black';
 
 			GM_setValue('FLPoolLastUpdate', Date.now());
-			GM_setValue('FLPoolTitles', titles);
-			GM_setValue('FLPoolHrefs', hrefs);
+			GM_setValue('FLPoolTitles', JSON.stringify(titles));
+			GM_setValue('FLPoolHrefs', JSON.stringify(hrefs));
 			GM_setValue('FLPoolAmounts', JSON.stringify(amounts));
-			GM_setValue('FLPoolColors', colors);
+			GM_setValue('FLPoolColors', JSON.stringify(colors));
 			GM_setValue('FLPoolCurrent', current);
 			GM_setValue('FLPoolContribution', contribution);
 			GM_setValue('FLPoolMax', max);
@@ -796,7 +797,7 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 			if (2 * diff > max)
 				z = 1; // use long arc
 			var perc = (100 * diff / max).toFixed(1) + '%\n' + niceNumber(diff) + ' ¥';
-			return '<a xlink:href="' + href + '"><path title="' + title + '\n' + perc + '" stroke-width="0.01" stroke="grey" fill="' + color + '" d="M0,0 L' + v + ',' + w + ' A1,1 0 ' + z + ',0 ' + x + ',' + y + 'z">\n' +
+			return '<a xlink:href="' + href + '" xlink:title="' + title + '\n' + perc + '"><path title="' + title + '\n' + perc + '" stroke-width="0.01" stroke="grey" fill="' + color + '" d="M0,0 L' + v + ',' + w + ' A1,1 0 ' + z + ',0 ' + x + ',' + y + 'z">\n' +
 				'<animate begin="mouseover" attributeName="d" to="M0,0 L' + 1.1 * v + ',' + 1.1 * w + ' A1.1,1.1 0 ' + z + ',0 ' + 1.1 * x + ',' + 1.1 * y + 'z" dur="0.3s" fill="freeze" />\n' +
 				'<animate begin="mouseout"  attributeName="d" to="M0,0 L' + v + ',' + w + ' A1,1 0 ' + z + ',0 ' + x + ',' + y + 'z" dur="0.3s" fill="freeze" />\n' +
 				'</path></a>\n\n';
@@ -804,11 +805,11 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 
 		var str = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-1.11 -1.11 2.22 2.22" height="200px" width="100%">' +
 				'<title>Most Donated To This Box Pie-Chart</title>';
-		var phi = Math.PI, max = parseInt(GM_getValue('FLPoolMax'), 10),
-				titles = GM_getValue('FLPoolTitles').split(','),
-				hrefs = GM_getValue('FLPoolHrefs').split(','),
-				amounts = JSON.parse(GM_getValue('FLPoolAmounts')),
-				colors = GM_getValue('FLPoolColors').split(',');
+		var phi = Math.PI, max = parseInt(GM_getValue('FLPoolMax', '50000000'), 10),
+				titles = JSON.parse(GM_getValue('FLPoolTitles', '[]')),
+				hrefs = JSON.parse(GM_getValue('FLPoolHrefs', '[]')),
+				amounts = JSON.parse(GM_getValue('FLPoolAmounts', '[]')),
+				colors = JSON.parse(GM_getValue('FLPoolColors', '[]'));
 		for (var i = 0; i < titles.length; i++) {
 			str += circlePart(amounts[i], titles[i], hrefs[i], colors[i]);
 		}
@@ -859,7 +860,7 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 				parent.insertBefore(nav, parent.firstChild);
 		}
 
-		updatePieChart()
+		updatePieChart();
 		
 		if (/user\.php\?id=/i.test(document.URL)) {
 			// Only do so on the user's own profile page
@@ -1004,6 +1005,7 @@ if(GM_getValue('deliciousyenperx', 'true') === 'true' && /user\.php\?id=/i.test(
 		addDefinitionAfter(ypdNode, 'Yen per year:', formatInteger(Math.round(ypy * compoundInterest(1))));
 		addDefinitionAfter(ypdNode, 'Yen per month:', formatInteger(Math.round(ypy * compoundInterest(1 / 12))));
 		addDefinitionAfter(ypdNode, 'Yen per week:', formatInteger(Math.round(ypy * compoundInterest(7 / dpy))));
+		// 1 Yen = 1 MB = 1024^2 B * yen per year * interest for 1 s
 		addDefinitionBefore(ypdNode, 'Yen as upload:', humancount(Math.pow(1024, 2) * ypy * compoundInterest(1 / dpy / 24 / 60 / 60)) + '/s');
 		addDefinitionBefore(ypdNode, 'Yen per hour:', (ypy * compoundInterest(1 / dpy / 24)).toFixed(1));
 	}
@@ -1196,7 +1198,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 
         if (showYen.toString() === 'true') {
             var myColSpan;
-            console.log("Sum of Yen for all torrents on this site:", sum);
+            console.log("Sum of Yen per hour for all torrents on this site:", sum);
 
             torrents = document.querySelectorAll('tr.edition_info,tr.pad,tr[id^="group_"]');
             for (var i = 0; i < torrents.length; i++) {
