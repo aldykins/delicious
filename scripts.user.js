@@ -8,7 +8,6 @@
 // @include *animebytes.tv/*
 // @match https://*.animebytes.tv/*
 // @icon http://animebytes.tv/favicon.ico
-// @grant none
 // ==/UserScript==
 
 
