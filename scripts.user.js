@@ -805,14 +805,16 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 
 		var str = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-1.11 -1.11 2.22 2.22" height="200px" width="100%">' +
 				'<title>Most Donated To This Box Pie-Chart</title>';
-		var phi = Math.PI, max = parseInt(GM_getValue('FLPoolMax', '50000000'), 10),
-				titles = JSON.parse(GM_getValue('FLPoolTitles', '[]')),
-				hrefs = JSON.parse(GM_getValue('FLPoolHrefs', '[]')),
-				amounts = JSON.parse(GM_getValue('FLPoolAmounts', '[]')),
-				colors = JSON.parse(GM_getValue('FLPoolColors', '[]'));
-		for (var i = 0; i < titles.length; i++) {
-			str += circlePart(amounts[i], titles[i], hrefs[i], colors[i]);
-		}
+		try {
+			var phi = Math.PI, max = parseInt(GM_getValue('FLPoolMax', '50000000'), 10),
+					titles = JSON.parse(GM_getValue('FLPoolTitles', '[]')),
+					hrefs = JSON.parse(GM_getValue('FLPoolHrefs', '[]')),
+					amounts = JSON.parse(GM_getValue('FLPoolAmounts', '[]')),
+					colors = JSON.parse(GM_getValue('FLPoolColors', '[]'));
+			for (var i = 0; i < titles.length; i++) {
+				str += circlePart(amounts[i], titles[i], hrefs[i], colors[i]);
+			}
+		} catch (e) {}
 		return str + '</svg>';
 	}
 
