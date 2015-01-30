@@ -12,19 +12,19 @@
     overflow: visible !important;
 }
 
-/**** aldy **** /
+/**** aldy ****/
 .post_block.user_17317 .avatar img {
     width: 0px;
-    height: 353px;
-    padding-left: 210px;
-    margin-left: -32px;
+    height: 334px;
+    padding-left: 194px;
+    margin-left: -43px;
     background: transparent url('aldy.png') top right no-repeat;
 }
 
 #user_leftcol .center:first-child img[title^="aldy"] {
     width: 0px;
-    height: 353px;
-    padding-left: 210px;
+    height: 334px;
+    padding-left: 194px;
     margin-left: -8px;
     background: transparent url('aldy.png') top right no-repeat;
 }
