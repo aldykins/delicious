@@ -4,12 +4,12 @@
 }
 
 #user_leftcol .center:first-child, #userhistory .avatar, .avatar_c, .flist_av, .floatleft.clearcont.friends_left,
-.post_block.user_17317, .post_block.user_17317 .avatar,
-.post_block.user_18701, .post_block.user_18701 .avatar,
-.post_block.user_12326, .post_block.user_12326 .avatar, 
-.post_block.user_20811, .post_block.user_20811 .avatar, 
-.post_block.user_21070, .post_block.user_21070 .avatar  {
-    overflow: visible !important;
+.post_block.user_17317, #forums .post_block.user_17317 .avatar,
+.post_block.user_18701, #forums .post_block.user_18701 .avatar,
+.post_block.user_12326, #forums .post_block.user_12326 .avatar, 
+.post_block.user_20811, #forums .post_block.user_20811 .avatar, 
+.post_block.user_21070, #forums .post_block.user_21070 .avatar  {
+    overflow: visible;
 }
 
 /**** aldy ****/
