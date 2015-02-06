@@ -516,7 +516,7 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 						return html;
 					}).
 					replace(/<ul><li>(.+?)<\/li><\/ul>/ig, '[*]$1').
-					replace(/<a.*?href="\/?torrents\.php\?.*?torrentid=([0-9]*?)".*?>([\s\S]*?)<\/a>/ig, '[torrent=$1]$2[/torrent]').
+					replace(/<a.*?href="torrents\.php\?.*?torrentid=([0-9]*?)".*?>([\s\S]*?)<\/a>/ig, '[torrent=$1]$2[/torrent]').
 					replace(/<a.*?href="(.*?)".*?>([\s\S]*?)<\/a>/ig, function(html, match1, match2) {
 						if (match1.indexOf('://') === -1 && match1.length > 0 && match1[0] !== '/')
 							return '[url=/' + match1 + ']' + match2 + '[/url]'
