@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.82
+// @version 1.83
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -516,7 +516,13 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 						return html;
 					}).
 					replace(/<ul><li>(.+?)<\/li><\/ul>/ig, '[*]$1').
-					replace(/<a.*?href="(.*?)".*?>([\s\S]*?)<\/a>/ig, '[url=$1]$2[/url]').
+					replace(/<a.*?href="\/?torrents\.php\?.*?torrentid=([0-9]*?)".*?>([\s\S]*?)<\/a>/ig, '[torrent=$1]$2[/torrent]').
+					replace(/<a.*?href="(.*?)".*?>([\s\S]*?)<\/a>/ig, function(html, match1, match2) {
+						if (match1.indexOf('://') === -1 && match1.length > 0 && match1[0] !== '/')
+							return '[url=/' + match1 + ']' + match2 + '[/url]'
+						else
+							return '[url=' + match1 + ']' + match2 + '[/url]'
+					}).
 					replace(/<strong>([\s\S]*?)<\/strong>/ig, '[b]$1[/b]').
 					replace(/<em>([\s\S]*?)<\/em>/ig, '[i]$1[/i]').
 					replace(/<u>([\s\S]*?)<\/u>/ig, '[u]$1[/u]').
@@ -868,7 +874,9 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 			var tw = document.createTreeWalker(document.getElementById('content'), NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /Yen per day/i.test(node.data); } });
 			if (tw.nextNode() != null) {
 				var cNode = document.querySelector('.userstatsleft > .userprofile_list');
-				cNode.appendChild(document.createElement('hr'));
+				var hr = document.createElement('hr');
+				hr.style.clear = 'both';
+				cNode.appendChild(hr);
 				cNode.appendChild(p2);
 				cNode.appendChild(p3);
 			}
@@ -991,6 +999,9 @@ if(GM_getValue('deliciousyenperx', 'true') === 'true' && /user\.php\?id=/i.test(
 			color = 'r50';
 
 		// Add to user stats after ratio
+		var hr = document.createElement('hr');
+		hr.style.clear = 'both';
+		ratioNode.parentNode.insertBefore(hr, ratioNode.nextElementSibling.nextSibling);
 		var rawRatioNode = addDefinitionAfter(ratioNode, 'Raw Ratio:', rawRatio, color);
 		addDefinitionAfter(ratioNode, 'Raw Downloaded:', match[5]);
 		addDefinitionAfter(ratioNode, 'Raw Uploaded:', match[1]);
@@ -1007,6 +1018,9 @@ if(GM_getValue('deliciousyenperx', 'true') === 'true' && /user\.php\?id=/i.test(
 		addDefinitionAfter(ypdNode, 'Yen per month:', formatInteger(Math.round(ypy * compoundInterest(1 / 12))));
 		addDefinitionAfter(ypdNode, 'Yen per week:', formatInteger(Math.round(ypy * compoundInterest(7 / dpy))));
 		// 1 Yen = 1 MB = 1024^2 B * yen per year * interest for 1 s
+		var hr = document.createElement('hr');
+		hr.style.clear = 'both';
+		ypdNode.parentNode.insertBefore(hr, ypdNode);
 		addDefinitionBefore(ypdNode, 'Yen as upload:', humancount(Math.pow(1024, 2) * ypy * compoundInterest(1 / dpy / 24 / 60 / 60)) + '/s');
 		addDefinitionBefore(ypdNode, 'Yen per hour:', (ypy * compoundInterest(1 / dpy / 24)).toFixed(1));
 	}
