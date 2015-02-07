@@ -204,19 +204,21 @@
 /**** Zeroxv ****/
 .post_block.user_20811 .avatar img {
     width: 0px;
-    height: 403px;
+    height: 270px;
     padding-left: 220px;
-    margin-left: -40px;
+    margin-left: -44px;
     background: transparent url('Zeroxv.png') top right no-repeat;
 }
 
 #user_leftcol .center:first-child img[title^="Zeroxv"] {
     width: 0px;
-    height: 403px;
+    height: 270px;
     padding-left: 220px;
+	margin-left: -10px;
     background: transparent url('Zeroxv.png') top right no-repeat;
 }
 
+/**
 #userhistory .forum_post .avatar img[title^="Zeroxv"] {
     width: 0px;
     height: 348px;
