@@ -484,6 +484,10 @@ th.torrent_properties a:hover {
     margin-top: 5px;
 }
 
+#user_leftcol .box div[align="left"] img {
+	margin-top: 6px;
+}
+
 #user_leftcol .box div img[title="IceCream"] + br + img[title="Watermelon"] {
     margin-top: -15px;
     margin-left: 160px;
@@ -1909,13 +1913,13 @@ a[href^='alltorrents.php?action=history&userid='] {
     padding-bottom: 14px !important;
 }
 
-.acht {
+.acht, .author_info ul > li.center {
     margin: 0 auto;
     text-align: center;
 }
 
-ul.user_fields {
-    padding: 0;
+.author_info ul > li.center, ul.user_fields {
+    padding: 0 11px;
 }
 
 ul.user_fields li {
@@ -1945,7 +1949,7 @@ span.uf_left,span.uf_right {
     display: none;
 }
 
-.avatar img,#user_leftcol .center img {
+.avatar img, #user_leftcol .center img {
     display: block;
     margin: 0 auto;
 }
@@ -3711,113 +3715,6 @@ ul .invitetree {
     background: #68c059 !important;
     line-height: 25px;
 }
-
-/*
-#forum_16 a[title^='[CSS]'],#forum_41 a[title^='[CSS]'] {
-    color: #B72D87;
-}
-
-#forum_16 a[title^='[Non-Bug'],#forum_16 a[title^='[Non-bug'],#forum_41 a[title^='[Non-Bug'],#forum_41 a[title^='[Non-bug'] {
-    color: #666;
-    font-weight: normal;
-}
-
-#forum_16 a[title^='[Solved'],#forum_16 a[title^='[In Progress]'],#forum_16 a[title^='[In progress]'],#forum_41 a[title^='[Solved'],#forum_41 a[title^='[In Progress]'],#forum_41 a[title^='[In progress]'] {
-    color: #477C29;
-    font-weight: normal;
-}
-
-.thread_tag_exc {
-    display: none;
-}
-
-.tr_unread .sticky + strong a[title^='[Read'],.tr_unread .sticky + strong a[title^='[READ'],.tr_unread .sticky + strong a[title^='[!]'] {
-    color: #C62323;
-    border-bottom: 1px dotted #C62323;
-    padding-bottom: 1px;
-}
-
-a[title*='[NSFW]'],a[title*='[18+]'] {
-    color: #333333;
-}
-
-a[title*='[Spoilers]'],a[title*='[Spoiler]'] {
-    color: #8C5646;
-}
-
-#forum_49 a[title^='[IDC challenge]'],#forum_49 a[title^='[IDC CHALLENGE]'] {
-    color: #B530D3;
-}
-
-#forum_49 a .thread_tag_unfunny {
-    display: none;
-}
-
-#forum_49 a[title^='[unfunny]'] {
-    filter: alpha(opacity=30);
-    -moz-opacity: 0.3;
-    -khtml-opacity: 0.3;
-    opacity: 0.3;
-}
-
-#forum_49 a .thread_tag_potions {
-    background: url("images/thread_tags/potions.png") left center no-repeat;
-    display: inline-block;
-    line-height: 20px;
-    min-height: 20px;
-    color: transparent;
-    width: 16px;
-}
-
-#forum_49 a[title^='[potions]'] {
-    color: #00A502;
-}
-
-#forum_49 a .thread_tag_cats {
-    background: url("images/thread_tags/cat.png") left center no-repeat;
-    display: inline-block;
-    line-height: 20px;
-    min-height: 20px;
-    color: transparent;
-    width: 22px;
-}
-
-#forum_49 a[title*='hot wheels'] {
-    background: url("images/thread_tags/hotwheels.png") left center no-repeat;
-    padding-left: 72px;
-    min-height: 20px;
-}
-
-#forum_49 a[title^='[apples]'] {
-    background: url("images/thread_tags/apple.png") left center no-repeat;
-    padding-left: 22px;
-    min-height: 22px;
-}
-
-@media all and (min-width: 0px) {
-    a[title^='[fabulous]'],span[title^='[fabulous]'],span[title^='Fabulous'],a[title^='Fabulous'] {
-        position: relative;
-    }
-
-    .thread_tag_fabulous {
-        color: transparent;
-        position: relative;
-    }
-
-    .thread_tag_fabulous:before {
-        display: block;
-        position: absolute;
-        top: -3px;
-        left: 0;
-        padding: 0 0 1px 0;
-        width: auto;
-        content: '\00a0 fabulous\00a0';
-        z-index: 1;
-        color: #fff;
-        text-shadow: -1px 0 #dd0000, 0 -1px #dd0000, -1px 1px 0 #dd0000, -2px 2px 0 #fe6230, -3px 3px 0 #fef600, -4px 4px 0 #00bc00, -5px 5px 0 #009bfe, -6px 6px 0 #000083, -7px 7px 0 #30009b, -8px 8px 0 #d971e0;
-    };
-}
-*/
 
 #forum_49 strong a[title][href^="/forums.php"]:after {
     content: '? what if im gay';
