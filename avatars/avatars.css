@@ -1,8 +1,3 @@
-#forums .avatar {
-    max-height: 400px;
-    overflow: hidden;
-}
-
 #user_leftcol .center:first-child, #userhistory .avatar, .avatar_c, .flist_av, .floatleft.clearcont.friends_left,
 .post_block.user_17317, #forums .post_block.user_17317 .avatar,
 .post_block.user_18701, #forums .post_block.user_18701 .avatar,
