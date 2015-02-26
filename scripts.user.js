@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.83
+// @version 1.84
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -731,14 +731,25 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 			if (boxes.length < 3) return;
 
 			// The first box holds the current amount, the max amount and the user's individual all-time contribution
-			var match = boxes[0].textContent.match(/have ([0-9,]+) \/ ([0-9,]+) yen/i);
-			if (match == null) return;
-			var current = parseInt(match[1].replace(/,/g, ''), 10),
-					max = parseInt(match[2].replace(/,/g, ''), 10),
-					contribution = 0;
+			var match = boxes[0].textContent.match(/have ([0-9,]+) \/ ([0-9,]+) yen/i),
+					max = parseInt(GM_getValue('FLPoolMax', '50000000'), 10),
+					current = parseInt(GM_getValue('FLPoolCurrent', '0'), 10);
+			if (match == null) {
+				match = boxes[0].textContent.match(/Our donation box is already full/i);
+				if (match != null) current = max;
+			}
+			else {
+				current = parseInt(match[1].replace(/,/g, ''), 10);
+				max = parseInt(match[2].replace(/,/g, ''), 10);
+			}
+			if (match != null) {
+				GM_setValue('FLPoolCurrent', current);
+				GM_setValue('FLPoolMax', max);
+			}
+			// Check first box for user's individual all-time contribution
 			match = boxes[0].textContent.match(/you've donated ([0-9,]+) yen/i);
 			if (match != null)
-				contribution = parseInt(match[1].replace(/,/g, ''), 10);
+				GM_setValue('FLPoolContribution', parseInt(match[1].replace(/,/g, ''), 10));
 
 			// The third box holds the top 10 donators for the current box
 			var box = boxes[2],
@@ -772,9 +783,6 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 			GM_setValue('FLPoolHrefs', JSON.stringify(hrefs));
 			GM_setValue('FLPoolAmounts', JSON.stringify(amounts));
 			GM_setValue('FLPoolColors', JSON.stringify(colors));
-			GM_setValue('FLPoolCurrent', current);
-			GM_setValue('FLPoolContribution', contribution);
-			GM_setValue('FLPoolMax', max);
 		}
 
 		// Either parse document or retrieve freeleech pool site 60*60*1000 ms after last retrieval
@@ -795,6 +803,7 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 
 	function getPieChart() {
 		function circlePart(diff, title, href, color) {
+			if (diff == 0) return '';
 			var x = Math.sin(phi), y = Math.cos(phi);
 			phi -= 2 * Math.PI * diff / max;
 			var v = Math.sin(phi), w = Math.cos(phi);
