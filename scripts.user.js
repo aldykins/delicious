@@ -121,36 +121,6 @@ var gm_deliciousfreeleechpool = initGM('deliciousfreeleechpool', 'true', false);
 var gm_delicousnavbarpiechart = initGM('delicousnavbarpiechart', 'false', false);
 
 
-// Banners, notifications and search bar by Megure
-// Fixes the placement of the search bars and notifications when a banner is in use.
-if (document.getElementById('bannerimg') !== null) {
-	var bannerimg = document.getElementById('bannerimg'),
-	    img = bannerimg.querySelector('img'),
-	    content = document.getElementById('content'),
-	    searchbars = document.getElementById('searchbars'),
-	    alerts = document.getElementById('alerts');
-	if (alerts !== null && alerts.textContent.trim() !== '') {
-		if (alerts.nextSibling !== null)
-			alerts.parentNode.insertBefore(bannerimg.parentNode, alerts.nextSibling);
-		else
-			alerts.parentNode.appendChild(bannerimg.parentNode);
-		if (img !== null) {
-			img.style.paddingTop = '0';
-			if (img.width > content.clientWidth) {
-				img.style.position = 'relative';
-				img.style.left = Math.round((content.clientWidth - bannerimg.children[0].width) / 2) + 'px';
-			}
-		}
-	}
-	else if (searchbars !== null) {
-		if (searchbars.nextSibling !== null)
-			searchbars.parentNode.insertBefore(bannerimg.parentNode, searchbars.nextSibling);
-		else
-			searchbars.appendChild(bannerimg.parentNode);
-	}
-}
-
-
 // Add delicious stylesheets to stylesheet dropdown menu including preview by Megure
 // LINKS ARE HARDCODED TO aldy.nope.bz AND /static/styles/, CHANGE IF NECESSARY!
 if (GM_getValue('deliciousstylesheetpreview', 'true') === 'true' && /\/user\.php\?.*action=edit/i.test(document.URL)) {
@@ -1232,17 +1202,17 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
 
   dynamicLoad = GM_getValue('ABHistDynLoad', 'true');
 
-  lcPosBG = GM_getValue('ABHistColorPosBG', '#B0F0B0');
+  lcPosBG = GM_getValue('ABHistColorPosBG', 'rgba(0, 240, 0, 0.15)');
 
-  lcNeuBG = GM_getValue('ABHistColorNeuBG', '#F0F0B0');
+  lcNeuBG = GM_getValue('ABHistColorNeuBG', 'rgba(240, 240, 0, 0.15)');
 
-  lcNegBG = GM_getValue('ABHistColorNegBG', '#F0B0B0');
+  lcNegBG = GM_getValue('ABHistColorNegBG', 'rgba(240, 0, 0, 0.15)');
 
-  lcPosFG = GM_getValue('ABHistColorPosFG', 'Black');
+  lcPosFG = GM_getValue('ABHistColorPosFG', 'none');
 
-  lcNeuFG = GM_getValue('ABHistColorNeuFG', 'Black');
+  lcNeuFG = GM_getValue('ABHistColorNeuFG', 'none');
 
-  lcNegFG = GM_getValue('ABHistColorNegFG', 'Black');
+  lcNegFG = GM_getValue('ABHistColorNegFG', 'none');
 
   line_color_neg = [lcNegBG, lcNegFG];
 
@@ -2084,7 +2054,7 @@ function addColorSetting(key, name, description, myDefault, deactivatable, deact
     });
 __temp.addEventListener('click', function(e){var a = e.target;
 		  if(a.type === "button"){
-		  	GM_setValue(key, myDefault);
+		  	GM_deleteValue(key);
 		  	document.getElementById('ColorCheckBox_' + key).checked = true;
 		  	document.getElementById('Setting_' + key).value = myDefault;
 		  }
