@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.85
+// @version 1.86
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -2080,12 +2080,12 @@ function addTextSetting(key, name, description, myDefault, maxLength){
 	addBooleanSetting('ABTorrentsReqTime', 'Show required seeding time', 'Shows minimal required seeding time for torrents in their description and when size is hovered.', 'true', 'false', 'true');
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABHistColorRows', 'Color history', 'Color rows in your history according to H&R status. (Choose colors below.)', 'true', 'false', 'true');
-	addColorSetting('ABHistColorPosBG', 'Color for non-H&Rs', 'Background color for torrents in your history that are no Hit & Runs.', '#B0F0B0', 'true', 'none');
-	addColorSetting('ABHistColorPosFG', 'Color for non-H&Rs', 'Text color for torrents in your history that are no Hit & Runs.', '#000000', 'true', 'none');
-	addColorSetting('ABHistColorNeuBG', 'Color for partial downloads', 'Background color for torrents in your history with less than 10% download.', '#F0F0B0', 'true', 'none');
-	addColorSetting('ABHistColorNeuFG', 'Color for partial downloads', 'Text color for torrents in your history with less than 10% download.', '#000000', 'true', 'none');
-	addColorSetting('ABHistColorNegBG', 'Color for potential H&R', 'Background color for torrents where you have not seeded enough yet.', '#F0B0B0', 'true', 'none');
-	addColorSetting('ABHistColorNegFG', 'Color for potential H&R', 'Text color for torrents where you have not seeded enough yet.', '#000000', 'true', 'none');
+	addColorSetting('ABHistColorPosBG', 'Color for non-H&Rs', 'Background color for torrents in your history that are no Hit & Runs.', '#008C00', 'true', 'none');
+	addColorSetting('ABHistColorPosFG', 'Color for non-H&Rs', 'Text color for torrents in your history that are no Hit & Runs.', 'none', 'true', 'none');
+	addColorSetting('ABHistColorNeuBG', 'Color for partial downloads', 'Background color for torrents in your history with less than 10% download.', '#8C8C00', 'true', 'none');
+	addColorSetting('ABHistColorNeuFG', 'Color for partial downloads', 'Text color for torrents in your history with less than 10% download.', 'none', 'true', 'none');
+	addColorSetting('ABHistColorNegBG', 'Color for potential H&R', 'Background color for torrents where you have not seeded enough yet.', '#8C0000', 'true', 'none');
+	addColorSetting('ABHistColorNegFG', 'Color for potential H&R', 'Text color for torrents where you have not seeded enough yet.', 'none', 'true', 'none');
 	addBooleanSetting('ABHistSortRows', 'Sorting of history', 'Sort your history pages for any column (seed-time column is sorted for remaining required seed-time).', 'true', 'false', 'true');
 	addBooleanSetting('ABHistDynLoad', 'Load history pages', 'Add buttons to dynamically load more pages into your history tables.', 'true', 'false', 'true');
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
