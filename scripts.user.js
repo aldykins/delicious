@@ -1202,11 +1202,11 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
 
   dynamicLoad = GM_getValue('ABHistDynLoad', 'true');
 
-  lcPosBG = GM_getValue('ABHistColorPosBG', 'rgba(0, 240, 0, 0.15)');
+  lcPosBG = GM_getValue('ABHistColorPosBG', 'rgba(0, 140, 0, 0.15)');
 
-  lcNeuBG = GM_getValue('ABHistColorNeuBG', 'rgba(240, 240, 0, 0.15)');
+  lcNeuBG = GM_getValue('ABHistColorNeuBG', 'rgba(140, 140, 0, 0.15)');
 
-  lcNegBG = GM_getValue('ABHistColorNegBG', 'rgba(240, 0, 0, 0.15)');
+  lcNegBG = GM_getValue('ABHistColorNegBG', 'rgba(140, 0, 0, 0.15)');
 
   lcPosFG = GM_getValue('ABHistColorPosFG', 'none');
 
