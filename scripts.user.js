@@ -2046,7 +2046,7 @@ function addColorSetting(key, name, description, myDefault, deactivatable, deact
     (deactivatable.toString() === 'true' ? "<input id='ColorCheckBox_" + key + "' type='checkbox' " +
 		  (GM_getValue(key, myDefault).toString() !== deactiveDefault.toString() ? "checked='checked'" : "") +
     ">" : "") +
-    " <input id='Setting_" + key + "' name='Setting_" + key + "' type='color' value='" + (GM_getValue(key, myDefault).toString() === deactiveDefault.toString() ? myDefault : GM_getValue(key, myDefault)) + "'>" +
+    " <input id='Setting_" + key + "' name='Setting_" + key + "' type='color' value='" + (GM_getValue(key, myDefault).toString() === deactiveDefault.toString() ? (myDefault.toString() === deactiveDefault.toString() ? '#000000' : myDefault) : GM_getValue(key, myDefault)) + "'>" +
     " <button type='button'>Reset</button> <label for='Setting_" + key + "'>" + description + "</label></span>";
       __temp.addEventListener('change', function(e){var a = e.target;
 		  if(a.type === "checkbox"){ a.checked === false ? GM_setValue(key, deactiveDefault) : GM_setValue(key, document.getElementById('Setting_' + key).value) }
@@ -2054,9 +2054,15 @@ function addColorSetting(key, name, description, myDefault, deactivatable, deact
     });
 __temp.addEventListener('click', function(e){var a = e.target;
 		  if(a.type === "button"){
-		  	GM_deleteValue(key);
-		  	document.getElementById('ColorCheckBox_' + key).checked = true;
-		  	document.getElementById('Setting_' + key).value = myDefault;
+			GM_deleteValue(key);
+			if (myDefault.toString() === deactiveDefault.toString()) {
+				document.getElementById('ColorCheckBox_' + key).checked = false;
+				document.getElementById('Setting_' + key).value = '#000000';
+			}
+			else {
+				document.getElementById('ColorCheckBox_' + key).checked = true;
+				document.getElementById('Setting_' + key).value = myDefault;
+			}
 		  }
     });
       document.getElementById('pose_list').appendChild(__temp);
