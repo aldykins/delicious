@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.84
+// @version 1.85
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -217,44 +217,7 @@ if (GM_getValue('deliciousstylesheetpreview', 'true') === 'true' && /\/user\.php
 			styleurl.value = src;
 		else
 			styleurl.value = '';
-		// Banners are only available for the original stylesheets, so default to Coaltastic "1", which has all banners
-		if (parseInt(id, 10) > originalNoSS)
-			id = '1';
-		input.value = id;
-		$j.ajax({
-			url: '/banners.php',
-			type: 'POST',
-			data: {
-				styleid: id
-			},
-			success: function(data) {
-				var currentBanner = $j('#banner :selected').text(),
-				    bannerVal = '';
-				$j('#banner').children().remove();
-				var BannersArray = data.split(',');
-				for (i = 0; i < BannersArray.length; i += 2) {
-					$j('#banner').append($j('<option></option>').val(BannersArray[i]).html(BannersArray[i + 1]));
-					if (currentBanner === BannersArray[i + 1])
-						bannerVal = BannersArray[i];
-				}
-				currentBanner = document.querySelector('#banner option[value="' + bannerVal + '"]');
-				if (currentBanner === null)
-					$j('#banner :first').attr('selected', 'selected');
-				else
-					currentBanner.selected = true;
-				showBanner();
-			}
-		});
 	});
-	function showBanner() {
-		var banner = document.querySelector('#bannerimg img'),
-		    pseudoSS = document.querySelector('#stylesheet option[value="' + input.value + '"]');
-		if (banner !== null && pseudoSS !== null)
-			banner.src = "static/styles/" + pseudoSS.textContent.toLowerCase() + "/images/" + $j("#banner :selected").text() + ".png";
-	}
-	var banner = document.getElementById('banner');
-	banner.removeAttribute('onchange');
-	banner.addEventListener('change', function(event) { showBanner(); });
 }
 
 
