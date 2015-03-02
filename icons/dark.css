@@ -350,18 +350,20 @@ a.permission_11,.permission_11 {
 
 /* cat */
 a.permission_30,.permission_30 {
-    color: #CC0000;
+    font-weight: bold;
+    color: #D71A41;
 }
 
 /* im the designer */
 a.permission_29,.permission_29 {
-    color: #99FFFF;
+    font-weight: bold;
+    color: #D71A41;
 }
 
 /* Administrator */
 a.permission_1,.permission_1 {
-    color: #D71A41;
     font-weight: bold;
+    color: #D71A41;
 }
 
 img[src="/static/common/quality_stars/blue.png"] {
