@@ -1191,7 +1191,7 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
 // @namespace   Megure@AnimeBytes.tv
 // @description Highlights torrents which might become a Hit & Run; allows sorting on all history-pages
 // @include     http*://animebytes.tv*alltorrents.php*
-// @version     0.84
+// @version     0.85
 // @grant       GM_getValue
 // @icon        http://animebytes.tv/favicon.ico
 // ==/UserScript==
@@ -1232,7 +1232,7 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
 
   andRe = /(and|\s)/ig;
 
-  durationRe = /^(?:(\d+)years?)?(?:(\d+)months?)?(?:(\d+)weeks?)?(?:(\d+)days?)?(?:(\d+)hours?)?(?:(\d+)minutes?)?(?:(\d+)seconds?)?$/i;
+  durationRe = /^(?:(\d+)years?)?(?:(\d+)months?)?(?:(\d+)weeks?)?(?:(\d+)days?)?(?:(\d+)hours?)?(?:(\d+)minutes?)?(?:(\d+)seconds?)?(\s*\([^)]*\))?$/i;
 
   dateTimeRe = /^(\d+)\-(\d{1,2})\-(\d{1,2})\s+(\d{1,2}):(\d{1,2})$/i;
 
@@ -1369,7 +1369,7 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
 
   parseRows = function(myDocument) {
     var cell, completion, downloaded, i, index, len, line_color, minSeedingTime, myData, ratio, ref, row, seedingTime, size, torrent_rows;
-    torrent_rows = myDocument.querySelectorAll('tr[class="torrent"]');
+    torrent_rows = myDocument.querySelectorAll('tr.torrent');
     for (i = 0, len = torrent_rows.length; i < len; i++) {
       row = torrent_rows[i];
       myData = (function() {
@@ -1410,7 +1410,7 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
         } else if (completion >= 10 && ratio < 1 && seedingTime < minSeedingTime) {
           line_color = line_color_neg;
           myData[durIndex] = minSeedingTime - seedingTime;
-          row.cells[durIndex].innerHTML += "<br />(~" + (dur2string(minSeedingTime - seedingTime)) + "h to seed)";
+          row.cells[durIndex].innerHTML += "<br />(~" + (dur2string(minSeedingTime - seedingTime)) + "h left)";
         } else if (seedingTime >= minSeedingTime || ratio >= 1) {
           line_color = line_color_pos;
           myData[durIndex] = Math.min(0, minSeedingTime - seedingTime);
