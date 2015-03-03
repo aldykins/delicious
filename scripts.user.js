@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.87
+// @version 1.88
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -1191,7 +1191,7 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
 // @namespace   Megure@AnimeBytes.tv
 // @description Highlights torrents which might become a Hit & Run; allows sorting on all history-pages
 // @include     http*://animebytes.tv*alltorrents.php*
-// @version     0.85
+// @version     0.86
 // @grant       GM_getValue
 // @icon        http://animebytes.tv/favicon.ico
 // ==/UserScript==
@@ -1232,7 +1232,7 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
 
   andRe = /(and|\s)/ig;
 
-  durationRe = /^(?:(\d+)years?)?(?:(\d+)months?)?(?:(\d+)weeks?)?(?:(\d+)days?)?(?:(\d+)hours?)?(?:(\d+)minutes?)?(?:(\d+)seconds?)?(\s*\([^)]*\))?$/i;
+  durationRe = /^(?:(\d+)years?)?(?:(\d+)months?)?(?:(\d+)weeks?)?(?:(\d+)days?)?(?:(\d+)hours?)?(?:(\d+)minutes?)?(?:(\d+)seconds?)?(\s*\([^)]*\)\s*)*$/i;
 
   dateTimeRe = /^(\d+)\-(\d{1,2})\-(\d{1,2})\s+(\d{1,2}):(\d{1,2})$/i;
 
@@ -1359,7 +1359,7 @@ if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
         default:
           return parseFloat(match[1]);
       }
-    } else if (textContentNoComma === 'Never') {
+    } else if (/^Never(\s*\([^)]*\)\s*)*$/i.test(textContentNoComma)) {
       durIndex = index;
       return 0;
     } else {
