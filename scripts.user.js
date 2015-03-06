@@ -979,7 +979,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 // @namespace   Megure@AnimeBytes.tv
 // @description Shows how much yen you would receive if you seeded torrents; shows required seeding time
 // @include     http*://animebytes.tv*
-// @version     0.81
+// @version     0.82
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @icon        http://animebytes.tv/favicon.ico
@@ -1057,6 +1057,105 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 
     if (showYen.toString() === 'true' || reqTime.toString() === 'true') {
         var torrents, cells, seeders, leechers, size, sizeIndex, sizeRe, andRe, durationRe, torrentId, newCell, header, newHeader, lastHeaderCell, sum = 0, seedingTime, duration, durMatch;
+
+        function processTorrentTable(torrent_table, deselected) {
+            var torrents = torrent_table.querySelectorAll('.group_torrent');
+            var values = [];
+            for (var i = 0; i < torrents.length; i++) {
+                var torrent = torrents[i];
+                var text = torrent.children[0].children[1].textContent.replace(/^»\s*/i, '');
+                if (text.indexOf('|') >= 0)
+                    text = text.split('|');
+                else
+                    text = text.split('/');
+                for (var j = 0; j < text.length; j++) {
+                    var val = text[j].trim();
+                    if (val !== '') {
+                        if (values[j] === undefined)
+                            values[j] = {};
+                        if (values[j][val] === undefined)
+                            values[j][val] = 0;
+                        if (torrent.style.visibility !== 'collapse')
+                            values[j][val] = 1
+                    }
+                }
+            }
+            if (values.length > 0 || Object.keys(deselected).length > 0) {
+                var box = document.createElement('div'), head = document.createElement('div'), body = document.createElement('div'), form = document.createElement('form'), myValues = {};
+                for (j = 0; j < values.length; j++) {
+                    for (var value in values[j]) {
+                        if (myValues[value] === 1) continue;
+                        else myValues[value] = 1;
+                        if (values[j][value] === 1 || deselected[value] === 1) {
+                            var label = document.createElement('label');
+                            label.innerHTML += ' <input type="checkbox" ' + (deselected[value] === 1 ? '' : 'checked="checked"') + '> ' + value + ' ';
+                            label.querySelector('input').value = value;
+                            form.appendChild(label);
+                        }
+                    }
+                    if (j < values.length - 1)
+                        form.innerHTML += ' <br/> ';
+                }
+                form.addEventListener('change', function(e) {
+                    var illegal = {};
+                    var cbs = form.querySelectorAll('input[type="checkbox"]');
+                    for (var j = 0; j < cbs.length; j++) {
+                        var cb = cbs[j];
+                        if (cb.checked != true)
+                            illegal[cb.value] = 1;
+                    }
+                    for (var j = 0; j < torrents.length; j++) {
+                        var torrent = torrents[j];
+                        var text = torrent.children[0].children[1].textContent;
+                        var ill = false;
+                        for (var subText in illegal) {
+                            if (text.indexOf(subText) >= 0) {
+                                ill = true
+                                break;
+                            }
+                        }
+                        if (ill == true)
+                            torrent.style.visibility = 'collapse';
+                        else
+                            torrent.style.visibility = 'visible';
+                    }
+                    processTorrentTable(torrent_table, illegal);
+                });
+                box.className = 'box';
+                head.className = 'head colhead strong';
+                body.className = 'body pad';
+                body.style.display = 'none';
+                body.appendChild(form);
+                head.innerHTML = '<a href="#"><span class="triangle-right-md"><span class="stext">+/-</span></span> Filter </a>';
+                var headClickEvent = function(e) {
+                    if (e !== undefined) e.preventDefault();
+                    if(body.style.display !== 'none') {
+                        body.style.display = 'none';
+                        head.querySelector('span').className = 'triangle-right-md';
+                    } else {
+                        body.style.display = 'block';
+                        head.querySelector('span').className = 'triangle-down-md';
+                    }
+                }
+                head.addEventListener('click', headClickEvent );
+                box.appendChild(head);
+                box.appendChild(body);
+                if (torrent_table.previousElementSibling !== null && torrent_table.previousElementSibling.className === 'box') {
+                    torrent_table.parentNode.replaceChild(box, torrent_table.previousElementSibling);
+                    headClickEvent();
+                }
+                else
+                    torrent_table.parentNode.insertBefore(box, torrent_table);
+            }
+        }
+
+        if (GM_getValue('ABTorrentsFilter', 'true') === 'true') {
+            var torrent_tables = document.querySelectorAll('.torrent_table');
+            for (var i = 0; i < torrent_tables.length; i++) {
+                var torrent_table = torrent_tables[i];
+                processTorrentTable(torrent_table, {});
+            }
+        }
         
         torrents = document.querySelectorAll('tr.torrent,tr.group_torrent');
         sizeRe = /^([\d\.,]+)\s([A-Z]?)B$/i;
@@ -1676,6 +1775,7 @@ function addTextSetting(key, name, description, myDefault, maxLength){
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABTorrentsShowYen', 'Show Yen production', 'Show Yen production for torrents, with detailed information when hovered.', 'true', 'false', 'true');
 	addBooleanSetting('ABTorrentsReqTime', 'Show required seeding time', 'Shows minimal required seeding time for torrents in their description and when size is hovered.', 'true', 'false', 'true');
+	addBooleanSetting('ABTorrentsFilter', 'Filter torrents', 'Shows a box above torrent tables, where you can filter the torrents from that table.', 'true', 'false', 'true');
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABForumEnhFastSearch', 'Create links to search forums', 'Add links to search forums (including or excluding direct subforums) at the top of a forums page.', 'true', 'false', 'true');
 	addBooleanSetting('ABForumSearchWorkInFS', 'Load posts into search results', 'Allows you to load posts and threads into search results, slide through posts and filter for authors.', 'true', 'false', 'true');
