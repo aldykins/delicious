@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.89
+// @version 1.90
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -1058,8 +1058,9 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
     if (showYen.toString() === 'true' || reqTime.toString() === 'true') {
         var torrents, cells, seeders, leechers, size, sizeIndex, sizeRe, andRe, durationRe, torrentId, newCell, header, newHeader, lastHeaderCell, sum = 0, seedingTime, duration, durMatch;
 
-        function processTorrentTable(torrent_table, deselected) {
+        function processTorrentTable(torrent_table, deselected, oldBox) {
             var torrents = torrent_table.querySelectorAll('.group_torrent');
+            if (torrents.length <= 1) return;
             var values = [];
             for (var i = 0; i < torrents.length; i++) {
                 var torrent = torrents[i];
@@ -1076,7 +1077,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
                         if (values[j][val] === undefined)
                             values[j][val] = 0;
                         if (torrent.style.visibility !== 'collapse')
-                            values[j][val] = 1
+                            values[j][val] = 1;
                     }
                 }
             }
@@ -1119,7 +1120,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
                         else
                             torrent.style.visibility = 'visible';
                     }
-                    processTorrentTable(torrent_table, illegal);
+                    processTorrentTable(torrent_table, illegal, box);
                 });
                 box.className = 'box';
                 head.className = 'head colhead strong';
@@ -1140,8 +1141,8 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
                 head.addEventListener('click', headClickEvent );
                 box.appendChild(head);
                 box.appendChild(body);
-                if (torrent_table.previousElementSibling !== null && torrent_table.previousElementSibling.className === 'box') {
-                    torrent_table.parentNode.replaceChild(box, torrent_table.previousElementSibling);
+                if (oldBox !== null) {
+                    torrent_table.parentNode.replaceChild(box, oldBox);
                     headClickEvent();
                 }
                 else
@@ -1149,11 +1150,11 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
             }
         }
 
-        if (GM_getValue('ABTorrentsFilter', 'true') === 'true') {
+        if (GM_getValue('ABTorrentsFilter', 'false') === 'true' && document.getElementById('collage') == null) {
             var torrent_tables = document.querySelectorAll('.torrent_table');
             for (var i = 0; i < torrent_tables.length; i++) {
                 var torrent_table = torrent_tables[i];
-                processTorrentTable(torrent_table, {});
+                processTorrentTable(torrent_table, {}, null);
             }
         }
         
@@ -1775,7 +1776,7 @@ function addTextSetting(key, name, description, myDefault, maxLength){
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABTorrentsShowYen', 'Show Yen production', 'Show Yen production for torrents, with detailed information when hovered.', 'true', 'false', 'true');
 	addBooleanSetting('ABTorrentsReqTime', 'Show required seeding time', 'Shows minimal required seeding time for torrents in their description and when size is hovered.', 'true', 'false', 'true');
-	addBooleanSetting('ABTorrentsFilter', 'Filter torrents', 'Shows a box above torrent tables, where you can filter the torrents from that table.', 'true', 'false', 'true');
+	addBooleanSetting('ABTorrentsFilter', 'Filter torrents', 'Shows a box above torrent tables, where you can filter the torrents from that table.', 'true', 'false', 'false');
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABForumEnhFastSearch', 'Create links to search forums', 'Add links to search forums (including or excluding direct subforums) at the top of a forums page.', 'true', 'false', 'true');
 	addBooleanSetting('ABForumSearchWorkInFS', 'Load posts into search results', 'Allows you to load posts and threads into search results, slide through posts and filter for authors.', 'true', 'false', 'true');
