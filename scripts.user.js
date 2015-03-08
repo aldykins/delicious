@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.85
+// @version 1.90
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -979,7 +979,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 // @namespace   Megure@AnimeBytes.tv
 // @description Shows how much yen you would receive if you seeded torrents; shows required seeding time
 // @include     http*://animebytes.tv*
-// @version     0.8
+// @version     0.82
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @icon        http://animebytes.tv/favicon.ico
@@ -1027,7 +1027,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
     }
 
     function fu (myDuration) {
-        return Math.pow(2, duration / (24 * 365.25));
+        return Math.pow(2, myDuration / (24 * 365.25));
     }
 
     function fs (mySize) {
@@ -1056,14 +1056,116 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
     }
 
     if (showYen.toString() === 'true' || reqTime.toString() === 'true') {
-        var torrents, cells, seeders, leechers, size, sizeIndex, sizeRe, andRe, durationRe, torrentId, newCell, header, newHeader, lastHeaderCell, sum = 0, seedingTime, duration;
+        var torrents, cells, seeders, leechers, size, sizeIndex, sizeRe, andRe, durationRe, torrentId, newCell, header, newHeader, lastHeaderCell, sum = 0, seedingTime, duration, durMatch;
+
+        function processTorrentTable(torrent_table, deselected, oldBox) {
+            var torrents = torrent_table.querySelectorAll('.group_torrent');
+            if (torrents.length <= 1) return;
+            var values = [];
+            for (var i = 0; i < torrents.length; i++) {
+                var torrent = torrents[i];
+                var text = torrent.children[0].children[1].textContent.replace(/^»\s*/i, '');
+                if (text.indexOf('|') >= 0)
+                    text = text.split('|');
+                else
+                    text = text.split('/');
+                for (var j = 0; j < text.length; j++) {
+                    var val = text[j].trim();
+                    if (val !== '') {
+                        if (values[j] === undefined)
+                            values[j] = {};
+                        if (values[j][val] === undefined)
+                            values[j][val] = 0;
+                        if (torrent.style.visibility !== 'collapse')
+                            values[j][val] = 1;
+                    }
+                }
+            }
+            if (values.length > 0 || Object.keys(deselected).length > 0) {
+                var box = document.createElement('div'), head = document.createElement('div'), body = document.createElement('div'), form = document.createElement('form'), myValues = {};
+                for (j = 0; j < values.length; j++) {
+                    for (var value in values[j]) {
+                        if (myValues[value] === 1) continue;
+                        else myValues[value] = 1;
+                        if (values[j][value] === 1 || deselected[value] === 1) {
+                            var label = document.createElement('label');
+                            label.innerHTML += ' <input type="checkbox" ' + (deselected[value] === 1 ? '' : 'checked="checked"') + '> ' + value + ' ';
+                            label.querySelector('input').value = value;
+                            form.appendChild(label);
+                        }
+                    }
+                    if (j < values.length - 1)
+                        form.innerHTML += ' <br/> ';
+                }
+                form.addEventListener('change', function(e) {
+                    var illegal = {};
+                    var cbs = form.querySelectorAll('input[type="checkbox"]');
+                    for (var j = 0; j < cbs.length; j++) {
+                        var cb = cbs[j];
+                        if (cb.checked != true)
+                            illegal[cb.value] = 1;
+                    }
+                    for (var j = 0; j < torrents.length; j++) {
+                        var torrent = torrents[j];
+                        var text = torrent.children[0].children[1].textContent;
+                        var ill = false;
+                        for (var subText in illegal) {
+                            if (text.indexOf(subText) >= 0) {
+                                ill = true
+                                break;
+                            }
+                        }
+                        if (ill == true)
+                            torrent.style.visibility = 'collapse';
+                        else
+                            torrent.style.visibility = 'visible';
+                    }
+                    processTorrentTable(torrent_table, illegal, box);
+                });
+                box.className = 'box';
+                head.className = 'head colhead strong';
+                body.className = 'body pad';
+                body.style.display = 'none';
+                body.appendChild(form);
+                head.innerHTML = '<a href="#"><span class="triangle-right-md"><span class="stext">+/-</span></span> Filter </a>';
+                var headClickEvent = function(e) {
+                    if (e !== undefined) e.preventDefault();
+                    if(body.style.display !== 'none') {
+                        body.style.display = 'none';
+                        head.querySelector('span').className = 'triangle-right-md';
+                    } else {
+                        body.style.display = 'block';
+                        head.querySelector('span').className = 'triangle-down-md';
+                    }
+                }
+                head.addEventListener('click', headClickEvent );
+                box.appendChild(head);
+                box.appendChild(body);
+                if (oldBox !== null) {
+                    torrent_table.parentNode.replaceChild(box, oldBox);
+                    headClickEvent();
+                }
+                else
+                    torrent_table.parentNode.insertBefore(box, torrent_table);
+            }
+        }
+
+        if (GM_getValue('ABTorrentsFilter', 'false') === 'true' && document.getElementById('collage') == null) {
+            var torrent_tables = document.querySelectorAll('.torrent_table');
+            for (var i = 0; i < torrent_tables.length; i++) {
+                var torrent_table = torrent_tables[i];
+                processTorrentTable(torrent_table, {}, null);
+            }
+        }
         
         torrents = document.querySelectorAll('tr.torrent,tr.group_torrent');
         sizeRe = /^([\d\.,]+)\s([A-Z]?)B$/i;
         andRe = /(and|\s|,)/ig;
         durationRe = /^(?:(\d+)years?)?(?:(\d+)months?)?(?:(\d+)weeks?)?(?:(\d+)days?)?(?:(\d+)hours?)?(?:(\d+)minutes?)?(?:(\d+)seconds?)?$/i;
         
-        fa = 2 - 1 / (1 + Math.exp(5 - ((new Date()).getTime() - GM_getValue('creation', 0)) / 1728000000)); // milliseconds per 20 days
+        fa = 2 - 1 / (1 + Math.exp(5 - ((new Date()).getTime() - parseInt(GM_getValue('creation', '0'), 10)) / 1728000000)); // milliseconds per 20 days
+        if (isNaN(fa))
+            fa = 1;
 
         for (var i = 0; i < torrents.length; i++) {
             cells = torrents[i].cells;
@@ -1107,22 +1209,25 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
             if (showYen.toString() === 'true') {
                 duration = 0;
                 if (document.URL.indexOf('type=seeding') >= 0) {
-                    duration = cells[3].textContent.replace(andRe, '').match(durationRe);
-                    if (duration != null) {
-                        duration = (function() {
+                    durMatch = cells[3].textContent.replace(andRe, '').match(durationRe);
+                    if (durMatch != null) {
+                        durMatch = (function() {
                             var _i, _len, _results, _num;
                             _results = [];
-                            for (_i = 1, _len = duration.length; _i < _len; _i++) {
-                                _num = duration[_i];
+                            for (_i = 1, _len = durMatch.length; _i < _len; _i++) {
+                                _num = durMatch[_i];
                                 if (_num != null) {
-                                    _results.push(parseInt(_num, 10));
+                                    if (isNaN(parseInt(_num, 10)))
+                                        _results.push(0);
+                                    else
+                                        _results.push(parseInt(_num, 10));
                                 } else {
                                     _results.push(0);
                                 }
                             }
                             return _results;
                         })();
-                        duration = 24 * (duration[0] * 365.25 + duration[1] * 30.4375 + duration[2] * 7 + duration[3]) + duration[4] + duration[5] / 60 + duration[6] / 3600;
+                        duration = 24 * (durMatch[0] * 365.25 + durMatch[1] * 30.4375 + durMatch[2] * 7 + durMatch[3]) + durMatch[4] + durMatch[5] / 60 + durMatch[6] / 3600;
                     }
                 }
                 sum += f(size, seeders, duration);
@@ -1154,7 +1259,6 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
         }
 
         if (showYen.toString() === 'true') {
-            var myColSpan;
             console.log("Sum of Yen per hour for all torrents on this site:", sum);
 
             torrents = document.querySelectorAll('tr.edition_info,tr.pad,tr[id^="group_"]');
@@ -1178,420 +1282,9 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 
 }
 
-if((/^http.*:\/\/animebytes\.tv.*alltorrents\.php/i.test(document.URL))){
-// Generated by CoffeeScript 1.6.3
-/*
-// ==UserScript==
-// @name        Hit&Run Detector
-// @namespace   Megure@AnimeBytes.tv
-// @description Highlights torrents which might become a Hit & Run; allows sorting on all history-pages
-// @include     http*://animebytes.tv*alltorrents.php*
-// @version     0.83
-// @grant       GM_getValue
-// @icon        http://animebytes.tv/favicon.ico
-// ==/UserScript==
-*/
-
-
-(function() {
-  var a1, a2, allRows, andRe, clonedNode, colorRows, curPage, currencyRe, dateTimeRe, downIndex, downRe, dur2string, durIndex, durationRe, dynamicLoad, header, headers, index, lastPage, lcNegBG, lcNegFG, lcNeuBG, lcNeuFG, lcPosBG, lcPosFG, line_color_neg, line_color_neu, line_color_pos, loadPage, multiRatio, newPagenum, nextPage, pagenum, pagenums, parseCell, parseRows, prevPage, ratioIndex, ratioRe, sizeIndex, sizeRe, sortFunctions, sortIndex, sortRows, unitPrefix, _i, _j, _len, _len1;
-
-  colorRows = GM_getValue('ABHistColorRows', 'true');
-
-  sortRows = GM_getValue('ABHistSortRows', 'true');
-
-  dynamicLoad = GM_getValue('ABHistDynLoad', 'true');
-
-  lcPosBG = GM_getValue('ABHistColorPosBG', 'rgba(0, 240, 0, 0.15)');
-
-  lcNeuBG = GM_getValue('ABHistColorNeuBG', 'rgba(240, 240, 0, 0.15)');
-
-  lcNegBG = GM_getValue('ABHistColorNegBG', 'rgba(240, 0, 0, 0.15)');
-
-  lcPosFG = GM_getValue('ABHistColorPosFG', 'none');
-
-  lcNeuFG = GM_getValue('ABHistColorNeuFG', 'none');
-
-  lcNegFG = GM_getValue('ABHistColorNegFG', 'none');
-
-  line_color_neg = [lcNegBG, lcNegFG];
-
-  line_color_neu = [lcNeuBG, lcNeuFG];
-
-  line_color_pos = [lcPosBG, lcPosFG];
-
-  sizeRe = /^([\d\.]+)\s([A-Z]?)B$/i;
-
-  downRe = /^([\d\.]+)\s([A-Z]?)B\s\(([\d\.]+)%\)$/i;
-
-  ratioRe = /^(∞|\-\-|[\d\.]+)$/i;
-
-  andRe = /(and|\s)/ig;
-
-  durationRe = /^(?:(\d+)years?)?(?:(\d+)months?)?(?:(\d+)weeks?)?(?:(\d+)days?)?(?:(\d+)hours?)?(?:(\d+)minutes?)?(?:(\d+)seconds?)?$/i;
-
-  dateTimeRe = /^(\d+)\-(\d{1,2})\-(\d{1,2})\s+(\d{1,2}):(\d{1,2})$/i;
-
-  currencyRe = /^(?:[¥|€|£|\$]\s*)([\d\.]+)$/i;
-
-  downIndex = null;
-
-  sizeIndex = null;
-
-  durIndex = null;
-
-  ratioIndex = null;
-
-  multiRatio = false;
-
-  allRows = [];
-
-  unitPrefix = function(prefix) {
-    switch (prefix.toUpperCase()) {
-      case '':
-        return 1 / 1073741824;
-      case 'K':
-        return 1 / 1048576;
-      case 'M':
-        return 1 / 1024;
-      case 'G':
-        return 1;
-      case 'T':
-        return 1024;
-      case 'P':
-        return 1048576;
-      case 'E':
-        return 1073741824;
-      default:
-        return 0;
-    }
-  };
-
-  dur2string = function(duration) {
-    var tempH, tempM;
-    tempH = Math.floor(duration);
-    tempM = Math.ceil((duration * 60) % 60);
-    if (tempM === 60) {
-      tempH += 1;
-      tempM = 0;
-    }
-    if (tempM === 0) {
-      return '' + tempH;
-    } else if (tempM < 10) {
-      return '' + tempH + ':0' + tempM;
-    } else {
-      return '' + tempH + ':' + tempM;
-    }
-  };
-
-  parseCell = function(cell, index) {
-    var match, num, textContent, textContentNoComma;
-    textContent = cell.textContent.trim();
-    textContentNoComma = textContent.replace(/,/g, '').trim();
-    match = cell.querySelector('img');
-    if (cell.textContent === '' && (match != null)) {
-      return match.alt.toUpperCase();
-    }
-    match = textContentNoComma.match(downRe);
-    if (match != null) {
-      downIndex = index;
-      return [parseFloat(match[1]) * unitPrefix(match[2]), parseFloat(match[3])];
-    }
-    match = textContentNoComma.match(sizeRe);
-    if (match != null) {
-      sizeIndex = index;
-      return parseFloat(match[1]) * unitPrefix(match[2]);
-    }
-    match = textContentNoComma.match(dateTimeRe);
-    if (match != null) {
-      match.shift();
-      match = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = match.length; _i < _len; _i++) {
-          num = match[_i];
-          _results.push(parseInt(num, 10));
-        }
-        return _results;
-      })();
-      return new Date(match[0], match[1] - 1, match[2], match[3], match[4]);
-    }
-    match = textContentNoComma.replace(andRe, '').match(durationRe);
-    if (match != null) {
-      durIndex = index;
-      match.shift();
-      match = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = match.length; _i < _len; _i++) {
-          num = match[_i];
-          if (num != null) {
-            _results.push(parseInt(num, 10));
-          } else {
-            _results.push(0);
-          }
-        }
-        return _results;
-      })();
-      return 24 * (match[0] * 365.25 + match[1] * 30.4375 + match[2] * 7 + match[3]) + match[4] + match[5] / 60 + match[6] / 3600;
-    }
-    match = textContentNoComma.match(currencyRe);
-    if (match != null) {
-      return parseFloat(match[1]);
-    }
-    match = textContentNoComma.match(ratioRe);
-    if (match != null) {
-      if ((ratioIndex != null) && ratioIndex !== index) {
-        multiRatio = true;
-      }
-      ratioIndex = index;
-      switch (match[1]) {
-        case '∞':
-          return Infinity;
-        case '--':
-          return -0.2;
-        case '0':
-          return -0.1;
-        default:
-          return parseFloat(match[1]);
-      }
-    } else if (textContentNoComma === 'Never') {
-      durIndex = index;
-      return 0;
-    } else {
-      return textContent.toUpperCase();
-    }
-  };
-
-  parseRows = function(myDocument) {
-    var cell, completion, downloaded, index, line_color, minSeedingTime, myData, ratio, row, seedingTime, size, torrent_rows, _i, _len, _ref;
-    torrent_rows = myDocument.querySelectorAll('tr[class="torrent"]');
-    for (_i = 0, _len = torrent_rows.length; _i < _len; _i++) {
-      row = torrent_rows[_i];
-      myData = (function() {
-        var _j, _len1, _ref, _results;
-        _ref = row.cells;
-        _results = [];
-        for (index = _j = 0, _len1 = _ref.length; _j < _len1; index = ++_j) {
-          cell = _ref[index];
-          _results.push(parseCell(cell, index));
-        }
-        return _results;
-      })();
-      completion = 100;
-      downloaded = 0;
-      size = 0;
-      ratio = 0;
-      line_color = ['', ''];
-      if (downIndex != null) {
-        _ref = myData[downIndex], downloaded = _ref[0], completion = _ref[1];
-        if (completion > 0) {
-          size = downloaded * 100 / completion;
-        } else {
-          size = downloaded;
-        }
-        myData[downIndex] = downloaded;
-      } else if (sizeIndex != null) {
-        size = myData[sizeIndex];
-      }
-      if ((ratioIndex != null) && !multiRatio) {
-        ratio = myData[ratioIndex];
-      }
-      if ((durIndex != null) && (document.URL.indexOf('action=history') >= 0 || document.URL.indexOf('type=seeding') >= 0)) {
-        minSeedingTime = 72 + 5 * Math.max(size - 10, 0);
-        seedingTime = myData[durIndex];
-        if (myData[myData.length - 1] === 'EXEMPT') {
-          line_color = line_color_pos;
-          myData[durIndex] = Math.min(0, minSeedingTime - seedingTime);
-        } else if (completion >= 10 && ratio < 1 && seedingTime < minSeedingTime) {
-          line_color = line_color_neg;
-          myData[durIndex] = minSeedingTime - seedingTime;
-          row.cells[durIndex].innerHTML += "<br />(~" + (dur2string(minSeedingTime - seedingTime)) + "h to seed)";
-        } else if (seedingTime >= minSeedingTime || ratio >= 1) {
-          line_color = line_color_pos;
-          myData[durIndex] = Math.min(0, minSeedingTime - seedingTime);
-        } else if (seedingTime > 0) {
-          line_color = line_color_pos;
-          myData[durIndex] = Math.min(0, minSeedingTime - seedingTime);
-        } else {
-          line_color = line_color_neu;
-          myData[durIndex] = Math.min(0.000001 * (completion + 1), minSeedingTime - seedingTime);
-        }
-        if (colorRows.toString() === 'true') {
-          if (line_color[0] !== 'none') {
-            row.style.backgroundColor = line_color[0];
-          }
-          if (line_color[1] !== 'none') {
-            row.style.color = line_color[1];
-          }
-        }
-      }
-      if (headers[0] != null) {
-        headers[0].parentNode.parentNode.appendChild(row);
-      }
-      if (sortRows.toString() === 'true') {
-        allRows.push([row].concat(myData));
-      }
-    }
-    return void 0;
-  };
-
-  sortIndex = null;
-
-  sortFunctions = function(index, force) {
-    return function(event) {
-      var row, _i, _len;
-      if (event != null) {
-        event.stopPropagation();
-        event.preventDefault();
-      }
-      if ((index != null) && (allRows[0] != null)) {
-        if (sortIndex === index && force === false) {
-          allRows.reverse();
-        } else {
-          sortIndex = index;
-          allRows.sort(function(a, b) {
-            if ((a[index + 1] != null) && (b[index + 1] != null)) {
-              if (a[index + 1] > b[index + 1]) {
-                return -1;
-              } else if (a[index + 1] < b[index + 1]) {
-                return 1;
-              } else {
-                return 0;
-              }
-            } else if ((a[index + 1] != null) && (b[index + 1] == null)) {
-              return -1;
-            } else if ((b[index + 1] != null) && (a[index + 1] == null)) {
-              return 1;
-            } else {
-              return 0;
-            }
-          });
-        }
-        for (_i = 0, _len = allRows.length; _i < _len; _i++) {
-          row = allRows[_i];
-          row[0].parentNode.appendChild(row[0]);
-        }
-      }
-      return void 0;
-    };
-  };
-
-  headers = document.querySelector('tr.colhead');
-
-  if (headers != null) {
-    headers = headers.cells;
-  } else {
-    headers = [];
-  }
-
-  parseRows(document);
-
-  if (sortRows.toString() === 'true') {
-    for (index = _i = 0, _len = headers.length; _i < _len; index = ++_i) {
-      header = headers[index];
-      a1 = document.createElement('a');
-      a1.href = '#';
-      if (index === 0) {
-        a1.textContent = 'Type';
-      } else if ((header.querySelector('a') != null) || header.textContent.trim() === '') {
-        a1.textContent = '*';
-      } else {
-        a1.textContent = header.textContent;
-      }
-      if (a1.textContent !== '*') {
-        while (header.hasChildNodes()) {
-          header.removeChild(header.lastChild);
-        }
-      }
-      header.appendChild(a1);
-      a1.addEventListener('click', sortFunctions(index, false), true);
-    }
-  }
-
-  if (dynamicLoad.toString() === 'true') {
-    curPage = document.URL.match(/page=(\d+)/i);
-    curPage = curPage != null ? parseInt(curPage[1], 10) : 1;
-    prevPage = curPage - 1;
-    nextPage = curPage + 1;
-    lastPage = 1;
-    pagenums = document.querySelectorAll('div.pagenums');
-    loadPage = function(prev) {
-      if (prev == null) {
-        prev = false;
-      }
-      return function(event) {
-        var newPage, newURL, xhr;
-        if (event != null) {
-          event.stopPropagation();
-          event.preventDefault();
-        }
-        if (prev) {
-          newPage = prevPage--;
-        } else {
-          newPage = nextPage++;
-        }
-        if (newPage < 1 || newPage > lastPage) {
-          return;
-        }
-        newURL = document.URL.split('#')[0];
-        if (newURL.indexOf('page=') >= 0) {
-          newURL = newURL.replace(/page=(\d+)/i, "page=" + newPage);
-        } else {
-          newURL += "&page=" + newPage;
-        }
-        xhr = new XMLHttpRequest();
-        xhr.open('GET', newURL, true);
-        xhr.send();
-        return xhr.onreadystatechange = function() {
-          var newDoc, parser;
-          if (xhr.readyState === 4) {
-            parser = new DOMParser();
-            newDoc = parser.parseFromString(xhr.responseText, 'text/html');
-            parseRows(newDoc);
-            return sortFunctions(sortIndex, true)(null);
-          }
-        };
-      };
-    };
-    for (_j = 0, _len1 = pagenums.length; _j < _len1; _j++) {
-      pagenum = pagenums[_j];
-      if (pagenum.lastChild.href != null) {
-        lastPage = pagenum.lastChild.href.match(/page=(\d+)/i);
-        lastPage = lastPage != null ? parseInt(lastPage[1], 10) : 1;
-      } else {
-        lastPage = parseInt(pagenum.lastChild.textContent, 10);
-        if (isNaN(lastPage)) {
-          lastPage = 1;
-        }
-      }
-      clonedNode = pagenum.parentNode.cloneNode(true);
-      newPagenum = clonedNode.querySelector('div[class="pagenums"]');
-      while (newPagenum.hasChildNodes()) {
-        newPagenum.removeChild(newPagenum.lastChild);
-      }
-      a1 = document.createElement('a');
-      a1.href = '#';
-      a1.className = 'next-prev';
-      a1.textContent = 'Load next page dynamically →';
-      a2 = document.createElement('a');
-      a2.href = '#';
-      a2.className = 'next-prev';
-      a2.textContent = '← Load previous page dynamically';
-      newPagenum.appendChild(a2);
-      newPagenum.appendChild(a1);
-      a1.addEventListener('click', loadPage(false), true);
-      a2.addEventListener('click', loadPage(true), true);
-      pagenum.parentNode.parentNode.insertBefore(clonedNode, pagenum.parentNode.nextSibling);
-    }
-  }
-
-}).call(this);
-
-}
-
 if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=viewthread/i.test(document.URL)){
-// Generated by CoffeeScript 1.6.3
+// Generated by CoffeeScript 1.9.1
+
 /*
 // ==UserScript==
 // @name        AnimeBytes - Forum Search - Enhancement
@@ -1599,15 +1292,14 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
 // @description Load posts into search results; highlight search terms; filter authors; slide through posts
 // @include     http*://animebytes.tv/forums.php*
 // @exclude     *action=viewthread*
-// @version     0.71
+// @version     0.72
 // @grant       GM_getValue
 // @icon        http://animebytes.tv/favicon.ico
 // ==/UserScript==
-*/
-
+ */
 
 (function() {
-  var a, allResults, background_color, button, cb, filterPost, forumIds, forumid, getFirstTagParent, hideSubSelection, index, input, linkbox1, loadPost, loadText, loadThreadPage, loadingText, myCell, myLINK, newCheckbox, newLinkBox, patt, processThreadPage, quickLink, quickLinkSubs, result, sR, searchForums, searchForumsCB, searchForumsNew, showFastSearchLinks, showPost, strong, tP, textReplace, text_color, toggleText, toggleVisibility, user_filter, user_td, user_tr, workInForumSearch, workInRestOfForum, _i, _len;
+  var a, allResults, background_color, button, cb, filterPost, forumIds, forumid, getFirstTagParent, hideSubSelection, i, index, input, len, linkbox1, loadPost, loadText, loadThreadPage, loadingText, myCell, myLINK, newCheckbox, newLinkBox, patt, processThreadPage, quickLink, quickLinkSubs, result, sR, searchForums, searchForumsCB, searchForumsNew, showFastSearchLinks, showPost, strong, tP, textReplace, text_color, toggleText, toggleVisibility, user_filter, user_td, user_tr, workInForumSearch, workInRestOfForum;
 
   background_color = GM_getValue('ABForumSearchHighlightBG', '#FFC000');
 
@@ -1677,7 +1369,7 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
 
   processThreadPage = function(id, threadid, page, parent, link) {
     return function() {
-      var cell, linkbox, myColsp, nextPost, pagenums, post, prevPost, td, threadPage, tr, user_id, _i, _j, _k, _len, _len1, _ref, _ref1;
+      var _i, cell, i, j, len, len1, linkbox, myColsp, nextPost, pagenums, post, prevPost, ref, ref1, td, threadPage, tr, user_id;
       threadPage = "threadid=" + threadid + "&page=" + page;
       link.textContent = toggleText;
       sR[id] = [];
@@ -1685,9 +1377,9 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
       sR[id].index = 0;
       sR[id].page = page;
       sR[id].threadid = threadid;
-      _ref = tP[threadPage];
-      for (_i = _j = 0, _len = _ref.length; _j < _len; _i = ++_j) {
-        post = _ref[_i];
+      ref = tP[threadPage];
+      for (_i = i = 0, len = ref.length; i < len; _i = ++i) {
+        post = ref[_i];
         if (post.id === id) {
           sR[id].index = _i;
         }
@@ -1715,9 +1407,9 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
       tr = document.createElement('tr');
       td = document.createElement('td');
       myColsp = 0;
-      _ref1 = parent.cells;
-      for (_k = 0, _len1 = _ref1.length; _k < _len1; _k++) {
-        cell = _ref1[_k];
+      ref1 = parent.cells;
+      for (j = 0, len1 = ref1.length; j < len1; j++) {
+        cell = ref1[j];
         myColsp += cell.colSpan;
       }
       td.colSpan = myColsp;
@@ -1738,18 +1430,18 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
     xhr.open('GET', "https://animebytes.tv/forums.php?action=viewthread&" + threadPage, true);
     xhr.send();
     xhr.onreadystatechange = function() {
-      var callback, parser, post, _i, _j, _len, _len1, _ref, _ref1;
+      var callback, i, j, len, len1, parser, post, ref, ref1;
       if (xhr.readyState === 4) {
         parser = new DOMParser();
         tP[threadPage] = (parser.parseFromString(xhr.responseText, 'text/html')).querySelectorAll('div[id^="post"]');
-        _ref = tP[threadPage];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          post = _ref[_i];
+        ref = tP[threadPage];
+        for (i = 0, len = ref.length; i < len; i++) {
+          post = ref[i];
           textReplace(post);
         }
-        _ref1 = cb[threadPage];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          callback = _ref1[_j];
+        ref1 = cb[threadPage];
+        for (j = 0, len1 = ref1.length; j < len1; j++) {
+          callback = ref1[j];
           callback();
         }
         return delete cb[threadPage];
@@ -1889,11 +1581,11 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
 
   filterPost = function(id) {
     return function() {
-      var elem, toFilter, user_name, _i, _len;
+      var elem, i, len, toFilter, user_name;
       elem = sR[id];
       toFilter = true;
-      for (_i = 0, _len = user_filter.length; _i < _len; _i++) {
-        user_name = user_filter[_i];
+      for (i = 0, len = user_filter.length; i < len; i++) {
+        user_name = user_filter[i];
         if (elem.user.toUpperCase() === user_name.toUpperCase()) {
           toFilter = false;
           break;
@@ -1914,7 +1606,7 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
       patt = '';
     }
     allResults = document.querySelectorAll('a[href^="/forums.php?action=viewthread"]');
-    for (index = _i = 0, _len = allResults.length; _i < _len; index = ++_i) {
+    for (index = i = 0, len = allResults.length; i < len; index = ++i) {
       result = allResults[index];
       textReplace(result);
       a = document.createElement('a');
@@ -1948,25 +1640,25 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
     searchForums = document.querySelector('select[name="forums[]"]').parentNode.parentNode;
     searchForums.parentNode.insertBefore(user_tr, searchForums);
     button.addEventListener('click', function(event) {
-      var userName, _j, _len1, _results;
+      var j, len1, results, userName;
       if (input.value.replace(/[,\s]/g, '') !== '') {
         user_filter = (function() {
-          var _j, _len1, _ref, _results;
-          _ref = input.value.trim().replace(/[,\s]+/g, ',').split(',');
-          _results = [];
-          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            userName = _ref[_j];
-            _results.push(userName.trim());
+          var j, len1, ref, results;
+          ref = input.value.trim().replace(/[,\s]+/g, ',').split(',');
+          results = [];
+          for (j = 0, len1 = ref.length; j < len1; j++) {
+            userName = ref[j];
+            results.push(userName.trim());
           }
-          return _results;
+          return results;
         })();
         button.disabled = 'disabled';
-        _results = [];
-        for (index = _j = 0, _len1 = allResults.length; _j < _len1; index = ++_j) {
+        results = [];
+        for (index = j = 0, len1 = allResults.length; j < len1; index = ++j) {
           result = allResults[index];
-          _results.push(loadPost(result, index, true)());
+          results.push(loadPost(result, index, true)());
         }
-        return _results;
+        return results;
       }
     }, true);
     if (hideSubSelection) {
@@ -2004,13 +1696,13 @@ if((/^http.*:\/\/animebytes\.tv\/forums\.php/i.test(document.URL)) && !/action=v
       newLinkBox.appendChild(quickLink);
       forumIds = document.querySelectorAll('table a[href^="/forums.php?action=viewforum&forumid="]');
       forumIds = (function() {
-        var _j, _len1, _results;
-        _results = [];
-        for (_j = 0, _len1 = forumIds.length; _j < _len1; _j++) {
-          myLINK = forumIds[_j];
-          _results.push(parseInt((myLINK.href.match(/forumid=(\d*)/i))[1], 10));
+        var j, len1, results;
+        results = [];
+        for (j = 0, len1 = forumIds.length; j < len1; j++) {
+          myLINK = forumIds[j];
+          results.push(parseInt((myLINK.href.match(/forumid=(\d*)/i))[1], 10));
         }
-        return _results;
+        return results;
       })();
       if (forumIds.length > 0) {
         forumIds.push(forumid);
@@ -2046,19 +1738,25 @@ function addColorSetting(key, name, description, myDefault, deactivatable, deact
     (deactivatable.toString() === 'true' ? "<input id='ColorCheckBox_" + key + "' type='checkbox' " +
 		  (GM_getValue(key, myDefault).toString() !== deactiveDefault.toString() ? "checked='checked'" : "") +
     ">" : "") +
-    " <input id='Setting_" + key + "' name='Setting_" + key + "' type='color' value='" + (GM_getValue(key, myDefault).toString() === deactiveDefault.toString() ? myDefault : GM_getValue(key, myDefault)) + "'>" +
+    " <input id='Setting_" + key + "' name='Setting_" + key + "' type='color' value='" + (GM_getValue(key, myDefault).toString() === deactiveDefault.toString() ? (myDefault.toString() === deactiveDefault.toString() ? '#000000' : myDefault) : GM_getValue(key, myDefault)) + "'>" +
     " <button type='button'>Reset</button> <label for='Setting_" + key + "'>" + description + "</label></span>";
       __temp.addEventListener('change', function(e){var a = e.target;
 		  if(a.type === "checkbox"){ a.checked === false ? GM_setValue(key, deactiveDefault) : GM_setValue(key, document.getElementById('Setting_' + key).value) }
 		  else if(a.type === "color"){ GM_setValue(key, a.value); document.getElementById('ColorCheckBox_' + key).checked = true; }
-    });
+	});
 __temp.addEventListener('click', function(e){var a = e.target;
-		  if(a.type === "button"){
-		  	GM_deleteValue(key);
-		  	document.getElementById('ColorCheckBox_' + key).checked = true;
-		  	document.getElementById('Setting_' + key).value = myDefault;
-		  }
-    });
+		if(a.type === "button"){
+			GM_deleteValue(key);
+			if (myDefault.toString() === deactiveDefault.toString()) {
+				document.getElementById('ColorCheckBox_' + key).checked = false;
+				document.getElementById('Setting_' + key).value = '#000000';
+			}
+			else {
+				document.getElementById('ColorCheckBox_' + key).checked = true;
+				document.getElementById('Setting_' + key).value = myDefault;
+			}
+		}
+	});
       document.getElementById('pose_list').appendChild(__temp);
     
 }
@@ -2078,16 +1776,7 @@ function addTextSetting(key, name, description, myDefault, maxLength){
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABTorrentsShowYen', 'Show Yen production', 'Show Yen production for torrents, with detailed information when hovered.', 'true', 'false', 'true');
 	addBooleanSetting('ABTorrentsReqTime', 'Show required seeding time', 'Shows minimal required seeding time for torrents in their description and when size is hovered.', 'true', 'false', 'true');
-	document.getElementById('pose_list').appendChild(document.createElement('hr'));
-	addBooleanSetting('ABHistColorRows', 'Color history', 'Color rows in your history according to H&R status. (Choose colors below.)', 'true', 'false', 'true');
-	addColorSetting('ABHistColorPosBG', 'Color for non-H&Rs', 'Background color for torrents in your history that are no Hit & Runs.', '#B0F0B0', 'true', 'none');
-	addColorSetting('ABHistColorPosFG', 'Color for non-H&Rs', 'Text color for torrents in your history that are no Hit & Runs.', '#000000', 'true', 'none');
-	addColorSetting('ABHistColorNeuBG', 'Color for partial downloads', 'Background color for torrents in your history with less than 10% download.', '#F0F0B0', 'true', 'none');
-	addColorSetting('ABHistColorNeuFG', 'Color for partial downloads', 'Text color for torrents in your history with less than 10% download.', '#000000', 'true', 'none');
-	addColorSetting('ABHistColorNegBG', 'Color for potential H&R', 'Background color for torrents where you have not seeded enough yet.', '#F0B0B0', 'true', 'none');
-	addColorSetting('ABHistColorNegFG', 'Color for potential H&R', 'Text color for torrents where you have not seeded enough yet.', '#000000', 'true', 'none');
-	addBooleanSetting('ABHistSortRows', 'Sorting of history', 'Sort your history pages for any column (seed-time column is sorted for remaining required seed-time).', 'true', 'false', 'true');
-	addBooleanSetting('ABHistDynLoad', 'Load history pages', 'Add buttons to dynamically load more pages into your history tables.', 'true', 'false', 'true');
+	addBooleanSetting('ABTorrentsFilter', 'Filter torrents', 'Shows a box above torrent tables, where you can filter the torrents from that table.', 'true', 'false', 'false');
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABForumEnhFastSearch', 'Create links to search forums', 'Add links to search forums (including or excluding direct subforums) at the top of a forums page.', 'true', 'false', 'true');
 	addBooleanSetting('ABForumSearchWorkInFS', 'Load posts into search results', 'Allows you to load posts and threads into search results, slide through posts and filter for authors.', 'true', 'false', 'true');
@@ -2101,4 +1790,3 @@ function addTextSetting(key, name, description, myDefault, maxLength){
 
     }).call(this);
 }
-
