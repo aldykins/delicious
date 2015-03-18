@@ -422,3 +422,11 @@ img[src="/static/common/quality_stars/yellow.png"] {
     padding-right: 15px;
     background: transparent url('quality_stars/yellow.png') top left no-repeat;
 }
+
+#about .dygraph-axis-label {
+    color: #fff;
+}
+
+#about .dygraph-legend {
+    background: rgba(0,0,0,0.5) !important;
+}
