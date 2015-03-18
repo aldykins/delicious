@@ -3803,6 +3803,7 @@ ul .invitetree {
     background: $primarybackground;
     padding: 10px;
     margin-bottom: 10px;
+    margin-right: 88px;
 }
 
 #about #HGraph {
@@ -3814,6 +3815,14 @@ ul .invitetree {
     padding-left: 87px;
     padding-right: 1px;
 }
+
+#about .dygraph-axis-label-y {
+    margin-right: 5px;
+}
+
+/*#about defs#defs + rect {
+    fill: $primarybackground;
+}*/
 
 #scholarapp h2 {
     display: block !important;
