@@ -8,7 +8,7 @@ $secondarybackground: rgba(#FFF,0.5);
 $headerbackground: #F4E9D5;
 $menubackground: #EFDFC2;
 $searchbackground: #FAF4EB;
-$navigationbackground: #000;
+$navigationbackground: #DA3A25;
 
 $primaryfontcolour: #2B2B2B;
 $secondaryfontcolour: #696969;
@@ -25,7 +25,7 @@ $usertorrent: #F24087;
 $usertorrenthover: #F788B4;
 
 $primaryborder: 1px solid #cfb68a;
-$secondaryborder: 1px solid #83837C;
+$secondaryborder: $primaryborder;
 $headerborder: $header;
 $focusshadow: rgba(89,89,89,0.6);
 $colouredposttransparency: 0.15;
@@ -40,6 +40,10 @@ $hideborder: #36849B;
 $hidebackground: #BBEAEC;
 
 @import "style";
+.main-menu li:hover a {
+    color: #DA3A25;
+}
+
 tr.freeleech a {
     color: $header;
 }

@@ -1,9 +1,9 @@
 #logo a {
-    background: url("logo.png") 0px 0px no-repeat;
+    background: url("logo.png") 0px -140px no-repeat;
 }
 
 #logo a:hover {
-    background: url("logo.png") 0px -35px no-repeat;
+    background: url("logo.png") 0px -175px no-repeat;
 }
 
 img[src="/static/common/symbols/bold.png"] {
