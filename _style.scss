@@ -1912,8 +1912,25 @@ a[href^='alltorrents.php?action=history&userid='] {
 
 .author_info {
     width: 178px !important;
-    padding-top: 14px !important;
-    padding-bottom: 14px !important;
+	padding: 14px 0 !important;
+}
+
+#torrent_comments .author_info {
+	width: 160px !important;
+	padding: 5px 0 !important;
+}
+
+#torrent_comments .author_info .nobullet {
+	padding: 0 5px;
+}
+
+#torrent_comments .post_body {
+	margin-left: 159px !important;
+}
+
+#torrent_comments .signature {
+	width: 100% !important;
+	padding: 0.5em 0 0 0 !important;
 }
 
 .acht, .author_info ul > li.center {
