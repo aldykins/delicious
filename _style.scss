@@ -3020,6 +3020,38 @@ img[src='/static/common/caticons/pv.png'] {
     margin-bottom: -3px;
 }
 
+#secretstuff > form > .box > .pad > div {
+    background-color: $secondarybackground !important;
+    color: $primaryfontcolour !important;
+    position: relative !important;
+    border: $primaryborder !important;
+    top: 5px !important;
+    bottom: 5px !important;
+}
+
+/*** yen log ***/
+#user form[abineguid] h2 {
+	display: block !important;
+	width: 120px;
+	margin: 5px 0;
+}
+
+#user form[abineguid] input[value="Filter"] {
+	margin-top: 10px;
+}
+
+#user h1 + br + div[class="box"] + h3 + br + table td:first-child {
+	width: 120px;
+}
+
+#user h1 + br + div[class="box"] + h3 + br + table td:nth-child(2) {
+	min-width: 82px;
+}
+
+#user h1 + br + div[class="box"] + h3 + br + table td:nth-child(3) {
+	width: 80px;
+}
+
 ul.trophies li {
     width: auto !important;
 }
