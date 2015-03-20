@@ -106,49 +106,49 @@
     margin-left: -15px;
 }
 
-/**** AdnapRalopib **** /
+/**** 10d **** /
 .post_block.user_21070 .avatar img {
     width: 0px;
     height: 400px;
     padding-left: 206px;
     margin-left: -35px;
-    background: transparent url('AdnapRalopib.png') top right no-repeat;
+    background: transparent url('10d.png') top right no-repeat;
 }
 
-#user_leftcol .center:first-child img[title^="AdnapRalopib"] {
+#user_leftcol .center:first-child img[title^="10d"] {
     width: 0px;
     height: 400px;
     padding-left: 206px;
-    background: transparent url('AdnapRalopib.png') top right no-repeat;
+    background: transparent url('10d.png') top right no-repeat;
 }
 
-#userhistory .forum_post .avatar img[title^="AdnapRalopib"] {
+#userhistory .forum_post .avatar img[title^="10d"] {
     width: 0px;
     height: 330px;
     padding-left: 170px;
     margin-left: -17px;
-    background: transparent url('AdnapRalopibHistory.png') top right no-repeat;
+    background: transparent url('10dHistory.png') top right no-repeat;
 }
 
-#user_comments .avatar_c img[title^="AdnapRalopib"] {
+#user_comments .avatar_c img[title^="10d"] {
     width: 0px;
     height: 252px;
     padding-left: 130px;
     margin-left: -15px;
-    background: transparent url('AdnapRalopibComments.png') top right no-repeat;
+    background: transparent url('10dComments.png') top right no-repeat;
 }
 
-#user_leftcol .friendslist img[title^="AdnapRalopib"] {
+#user_leftcol .friendslist img[title^="10d"] {
     width: 0px;
     height: 55px;
     padding-left: 118px;
-    background: transparent url('AdnapRalopibComments.png') -53px -17px no-repeat;
+    background: transparent url('10dComments.png') -53px -17px no-repeat;
 }
 
-#friends .flist_av img[title^="AdnapRalopib"] {
+#friends .flist_av img[title^="10d"] {
     width: 0px;
     padding-left: 130px;
-    background: transparent url('AdnapRalopibComments.png') top right no-repeat;
+    background: transparent url('10dComments.png') top right no-repeat;
     height: 252px;
     margin-left: -20px;
 }
