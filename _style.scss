@@ -3051,13 +3051,18 @@ img[src='/static/common/caticons/pv.png'] {
 }
 
 /*** yen log ***/
-#user form[abineguid] h2 {
+#user h1 + br + .box .pad {
+    background-color: $primarybackground;
+	border: $primaryborder;
+}
+
+#user input[value="yenlog"] ~ h2 {
 	display: block !important;
 	width: 120px;
 	margin: 5px 0;
 }
 
-#user form[abineguid] input[value="Filter"] {
+#user input[value="yenlog"] ~ input[value="Filter"] {
 	margin-top: 10px;
 }
 
