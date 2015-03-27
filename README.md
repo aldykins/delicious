@@ -1,7 +1,7 @@
 delicious
 =========
 
-Delicious chocolate-flavoured stylesheets: Dream, Milky Way, Toblerone, Tentaclebytes and Coaltastic. Itadakimasu.
+Delicious chocolate-flavoured stylesheets: Dream, Milky Way, Toblerone, White Chocolate and Dark Chocolate. Itadakimasu.
 
 ### ahhhh what does all this mean
 
