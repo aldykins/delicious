@@ -16,3 +16,15 @@ If you've never used Sass before, try [Koala](http://koala-app.com/) which is an
 Cool, just post in the thread then and I'll see it, or if you're feeling adventuruous, [create an issue for it](https://github.com/aldykins/delicious/issues) because I'll be making one for it anyway.
 
 If you're just reading this because you like the stylesheet, thanks for using it!
+
+### credits
+
+Main design and CSS: aldy
+
+Thanks to:
+- 10d for testing and graphic designing
+- Alpha for CSS and userscripts
+- Leamas for testing and suggesting
+- Megure for userscripts
+- noise for designing the original stylesheets
+- Potatoe for userscripts
