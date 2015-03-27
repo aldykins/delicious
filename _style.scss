@@ -2293,12 +2293,39 @@ tr.freeleech a[title='Download']:after {
     display: block !important;
 }
 
+#alltorrents .linkbox h2 {
+	margin-right: 4px;
+}
+
+#alltorrents h2 + .linkbox:nth-child(5) {
+    background: $primarybackground;
+    border: 1px solid $headerborder;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    line-height: 25px;
+    padding: 5px 10px 5px 10px;
+    color: $header;
+	width: 230px;
+	height: 25px;
+	margin: 10px auto;
+    font-weight: bolder;
+    font-family: Helvetica,Arial,sans-serif;
+}
+
 #alltorrents .linkbox h3 {
-    font-size: 0px;
+	font-size: 1.7em;
+    display: inline-block;
+	margin-bottom: 0;
+	margin-left: 5px;
 }
 
 #alltorrents .linkbox h3 > a {
-    font-size: 16px !important;
+	margin-right: 10px;
+}
+
+#alltorrents .linkbox h3:last-child > a {
+	margin-right: 0;
 }
 
 #categories {
