@@ -45,3 +45,7 @@ $hideborder: #36849B;
 $hidebackground: #0e3133;
 
 @import "style";
+
+#about g>g>path[fill="#ffffff"] {
+	fill: $headerbackground;
+}

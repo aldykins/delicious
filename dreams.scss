@@ -47,3 +47,7 @@ $hidebackground: #BBEAEC;
 tr.freeleech a {
     color: $header;
 }
+
+#about g>g>path[fill="#ffffff"] {
+	fill: $primarybackground;
+}

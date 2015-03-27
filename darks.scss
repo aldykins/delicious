@@ -48,3 +48,7 @@ span.download_link a,a[title='Download'] {
 .pruned a[title="Download"] {
     background: rgba($header, 0.35);
 }
+
+#about g>g>path[fill="#ffffff"] {
+	fill: $secondarybackground;
+}

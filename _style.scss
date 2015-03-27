@@ -3878,9 +3878,13 @@ ul .invitetree {
     margin-right: 5px;
 }
 
-/*#about defs#defs + rect {
+#about defs#defs + rect {
     fill: $primarybackground;
-}*/
+}
+
+#about defs#defs ~ g text {
+    fill: $primaryfontcolour;
+}
 
 #scholarapp h2 {
     display: block !important;
