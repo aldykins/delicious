@@ -275,10 +275,6 @@ a[href="/user.php?id=15890"] {
 	opacity: 0.1;
 }*/
 
-.post_block, #forums .post_block {
-	overflow: visible;
-}
-
 #forums .avatar:before {
 	display: block;
     content: '';
