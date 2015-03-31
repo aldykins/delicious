@@ -263,28 +263,16 @@ a[href="/user.php?id=15890"] {
 }
 
 /**** April Fools Day ****/
-/*#forums .avatar:before{
-	display: block;
-    content: '';
-    position: absolute;
-    width: 150px;
-    height: 50px;
-    border-top: 1px solid black;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
-	opacity: 0.1;
-}*/
-
 #forums .avatar:before {
 	display: block;
-    content: '';
-    position: absolute;
+	content: '';
+	position: absolute;
 	width: 0px;
-    height: 69px;
-    padding-left: 160px;
-    margin-left: -5px;
+	height: 69px;
+	padding-left: 160px;
+	margin-left: -5px;
 	margin-top: -30px;
-    background: transparent url('Naruto.png') top right no-repeat;
+	background: transparent url('Naruto.png') top right no-repeat;
 }
 
 #forums .avatar {
