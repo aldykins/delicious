@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.90
+// @version 1.91
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -971,7 +971,7 @@ if(GM_getValue('deliciousyenperx', 'true') === 'true' && /user\.php\?id=/i.test(
 }
 
 
-// Three more scripts by Megure; the headers are still included
+// Two more scripts by Megure; the headers are still included
 // Search for UserScript or visit https://github.com/tubersan/AnimeBytes-Userscripts/ for details
 if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 // ==UserScript==
@@ -979,7 +979,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 // @namespace   Megure@AnimeBytes.tv
 // @description Shows how much yen you would receive if you seeded torrents; shows required seeding time
 // @include     http*://animebytes.tv*
-// @version     0.82
+// @version     0.83
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @icon        http://animebytes.tv/favicon.ico
@@ -988,6 +988,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 (function() {
     var showYen = GM_getValue('ABTorrentsShowYen', 'true'), // true / false: activate / deactivate display of yen production per hour
         reqTime = GM_getValue('ABTorrentsReqTime', 'true'), // true / false: activate / deactivate display of required seeding time
+        timeFrame = parseInt(GM_getValue('ABTorrentsYenTimeFrame', '1'), 10),
         fa = 1;
 
     function unitPrefix (prefix) {
@@ -1026,6 +1027,12 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
         return durationString;
     }
 
+    function yen2string (yen) {
+        if (timeFrame >= 100) return Math.round(yen);
+        else if (timeFrame >= 10) return yen.toFixed(1);
+        else return yen.toFixed(2);
+    }
+
     function fu (myDuration) {
         return Math.pow(2, myDuration / (24 * 365.25));
     }
@@ -1039,7 +1046,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
     }
 
     function f (mySize, mySeeders, myDuration) {
-        return fs(mySize) * fu(myDuration) * ft(mySeeders) * fa;
+        return fs(mySize) * fu(myDuration) * ft(mySeeders) * fa * timeFrame;
     }
 
     function createTitle (start, end, mySize, myDuration) {
@@ -1233,8 +1240,8 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
                 sum += f(size, seeders, duration);
 
                 newCell = document.createElement('td');
-                newCell.textContent = '¥' + f(size, seeders, duration).toFixed(2);
-                newCell.title = '¥' + fs(size).toPrecision(6)                      + '  \tbase for size';
+                newCell.textContent = '¥' + yen2string(f(size, seeders, duration));
+                newCell.title = '¥' + (timeFrame * fs(size)).toPrecision(6)                      + '  \tbase for size';
                 if ((100 * (fa           - 1)).toFixed(1) !== '0.0')
                     newCell.title += '\n+' + (100 * (fa           - 1)).toFixed(1) + '% \tfor your account\'s age';
                 if ((100 * (fu(duration) - 1)).toFixed(1) !== '0.0')
@@ -1245,13 +1252,16 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
                 torrents[i].appendChild(newCell);
                 header = torrents[i].parentNode.firstChild;
                 if (countCols(header) + 1 === countCols(torrents[i])) {
+                    var timeFrameStr = "hour";
+                    if (timeFrame == 24) timeFrameStr = "day";
+                    if (timeFrame == 168) timeFrameStr = "week";
                     newHeader = header.children[1].cloneNode(true);
-                    newHeader.title = '¥ per hour';
+                    newHeader.title = '¥ per ' + timeFrameStr;
                     if (newHeader.textContent !== '') {
                         if (newHeader.children.length > 0)
-                            newHeader.children[0].textContent = '¥/h';
+                            newHeader.children[0].textContent = '¥/' + timeFrameStr.charAt(0);
                         else
-                            newHeader.textContent = '¥/h';
+                            newHeader.textContent = '¥/' + timeFrameStr.charAt(0);
                     }
                     header.appendChild(newHeader);
                 }
@@ -1730,6 +1740,23 @@ if(/\/user\.php\?.*action=edit/i.test(document.URL)){
     
 }
 
+function addSelectSetting(key, name, description, myDefault, values){
+
+      var __temp = document.createElement('li');
+      __temp.className = '';
+      __temp.innerHTML = "<span class='ue_left strong'>" + name + "</span><span class='ue_right'><select id='Setting_" + key + "' name='Setting_" + key + "'>" + 
+      ((function(){var res = "";
+        for(var i = 0; i < values.length; i++){
+          var elem = values[i];
+          res += "<option " + (GM_getValue(key, myDefault).toString() === elem[0].toString() ? "selected='selected'" : "") + " value='"+elem[0]+"'>"+elem[1]+"</option>";
+        }
+        return res;
+      }).call(this)) + "</select> <label for='Setting_" + key + "'>" + description + "</label></span>";
+      __temp.addEventListener('change', function(e){GM_setValue(key, e.target.value);});
+      document.getElementById('pose_list').appendChild(__temp);
+    
+}
+
 function addColorSetting(key, name, description, myDefault, deactivatable, deactiveDefault){
 
       var __temp = document.createElement('li');
@@ -1774,7 +1801,8 @@ function addTextSetting(key, name, description, myDefault, maxLength){
 
     
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
-	addBooleanSetting('ABTorrentsShowYen', 'Show Yen production', 'Show Yen production for torrents, with detailed information when hovered.', 'true', 'false', 'true');
+	addBooleanSetting('ABTorrentsShowYen', 'Show Yen generation', 'Show Yen generation for torrents, with detailed information when hovered.', 'true', 'false', 'true');
+	addSelectSetting('ABTorrentsYenTimeFrame', 'Yen generation time frame', 'The amount of generated Yen per selected time frame.', '1', [["1","Hour"],["24","Day"],["168","Week"]]);
 	addBooleanSetting('ABTorrentsReqTime', 'Show required seeding time', 'Shows minimal required seeding time for torrents in their description and when size is hovered.', 'true', 'false', 'true');
 	addBooleanSetting('ABTorrentsFilter', 'Filter torrents', 'Shows a box above torrent tables, where you can filter the torrents from that table.', 'true', 'false', 'false');
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
