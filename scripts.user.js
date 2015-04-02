@@ -1214,6 +1214,9 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
             }
 
             if (showYen.toString() === 'true') {
+                var timeFrameStr = "hour";
+                if (timeFrame == 24) timeFrameStr = "day";
+                else if (timeFrame == 168) timeFrameStr = "week";
                 duration = 0;
                 if (document.URL.indexOf('type=seeding') >= 0) {
                     durMatch = cells[3].textContent.replace(andRe, '').match(durationRe);
@@ -1248,13 +1251,10 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
                     newCell.title += '\n+' + (100 * (fu(duration) - 1)).toFixed(1) + '% \tfor seeding time';
                 if ((100 * (ft(seeders)  - 1)).toFixed(1) !== '0.0')
                     newCell.title += '\n'  + (100 * (ft(seeders)  - 1)).toFixed(1) + '% \tfor number of seeders';
-                newCell.title += '\n\n¥ per hour \t#seeders\n' + createTitle(seeders - 1, seeders + leechers + 1, size, duration);
+                newCell.title += '\n\n¥ per ' + timeFrameStr + ' \t#seeders\n' + createTitle(seeders - 1, seeders + leechers + 1, size, duration);
                 torrents[i].appendChild(newCell);
                 header = torrents[i].parentNode.firstChild;
                 if (countCols(header) + 1 === countCols(torrents[i])) {
-                    var timeFrameStr = "hour";
-                    if (timeFrame == 24) timeFrameStr = "day";
-                    if (timeFrame == 168) timeFrameStr = "week";
                     newHeader = header.children[1].cloneNode(true);
                     newHeader.title = '¥ per ' + timeFrameStr;
                     if (newHeader.textContent !== '') {
@@ -1269,7 +1269,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
         }
 
         if (showYen.toString() === 'true') {
-            console.log("Sum of Yen per hour for all torrents on this site:", sum);
+            console.log("Sum of Yen per " + timeFrameStr + " for all torrents on this site:", sum);
 
             torrents = document.querySelectorAll('tr.edition_info,tr.pad,tr[id^="group_"]');
             for (var i = 0; i < torrents.length; i++) {
