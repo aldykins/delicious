@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.91
+// @version 1.92
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -979,7 +979,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 // @namespace   Megure@AnimeBytes.tv
 // @description Shows how much yen you would receive if you seeded torrents; shows required seeding time
 // @include     http*://animebytes.tv*
-// @version     0.83
+// @version     0.84
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @icon        http://animebytes.tv/favicon.ico
@@ -1027,7 +1027,12 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
         return durationString;
     }
 
-    function yen2string (yen) {
+    function yen2string (yen, perSize) {
+        if (perSize === true) {
+            if (timeFrame >= 100) return yen.toFixed(1);
+            else if (timeFrame >= 10) return yen.toFixed(2);
+            else return yen.toFixed(3);
+        }
         if (timeFrame >= 100) return Math.round(yen);
         else if (timeFrame >= 10) return yen.toFixed(1);
         else return yen.toFixed(2);
@@ -1063,7 +1068,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
     }
 
     if (showYen.toString() === 'true' || reqTime.toString() === 'true') {
-        var torrents, cells, seeders, leechers, size, sizeIndex, sizeRe, andRe, durationRe, torrentId, newCell, header, newHeader, lastHeaderCell, sum = 0, seedingTime, duration, durMatch;
+        var torrents, cells, seeders, leechers, size, sizeIndex, sizeRe, andRe, durationRe, torrentId, newCell, header, newHeader, lastHeaderCell, sum = 0, seedingTime, duration, durMatch, yenCells, yenPerGb;
 
         function processTorrentTable(torrent_table, deselected, oldBox) {
             var torrents = torrent_table.querySelectorAll('.group_torrent');
@@ -1164,15 +1169,17 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
                 processTorrentTable(torrent_table, {}, null);
             }
         }
-        
+
         torrents = document.querySelectorAll('tr.torrent,tr.group_torrent');
         sizeRe = /^([\d\.,]+)\s([A-Z]?)B$/i;
         andRe = /(and|\s|,)/ig;
         durationRe = /^(?:(\d+)years?)?(?:(\d+)months?)?(?:(\d+)weeks?)?(?:(\d+)days?)?(?:(\d+)hours?)?(?:(\d+)minutes?)?(?:(\d+)seconds?)?$/i;
-        
+
         fa = 2 - 1 / (1 + Math.exp(5 - ((new Date()).getTime() - parseInt(GM_getValue('creation', '0'), 10)) / 1728000000)); // milliseconds per 20 days
         if (isNaN(fa))
             fa = 1;
+
+        yenCells = [];
 
         for (var i = 0; i < torrents.length; i++) {
             cells = torrents[i].cells;
@@ -1215,8 +1222,8 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 
             if (showYen.toString() === 'true') {
                 var timeFrameStr = "hour";
-                if (timeFrame == 24) timeFrameStr = "day";
-                else if (timeFrame == 168) timeFrameStr = "week";
+                if (timeFrame === 24) timeFrameStr = "day";
+                else if (timeFrame === 168) timeFrameStr = "week";
                 duration = 0;
                 if (document.URL.indexOf('type=seeding') >= 0) {
                     durMatch = cells[3].textContent.replace(andRe, '').match(durationRe);
@@ -1265,11 +1272,27 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
                     }
                     header.appendChild(newHeader);
                 }
+                yenCells.push([newCell, yen2string(f(size, seeders, duration)), yen2string(f(size, seeders, duration) / size, true)]);
             }
         }
 
+        yenPerGb = 0;
+
+        function toggleYenPerGb() {
+            yenPerGb = 1 - yenPerGb;
+            for (var i = 0; i < yenCells.length; i++) {
+                var elem = yenCells[i];
+                elem[0].textContent = '¥' + elem[yenPerGb + 1];
+            }
+        }
+
+        for (var i = 0; i < yenCells.length; i++) {
+            var elem = yenCells[i];
+            elem[0].addEventListener('click', toggleYenPerGb);
+        }
+
         if (showYen.toString() === 'true') {
-            console.log("Sum of Yen per " + timeFrameStr + " for all torrents on this site:", sum);
+            console.log('Sum of Yen per ' + timeFrameStr + ' for all torrents on this site:', sum);
 
             torrents = document.querySelectorAll('tr.edition_info,tr.pad,tr[id^="group_"]');
             for (var i = 0; i < torrents.length; i++) {
