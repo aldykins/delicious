@@ -7,7 +7,8 @@
 .post_block.user_18701, #forums .post_block.user_18701 .avatar,
 .post_block.user_12326, #forums .post_block.user_12326 .avatar, 
 .post_block.user_20811, #forums .post_block.user_20811 .avatar, 
-.post_block.user_21070, #forums .post_block.user_21070 .avatar  {
+.post_block.user_21070, #forums .post_block.user_21070 .avatar, 
+.post_block.user_17176, #forums .post_block.user_17176 .avatar  {
     overflow: visible;
 }
 
@@ -249,6 +250,23 @@
     margin-left: -35px;
 }
 
+/**** Stryk3r117 ****/
+.post_block.user_17176 .avatar img {
+    width: 0px;
+    height: 324px;
+    padding-left: 220px;
+    margin-left: -45px;
+    background: transparent url('Stryk3r117.png') top right no-repeat;
+}
+
+#user_leftcol .center:first-child img[title^="Stryk3r117"] {
+    width: 0px;
+    height: 324px;
+    padding-left: 220px;
+	margin-left: -10px;
+    background: transparent url('Stryk3r117.png') top right no-repeat;
+}
+
 /**** Green ****/
 a[href="/user.php?id=15890"] {
     color: #00DE00;
@@ -261,3 +279,20 @@ a[href="/user.php?id=15890"] {
     padding-left: 150px;
     background: transparent url('daigunzan.png') top right no-repeat;
 }
+
+/**** April Fools Day **** /
+#forums .avatar:before {
+	display: block;
+    content: '';
+    position: absolute;
+	width: 0px;
+    height: 69px;
+    padding-left: 160px;
+    margin-left: -5px;
+	margin-top: -30px;
+    background: transparent url('Naruto.png') top right no-repeat;
+}
+
+#forums .avatar {
+	padding-top: 20px;
+}*/
