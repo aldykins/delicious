@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.93
+// @version 1.931
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -996,11 +996,11 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 
   reqTime = GM_getValue('ABTorrentsReqTime', 'true');
 
-  sortRows = GM_getValue('ABHistSortRows', 'true');
-
-  dynamicLoad = GM_getValue('ABHistDynLoad', 'true');
+  sortRows = GM_getValue('ABSortTorrents', 'true');
 
   torrentsFilter = GM_getValue('ABTorrentsFilter', 'true');
+
+  dynamicLoad = GM_getValue('ABHistDynLoad', 'true');
 
   timeFrame = parseInt(GM_getValue('ABTorrentsYenTimeFrame', '24'), 10);
 
@@ -2265,6 +2265,7 @@ function addTextSetting(key, name, description, myDefault, maxLength){
 	addSelectSetting('ABTorrentsYenTimeFrame', 'Yen generation time frame', 'The amount of generated Yen per selected time frame.', '1', [["1","Hour"],["24","Day"],["168","Week"]]);
 	addBooleanSetting('ABTorrentsReqTime', 'Show required seeding time', 'Shows minimal required seeding time for torrents in their description and when size is hovered.', 'true', 'false', 'true');
 	addBooleanSetting('ABTorrentsFilter', 'Filter torrents', 'Shows a box above torrent tables, where you can filter the torrents from that table.', 'true', 'false', 'true');
+	addBooleanSetting('ABSortTorrents', 'Sort torrents', 'Allows torrent tables to be sorted.', 'true', 'false', 'true');
 	addBooleanSetting('ABHistDynLoad', 'Dynamic history tables', 'Dynamically load more pages into transfer history tables.', 'true', 'false', 'true');
 	document.getElementById('pose_list').appendChild(document.createElement('hr'));
 	addBooleanSetting('ABForumEnhFastSearch', 'Create links to search forums', 'Add links to search forums (including or excluding direct subforums) at the top of a forums page.', 'true', 'false', 'true');
