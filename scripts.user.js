@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.931
+// @version 1.932
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -982,7 +982,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 // @namespace   Megure@AnimeBytes.tv
 // @description Shows how much yen you would receive if you seeded torrents; shows required seeding time; allows sorting and filtering of torrent tables; dynamic loading of transfer history tables
 // @include     http*://animebytes.tv*
-// @version     0.90
+// @version     0.91
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @icon        http://animebytes.tv/favicon.ico
@@ -1146,7 +1146,8 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
 
   createTitle = function(size, seeders, dur) {
     var end, i, start, title, _i;
-    title = '¥' + (timeFrame * fSize(size)).toPrecision(6) + ' \tbase for size';
+    title = "Click to toggle between Yen per " + timeFrameStr + "\nand Yen per " + timeFrameStr + " per GB of size.\n\n";
+    title += '¥' + (timeFrame * fSize(size)).toPrecision(6) + ' \tbase for size';
     if ((100 * (fInt - 1)).toFixed(1) !== '0.0') {
       title += '\n+' + (100 * (fInt - 1)).toFixed(1) + '% \tfor interest per ' + timeFrameStr;
     }
@@ -1334,7 +1335,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
   };
 
   parseTable = function(table) {
-    var a, a1, a2, cell, clonedNode, curPage, durIndex, headers, index, lastPage, loadPage, newPagenum, nextPage, nextPagenums, non_torrent, non_torrents, pagenum, pagenums, prevPage, previousPagenums, row, seedersIndex, sizeIndex, sortDesc, sortFunction, sortFunctions, sortIndex, tBody, tableData, td1, td2, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _results;
+    var a, a1, a2, cell, clonedNode, curPage, durIndex, headers, index, lastPage, loadPage, newPagenum, nextPage, nextPagenums, non_torrent, non_torrents, pagenum, pagenums, prevPage, prevPagenums, previousPagenums, row, seedersIndex, sizeIndex, sortByIndex, sortDesc, sortFunction, sortIndex, tBody, tableData, td1, td2, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _results;
     sizeIndex = [];
     seedersIndex = [];
     durIndex = [];
@@ -1398,6 +1399,9 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
       }
       return _results;
     })();
+    if (tableData.length === 0) {
+      return;
+    }
     tBody = tableData[0][0].parentNode;
     sortIndex = null;
     sortDesc = true;
@@ -1420,7 +1424,7 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
         }
       };
     };
-    sortFunctions = function(index, force) {
+    sortByIndex = function(index, force) {
       if (force == null) {
         force = false;
       }
@@ -1462,15 +1466,15 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
         }
       };
     };
-    if (sortRows.toString() === 'true') {
+    if (sortRows.toString() === 'true' && tableData.length > 1) {
       _ref1 = headers.cells;
       for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
         cell = _ref1[_k];
         index = getCol(headers, cell);
         a = document.createElement('a');
-        a.href = 'javascript:void(0);';
+        a.href = "#";
         a.textContent = '*';
-        a.addEventListener('click', sortFunctions(index));
+        a.addEventListener('click', sortByIndex(index));
         cell.appendChild(a);
       }
     }
@@ -1486,12 +1490,14 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
         nextPagenums = table.nextElementSibling.querySelector('div.pagenums');
       }
       pagenums = [previousPagenums, nextPagenums];
+      prevPagenums = [];
+      nextPagenums = [];
       loadPage = function(prev) {
         if (prev == null) {
           prev = false;
         }
         return function(event) {
-          var newPage, newURL, xhr;
+          var newPage, newURL, nextPagenum, prevPagenum, xhr, _l, _len3, _len4, _m;
           if (event != null) {
             event.stopPropagation();
             event.preventDefault();
@@ -1504,6 +1510,18 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
           if (newPage < 1 || newPage > lastPage) {
             return;
           }
+          if (newPage === 1) {
+            for (_l = 0, _len3 = prevPagenums.length; _l < _len3; _l++) {
+              prevPagenum = prevPagenums[_l];
+              prevPagenum.parentNode.removeChild(prevPagenum);
+            }
+          }
+          if (newPage === lastPage) {
+            for (_m = 0, _len4 = nextPagenums.length; _m < _len4; _m++) {
+              nextPagenum = nextPagenums[_m];
+              nextPagenum.parentNode.removeChild(nextPagenum);
+            }
+          }
           newURL = document.URL.split('#')[0];
           if (newURL.indexOf('page=') >= 0) {
             newURL = newURL.replace(/page=(\d+)/i, "page=" + newPage);
@@ -1514,16 +1532,16 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
           xhr.open('GET', newURL, true);
           xhr.send();
           return xhr.onreadystatechange = function() {
-            var newDoc, parser, _l, _len3, _ref2;
+            var newDoc, parser, _len5, _n, _ref2;
             if (xhr.readyState === 4) {
               parser = new DOMParser();
               newDoc = parser.parseFromString(xhr.responseText, 'text/html');
               _ref2 = newDoc.querySelectorAll('tr.torrent,tr.group_torrent');
-              for (_l = 0, _len3 = _ref2.length; _l < _len3; _l++) {
-                row = _ref2[_l];
+              for (_n = 0, _len5 = _ref2.length; _n < _len5; _n++) {
+                row = _ref2[_n];
                 tableData.push([row].concat(parseRow(row, sizeIndex, seedersIndex, durIndex)));
               }
-              sortFunctions(sortIndex, true)(null);
+              sortByIndex(sortIndex, true)(null);
               return toggleYen(true)(null);
             }
           };
@@ -1549,18 +1567,24 @@ if((/^http.*:\/\/animebytes\.tv/i.test(document.URL))){
         while (newPagenum.hasChildNodes()) {
           newPagenum.removeChild(newPagenum.lastChild);
         }
-        a1 = document.createElement('a');
-        a1.href = '#';
-        a1.className = 'next-prev';
-        a1.textContent = 'Load next page dynamically →';
-        a2 = document.createElement('a');
-        a2.href = '#';
-        a2.className = 'next-prev';
-        a2.textContent = '← Load previous page dynamically';
-        newPagenum.appendChild(a2);
-        newPagenum.appendChild(a1);
-        a1.addEventListener('click', loadPage(false), true);
-        a2.addEventListener('click', loadPage(true), true);
+        if (curPage > 1) {
+          a2 = document.createElement('a');
+          a2.href = '#';
+          a2.className = 'next-prev';
+          a2.textContent = '← Load previous page dynamically';
+          a2.addEventListener('click', loadPage(true), true);
+          newPagenum.appendChild(a2);
+          prevPagenums.push(a2);
+        }
+        if (curPage < lastPage) {
+          a1 = document.createElement('a');
+          a1.href = '#';
+          a1.className = 'next-prev';
+          a1.textContent = 'Load next page dynamically →';
+          a1.addEventListener('click', loadPage(false), true);
+          newPagenum.appendChild(a1);
+          nextPagenums.push(a1);
+        }
         _results.push(pagenum.parentNode.parentNode.insertBefore(clonedNode, pagenum.parentNode.nextSibling));
       }
       return _results;
