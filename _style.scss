@@ -928,7 +928,7 @@ pre.php {
 }
 
 .userinfonav {
-    padding: 0 0px 3px 0px;
+    padding: 0;
     -moz-border-radius-bottomright: 3px;
     -moz-border-radius-bottomleft: 3px;
     border-bottom-right-radius: 3px;
@@ -2426,11 +2426,6 @@ th.torrent_properties {
 td.torrent_size,td.torrent_snatched,td.torrent_seeders,td.torrent_leechers {
     white-space: nowrap;
     padding: 0 !important;
-}
-
-th.torrent_size span {
-    display: block !important;
-    visibility: hidden !important;
 }
 
 td.torrent_size span {
