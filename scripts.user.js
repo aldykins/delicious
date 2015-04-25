@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.933
+// @version 1.934
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -812,15 +812,18 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 		updatePieChart();
 		
 		if (/user\.php\?id=/i.test(document.URL) && GM_getValue('deliciousyenperx', 'true') === 'true') {
-			// Only do so on the users' profile pages if Yen per X is activated and Yen per day is present
-			var tw = document.createTreeWalker(document.getElementById('content'), NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /Yen per day/i.test(node.data); } });
-			if (tw.nextNode() != null) {
-				var cNode = document.querySelector('.userstatsleft > .userprofile_list');
-				var hr = document.createElement('hr');
-				hr.style.clear = 'both';
-				cNode.appendChild(hr);
-				cNode.appendChild(p2);
-				cNode.appendChild(p3);
+			// Only do so on the users' profile pages if Yen per X is activated and Yen per day is present in userstats
+			var userstats = document.querySelector('#user_rightcol > .box');
+			if (userstats != null) {
+				var tw = document.createTreeWalker(userstats, NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /Yen per day/i.test(node.data); } });
+				if (tw.nextNode() != null) {
+					var cNode = document.querySelector('.userstatsleft > .userprofile_list');
+					var hr = document.createElement('hr');
+					hr.style.clear = 'both';
+					cNode.appendChild(hr);
+					cNode.appendChild(p2);
+					cNode.appendChild(p3);
+				}
 			}
 		}
 
