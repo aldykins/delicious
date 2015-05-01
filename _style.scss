@@ -1380,9 +1380,10 @@ a[href^='alltorrents.php?action=history&userid='] {
     text-align: left;
     box-shadow: none;
 }
-
+ 
+/* Chrome autofill yellow */
 #seachbars input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:active, input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 1000px transparent inset; !important /* chrome autofill yellow */
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
 }
 
 #content {
