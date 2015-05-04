@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.934
+// @version 1.935
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -803,10 +803,12 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 		if (pos !== 'none') {
 			pos = pos.split(' ');
 			var parent = document.querySelector(pos[1]);
-			if (pos[0] === 'after')
-				parent.appendChild(nav);
-			if (pos[0] === 'before')
-				parent.insertBefore(nav, parent.firstChild);
+			if (parent !== null) {
+				if (pos[0] === 'after')
+					parent.appendChild(nav);
+				if (pos[0] === 'before')
+					parent.insertBefore(nav, parent.firstChild);
+			}
 		}
 
 		updatePieChart();
