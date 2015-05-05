@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.935
+// @version 1.936
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -658,6 +658,7 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 		}
 		return num + res;
 	}
+	var locked = false;
 	function getFLInfo() {
 		function parseFLInfo(elem) {
 			var boxes = elem.querySelectorAll('#content .box.pad');
@@ -721,7 +722,8 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 		// Either parse document or retrieve freeleech pool site 60*60*1000 ms after last retrieval
 		if (/konbini\.php\?action=pool$/i.test(document.URL))
 			parseFLInfo(document);
-		else if (Date.now() - parseInt(GM_getValue('FLPoolLastUpdate', '0'), 10) > 3600000) {
+		else if (Date.now() - parseInt(GM_getValue('FLPoolLastUpdate', '0'), 10) > 3600000 && locked === false) {
+			locked = true;
 			var xhr = new XMLHttpRequest(), parser = new DOMParser();
 			xhr.open('GET', "https://animebytes.tv/konbini.php?action=pool", true);
 			xhr.send();
@@ -729,6 +731,7 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 				if (xhr.readyState === 4) {
 					parseFLInfo(parser.parseFromString(xhr.responseText, 'text/html'));
 					updatePieChart();
+					locked = false;
 				}
 			};
 		}
@@ -783,7 +786,6 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 	var pos = GM_getValue('deliciousflpoolposition');
 
 	if (pos !== 'none' || /user\.php\?id=/i.test(document.URL) || /konbini\.php\?action=pool/i.test(document.URL)) {
-		getFLInfo();
 		var p = document.createElement('p'),
 				p2 = document.createElement('center'),
 				p3 = document.createElement('p'),
@@ -804,6 +806,7 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 			pos = pos.split(' ');
 			var parent = document.querySelector(pos[1]);
 			if (parent !== null) {
+				getFLInfo();
 				if (pos[0] === 'after')
 					parent.appendChild(nav);
 				if (pos[0] === 'before')
@@ -819,6 +822,7 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 			if (userstats != null) {
 				var tw = document.createTreeWalker(userstats, NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /Yen per day/i.test(node.data); } });
 				if (tw.nextNode() != null) {
+					getFLInfo();
 					var cNode = document.querySelector('.userstatsleft > .userprofile_list');
 					var hr = document.createElement('hr');
 					hr.style.clear = 'both';
