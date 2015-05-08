@@ -26,5 +26,6 @@ Thanks to:
 - Alpha for CSS and userscripts
 - Leamas for testing and suggesting
 - Megure for userscripts
+- meimei for CSS
 - noise for designing the original stylesheets
 - Potatoe for userscripts

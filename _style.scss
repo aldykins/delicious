@@ -1384,7 +1384,7 @@ a[href^='alltorrents.php?action=history&userid='] {
 /* Chrome autofill yellow */
 #searchbars input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:active, input:-webkit-autofill:focus {
     -webkit-box-shadow: 0 0 0 1000px $searchbackground inset;
-	-webkit-text-fill-color: $tertiaryfontcolour;
+    -webkit-text-fill-color: $tertiaryfontcolour;
 }
 
 #content {
