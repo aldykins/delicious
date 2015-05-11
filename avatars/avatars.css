@@ -1,10 +1,6 @@
-#forums .avatar {
+.avatar {
     max-height: 400px;
     overflow: hidden;
-}
-
-.author_info ul > li.center, .user_fields.nobullet {
-    display: none;
 }
 
 #user_leftcol .center:first-child, #userhistory .avatar, .avatar_c, .flist_av, .floatleft.clearcont.friends_left,
