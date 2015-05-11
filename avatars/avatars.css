@@ -3,13 +3,12 @@
     overflow: hidden;
 }
 
+/**** overflowing avatars **** /
 #user_leftcol .center:first-child, #userhistory .avatar, .avatar_c, .flist_av, .floatleft.clearcont.friends_left,
 .post_block.user_17317, #forums .post_block.user_17317 .avatar,
 .post_block.user_18701, #forums .post_block.user_18701 .avatar,
 .post_block.user_12326, #forums .post_block.user_12326 .avatar, 
-.post_block.user_20811, #forums .post_block.user_20811 .avatar, 
-.post_block.user_21070, #forums .post_block.user_21070 .avatar, 
-.post_block.user_17176, #forums .post_block.user_17176 .avatar  {
+.post_block.user_20811, #forums .post_block.user_20811 .avatar  {
     overflow: visible;
 }
 
@@ -29,7 +28,7 @@
     margin-left: -40px;
     background: transparent url('aldy.png') top right no-repeat;
 }
-/*
+
 #userhistory .forum_post .avatar img[title^="aldy"] {
     width: 0px;
     height: 247px;
@@ -108,54 +107,7 @@
     margin-left: -15px;
 }
 
-/**** 10d **** /
-.post_block.user_21070 .avatar img {
-    width: 0px;
-    height: 400px;
-    padding-left: 206px;
-    margin-left: -35px;
-    background: transparent url('10d.png') top right no-repeat;
-}
-
-#user_leftcol .center:first-child img[title^="10d"] {
-    width: 0px;
-    height: 400px;
-    padding-left: 206px;
-    background: transparent url('10d.png') top right no-repeat;
-}
-
-#userhistory .forum_post .avatar img[title^="10d"] {
-    width: 0px;
-    height: 330px;
-    padding-left: 170px;
-    margin-left: -17px;
-    background: transparent url('10dHistory.png') top right no-repeat;
-}
-
-#user_comments .avatar_c img[title^="10d"] {
-    width: 0px;
-    height: 252px;
-    padding-left: 130px;
-    margin-left: -15px;
-    background: transparent url('10dComments.png') top right no-repeat;
-}
-
-#user_leftcol .friendslist img[title^="10d"] {
-    width: 0px;
-    height: 55px;
-    padding-left: 118px;
-    background: transparent url('10dComments.png') -53px -17px no-repeat;
-}
-
-#friends .flist_av img[title^="10d"] {
-    width: 0px;
-    padding-left: 130px;
-    background: transparent url('10dComments.png') top right no-repeat;
-    height: 252px;
-    margin-left: -20px;
-}
-
-/**** aw3efgz7p ****/
+/**** aw3efgz7p **** /
 .post_block.user_12326 .avatar img {
     width: 0px;
     height: 260px;
@@ -202,7 +154,7 @@
     margin-left: -5px;
 }
 
-/**** Zeroxv ****/
+/**** Zeroxv **** /
 .post_block.user_20811 .avatar img {
     width: 0px;
     height: 270px;
@@ -251,34 +203,9 @@
     margin-left: -35px;
 }
 
-/**** Stryk3r117 **** /
-.post_block.user_17176 .avatar img {
-    width: 0px;
-    height: 324px;
-    padding-left: 220px;
-    margin-left: -45px;
-    background: transparent url('Stryk3r117.png') top right no-repeat;
-}
-
-#user_leftcol .center:first-child img[title^="Stryk3r117"] {
-    width: 0px;
-    height: 324px;
-    padding-left: 220px;
-	margin-left: -10px;
-    background: transparent url('Stryk3r117.png') top right no-repeat;
-}
-
 /**** Green ****/
 a[href="/user.php?id=15890"] {
     color: #00DE00;
-}
-
-/**** daigunzan **** /
-.post_block.user_27718 .avatar img {
-    width: 0px;
-    height: 237px;
-    padding-left: 150px;
-    background: transparent url('daigunzan.png') top right no-repeat;
 }
 
 /**** April Fools Day **** /
