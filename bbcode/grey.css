@@ -83,15 +83,31 @@ img[src="/static/common/symbols/youtube.png"] {
     background: transparent url('grey/youtube.png') top left no-repeat;
 }
 
-#smileysbutton img[src="/static/common/smileys/Smile.png"] {
-    width: 0px;
-    height: 20px;
-    padding-right: 20px;
-    background: transparent url('grey/smileys.png') top left no-repeat;
+#smileysbox span, #smileys {
+    background-color: rgba(0,0,0,0.5) !important;
+    border: none !important;
 }
 
-#smileysbutton {
+#smileysbox span[alt="Smileys"] {
+    width: 0px !important;
+    height: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+    background: transparent url('grey/smileys.png') top left no-repeat !important;
+}
+
+#smileysbox {
     background: transparent !important;
+    margin-left: -7px;
+}
+
+#smileysbox > #smileys {
+    width: 345px !important;
+    z-index: 2;
+}
+
+#quickpostform textarea {
+    z-index: 1;
 }
 
 img[src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAotJREFUeNpiYWBgaGCgImDBJaHqp6co76CmLaAkosjGw84PEvv15efHD/fe3H908PbVWxsv3semjxHdhZLGciKm+U7evDICCvhc8vnJhwenJ+7b+vzsozfI4sxA7ADjqHjryFtXeSRwCHIJE/IaOx+HgLyjmsGP998ev7v96iOGl0EuM8l1iGRiZWYD8b+9+vz83Z3X95ANYeVi4xDRlNBmZmfhAPFBakF6vr74NAfmUrCBjIyMDOYlLv7MbCzsMM1XV5zZc2vDxXvoLuOW4Ntj1+DjK6QmpgX2IlAPSO/GqPlz////D/GyWoC+koKzhi2yxv9//39RcFJX0ou3sFYPNNBX9tBWZ2Jh+vHizKPXz888vKcRbGgDUwuMNL4fH78/fnvj5XuwC+XtVbXRXSJjpWSNLsYvL6QEdHUn0Is/QEHCJcYrCZMDmQHyERNYoaKIIsnpjZOVA8UyqBksMCcTMuDT4/f3Hu67eRbEFtWVEmTj5RBEloeZwQIJr39/GZmYmdENeXLs3tGDNZv2oIubZDu44M0pv77+/MwhgDvtAWOWQ9pCUQqYZCSBtDG660Dg99efn+AGfnn28Sk+A0GGmeY5xhIIksfgtAkiHu6/dQmbIlBCBiUpkMsIhfGDfTcvwV14c92Fuxohhk+4xflkkBUJKosocQpzC7Kws3DiM+zry09Pbq2/eBfuQlAKP9mzZ+PfX39+Iit8dfnZtc3xCxeDcg0uw0B6Tvbt3QgyA24gCIDy4pnJB5b/+/33F7FpEaQWpOf56Ydv8BZfoLyJ7n1s3gT5Cr34YsRWYoMKC7VAfWU5WxUtUAHLys3O///fv7+gAvbTw3ePHh2+cw0UZjBvEjSQEgAQYABZyQWIL1ugrwAAAABJRU5ErkJggg=="] {

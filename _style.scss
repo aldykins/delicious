@@ -2028,14 +2028,14 @@ div.post_controls ul li {
     opacity: 1;
 }
 
-#bbcode img {
+#bbcode img, #smileysbox span {
     filter: alpha(opacity=60);
     -moz-opacity: 0.6;
     -khtml-opacity: 0.6;
     opacity: 0.6;
 }
 
-#bbcode img:hover {
+#bbcode img:hover, #smileysbox span:hover {
     filter: alpha(opacity=100);
     -moz-opacity: 1;
     -khtml-opacity: 1;
