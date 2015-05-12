@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.936
+// @version 1.94
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -86,16 +86,13 @@ function createSettingsPage() {
 	var tabsNode = document.getElementById('tabs');
 	var linksNode = document.getElementsByClassName('ue_tabs')[0];
 	if (document.getElementById('potatoes_settings') == null) { tabsNode.insertBefore(pose, tabsNode.childNodes[tabsNode.childNodes.length-2]); linksNode.appendChild(poseanc); document.body.removeChild(injectScript('('+relink.toString()+')();', 'settings_relink')); }
-	addCheckbox("Delicious Hover Smileys", "Enable/Disable delicious smileys that appear on hover.", 'delicioussmileys');
 	addCheckbox("Delicious BBCode", "Enable/Disable delicious [hide] button and modify [url] and [quote] buttons.", 'deliciousbbcode');
 	addCheckbox("Delicious Better Quote", "Enable/Disable delicious better <span style='color: green; font-family: Courier New;'>&gt;quoting</span>", 'deliciousquote');
 	addCheckbox("Delicious HYPER Quote", "Enable/Disable experimental HYPER quoting: select text and press CTRL+V to instant-quote. [EXPERIMENTAL]", 'delicioushyperquote');
 	addCheckbox("Delicious Title Flip", "Enable/Disable delicious flipping of Forum title tags.", 'delicioustitleflip');
 	addCheckbox("Disgusting Treats", "Hide/Unhide those hideous treats!", 'delicioustreats');
-	addCheckbox("Disgusting Poster Info", "Hide/Unhide those despicable poster infos!", 'disgustingposterinfo');
 	addCheckbox("Delicious Keyboard Shortcuts", "Enable/Disable delicious keyboard shortcuts for easier access to Bold/Italics/Underline/Spoiler/Hide and aligning.", 'deliciouskeyboard');
 	addCheckbox("Delicious Title Notifications", "Display number of notifications in title.", 'delicioustitlenotifications');
-	addCheckbox("Delicious Stylesheet Preview", "Allows you to easily preview and select delicious stylesheets.", 'deliciousstylesheetpreview');
 	addCheckbox("Delicious Yen per X", "Shows how much yen you receive per X, and as upload equivalent. Also adds raw download, raw upload and raw ratio.", 'deliciousyenperx');
 	addCheckbox("Delicious Freeleech Pool", "Shows current freeleech pool progress in the navbar and on user pages (updated once an hour or when freeleech pool site is visited).", 'deliciousfreeleechpool');
 	addDropdown("FL Pool Navbar Position", "Select position of freeleech pool progress in the navbar or disable it.", 'deliciousflpoolposition', [['Before user info', 'before #userinfo_minor'], ['After user info', 'after #userinfo_minor'], ['Before menu', 'before .main-menu.nobullet'], ['After menu', 'after .main-menu.nobullet'], ['Don\'t display', 'none']], 'after #userinfo_minor');
@@ -106,115 +103,16 @@ if (/\/user\.php\?.*action=edit/i.test(document.URL)) createSettingsPage();
 
 
 // A couple GM variables that need initializing
-var gm_delicioussmileys = initGM('delicioussmileys', 'true', false);
 var gm_deliciousbbcode = initGM('deliciousbbcode', 'true', false);
 var gm_deliciousquote = initGM('deliciousquote', 'true', false);
 var gm_delicioushyperquote = initGM('delicioushyperquote', 'true', false);
 var gm_delicioustitleflip = initGM('delicioustitleflip', 'true', false);
 var gm_delicioustreats = initGM('delicioustreats', 'true', false);
-var gm_disgustingposterinfo = initGM('disgustingposterinfo', 'true', false);
 var gm_deliciouskeyboard = initGM('deliciouskeyboard', 'true', false);
 var gm_delicioustitlenotifications = initGM('delicioustitlenotifications', 'true', false);
-var gm_deliciousstylesheetpreview = initGM('deliciousstylesheetpreview', 'true', false);
 var gm_deliciousyenperx = initGM('deliciousyenperx', 'true', false);
 var gm_deliciousfreeleechpool = initGM('deliciousfreeleechpool', 'true', false);
 var gm_delicousnavbarpiechart = initGM('delicousnavbarpiechart', 'false', false);
-
-
-// Add delicious stylesheets to stylesheet dropdown menu including preview by Megure
-// LINKS ARE HARDCODED TO aldy.nope.bz AND /static/styles/, CHANGE IF NECESSARY!
-if (GM_getValue('deliciousstylesheetpreview', 'true') === 'true' && /\/user\.php\?.*action=edit/i.test(document.URL)) {
-	var source = 'https://aldy.nope.bz/',
-	    ABSource = '/static/styles/',
-	    deliciousStylesheets = ['Milky Way', 'Toblerone', 'Dream', 'Tentaclebytes', 'Coaltastic'],
-	    stylesheet = document.getElementById('stylesheet'),
-	    currentLink = document.querySelector('link[rel=stylesheet]'),
-	    originalNoSS = stylesheet.children.length,
-	    styleurl = document.getElementById('styleurl'),
-	    input = document.createElement('input');
-	input.type = 'text';
-	input.name = stylesheet.name;
-	input.value = stylesheet.value;
-	input.style.display = 'none';
-	stylesheet.parentNode.insertBefore(input, stylesheet);
-	stylesheet.removeAttribute('name');
-	stylesheet.removeAttribute('onchange');
-	// Store the source for all current children into attribute src
-	for (var i = 0, len = stylesheet.children.length; i < len; i++) {
-		var elem = stylesheet.children[i];
-		elem.setAttribute('src', ABSource + elem.textContent.trim().toLowerCase() + '.css');
-	}
-	// Add delicious stylesheets and store source in src
-	for (var i = 0, len = deliciousStylesheets.length; i < len; i++) {
-		var sheet = deliciousStylesheets[i],
-		    option = document.createElement('option'),
-		    src = source + sheet.replace(/\s/g, '').toLowerCase() + '.css';
-		option.textContent = 'Delicious ' + sheet;
-		option.setAttribute('src', src);
-		option.value = stylesheet.children.length + 1;
-		stylesheet.appendChild(option);
-		if (styleurl.value === src)
-			stylesheet.value = option.value;
-	}
-	// Pre-load the stylesheets on focus of dropdown
-	stylesheet.addEventListener('focus', function(event) {
-		for (var i = 0, len = stylesheet.children.length; i < len; i++) {
-			var elem = stylesheet.children[i],
-			    src = elem.getAttribute('src');
-			if (currentLink.href !== src) {
-				var newLink = document.createElement('link');
-				newLink.href = src;
-				newLink.media = 'screen';
-				newLink.rel = 'alternate stylesheet';
-				newLink.title = elem.textContent;
-				newLink.type = 'text/css';
-				currentLink.parentNode.insertBefore(newLink, currentLink);
-				newLink.disabled = true;
-			}
-		}
-	});
-	stylesheet.addEventListener('change', function(event) {
-		var id = stylesheet.value,
-		    src = stylesheet.children[parseInt(id, 10) - 1].getAttribute('src'),
-		    activeLink = document.querySelector('link[href="' + src + '"]');
-		if (activeLink !== null) {
-			var allLinks = document.querySelectorAll('link[title][rel~="stylesheet"]');
-			for (var i = 0, len = allLinks.length; i < len; i++)
-				allLinks[i].disabled = true;
-			activeLink.disabled = false;
-		}
-		if (src.indexOf(source) !== -1)
-			styleurl.value = src;
-		else
-			styleurl.value = '';
-	});
-}
-
-
-// Hover smileys by Potatoe, ported by aldy
-// Hides smileys behind one button that shows them all on hover.
-// Depends on HTMLElement.clone and HTMLCollection.each
-if (GM_getValue('delicioussmileys') === 'true' && document.getElementById('smileys')) {
-	var smileys = document.getElementById('smileys'), r = '';
-	forEach(smileys.getElementsByTagName('*'), function (n) {
-		var c = n.getAttribute('onclick');
-		n.removeAttribute('onclick');
-		n.setAttribute('style',((n.width>33)?'margin-left:'+(33-n.width)/2+'px;':'')+'margin-top:'+(33-n.height)/2+'px;');
-		r += '<div class="smileyscell" onclick="'+c+'">'+n.outerHTML+'</div>';
-	});
-	smileys.innerHTML = r;
-	smileys.setAttribute('style', 'display: none; width: 330px !important; position: absolute; top: 0; left: 0; background:rgba(0,0,0,0.75);');
-	smileys.setAttribute('id', 'hoversmileys');
-	document.getElementById('bbcode').innerHTML += '<span style="display:inline-block;max-width:20px;height:20px;z-index:1;position:relative;" id="smileysholdster"><style>.smileyscell{display:inline-block;overflow:hidden;width:33px;max-width:33px;height:33px;float:left}#smileysbutton img[src="/static/common/smileys/Smile.png"]{margin-top:0px!important}#smileysbutton{width:20px;height:20px}</style></div>'
-	var smileysholdster = document.getElementById('smileysholdster'), smileysbutton = clone(smileys.firstElementChild, {'id':'smileysbutton'});
-	smileysholdster.appendChild(smileysbutton);
-	smileysholdster.appendChild(smileys);
-	smileys.style.top = smileysbutton.offsetTop + 'px';
-	smileys.style.left = smileysbutton.offsetLeft + 'px';
-	smileysholdster.addEventListener('mouseenter', function(){ var hs = document.getElementById('hoversmileys'), sb = document.getElementById('smileysbutton'); hs.style.top = sb.offsetTop+'px'; hs.style.left = sb.offsetLeft+'px'; hs.style.display = 'block'; });
-	smileysholdster.addEventListener('mouseleave', function(){ document.getElementById('hoversmileys').style.display = 'none'; });
-}
-
 
 // [hide] button by Potatoe
 // Adds a button that inserts the [hide] BBCode into the text field.
@@ -540,15 +438,6 @@ if (GM_getValue('delicioushyperquote') === 'true' && document.getElementById('qu
 // Forums title inverter by Potatoe
 // Inverts the forums titles.
 if (GM_getValue('delicioustitleflip') === 'true' && document.title.indexOf(' > ') > -1) document.title = document.title.split(" :: ")[0].split(" > ").reverse().join(" < ") + " :: AnimeBytes";
-
-
-// Hide/Show forum poster info by Megure
-// Hide/Show #posts, join date, icons
-if (GM_getValue('disgustingposterinfo') !== 'true') {
-	var info = document.querySelectorAll('.user_fields.nobullet');
-	for (var _i = 0, _len = info.length; _i < _len; _i++)
-		info[_i].style.display = 'inherit';
-}
 
 
 // Hide treats by Alpha
