@@ -83,11 +83,25 @@ img[src="/static/common/symbols/list.png"] {
     background: transparent url('brown/list.png') top left no-repeat;
 }
 
+img[src="/static/common/symbols/webm.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('brown/webm.png') top left no-repeat;
+}
+
 img[src="/static/common/symbols/youtube.png"] {
     width: 0px;
     height: 20px;
     padding-right: 20px;
     background: transparent url('brown/youtube.png') top left no-repeat;
+}
+
+img[src="/static/common/symbols/soundcloud.png"] {
+    width: 0px;
+    height: 20px;
+    padding-right: 20px;
+    background: transparent url('brown/soundcloud.png') top left no-repeat;
 }
 
 #bbcode > #smileysbox span {
