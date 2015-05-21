@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.94
+// @version 1.95
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -86,7 +86,6 @@ function createSettingsPage() {
 	var tabsNode = document.getElementById('tabs');
 	var linksNode = document.getElementsByClassName('ue_tabs')[0];
 	if (document.getElementById('potatoes_settings') == null) { tabsNode.insertBefore(pose, tabsNode.childNodes[tabsNode.childNodes.length-2]); linksNode.appendChild(poseanc); document.body.removeChild(injectScript('('+relink.toString()+')();', 'settings_relink')); }
-	addCheckbox("Delicious BBCode", "Enable/Disable delicious [hide] button and modify [url] and [quote] buttons.", 'deliciousbbcode');
 	addCheckbox("Delicious Better Quote", "Enable/Disable delicious better <span style='color: green; font-family: Courier New;'>&gt;quoting</span>", 'deliciousquote');
 	addCheckbox("Delicious HYPER Quote", "Enable/Disable experimental HYPER quoting: select text and press CTRL+V to instant-quote. [EXPERIMENTAL]", 'delicioushyperquote');
 	addCheckbox("Delicious Title Flip", "Enable/Disable delicious flipping of Forum title tags.", 'delicioustitleflip');
@@ -103,7 +102,6 @@ if (/\/user\.php\?.*action=edit/i.test(document.URL)) createSettingsPage();
 
 
 // A couple GM variables that need initializing
-var gm_deliciousbbcode = initGM('deliciousbbcode', 'true', false);
 var gm_deliciousquote = initGM('deliciousquote', 'true', false);
 var gm_delicioushyperquote = initGM('delicioushyperquote', 'true', false);
 var gm_delicioustitleflip = initGM('delicioustitleflip', 'true', false);
@@ -113,25 +111,6 @@ var gm_delicioustitlenotifications = initGM('delicioustitlenotifications', 'true
 var gm_deliciousyenperx = initGM('deliciousyenperx', 'true', false);
 var gm_deliciousfreeleechpool = initGM('deliciousfreeleechpool', 'true', false);
 var gm_delicousnavbarpiechart = initGM('delicousnavbarpiechart', 'false', false);
-
-// [hide] button by Potatoe
-// Adds a button that inserts the [hide] BBCode into the text field.
-if (GM_getValue('deliciousbbcode') === 'true') {
-	var spoilersnode = document.evaluate("//img[@title='Spoilers']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-	if (spoilersnode) {
-		// [url] and [quote] buttons by aldy
-		// Edits the [url] and [quote] BBCode buttons.
-		document.evaluate("//img[@title='URL']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('onclick', "insert_text('[url]', '[/url]')");
-		document.evaluate("//img[@title='Quote']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('onclick', "insert_text('[quote]', '[/quote]')");
-
-		var hideimg = document.createElement('img');
-		hideimg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAotJREFUeNpiYWBgaGCgImDBJaHqp6co76CmLaAkosjGw84PEvv15efHD/fe3H908PbVWxsv3semjxHdhZLGciKm+U7evDICCvhc8vnJhwenJ+7b+vzsozfI4sxA7ADjqHjryFtXeSRwCHIJE/IaOx+HgLyjmsGP998ev7v96iOGl0EuM8l1iGRiZWYD8b+9+vz83Z3X95ANYeVi4xDRlNBmZmfhAPFBakF6vr74NAfmUrCBjIyMDOYlLv7MbCzsMM1XV5zZc2vDxXvoLuOW4Ntj1+DjK6QmpgX2IlAPSO/GqPlz////D/GyWoC+koKzhi2yxv9//39RcFJX0ou3sFYPNNBX9tBWZ2Jh+vHizKPXz888vKcRbGgDUwuMNL4fH78/fnvj5XuwC+XtVbXRXSJjpWSNLsYvL6QEdHUn0Is/QEHCJcYrCZMDmQHyERNYoaKIIsnpjZOVA8UyqBksMCcTMuDT4/f3Hu67eRbEFtWVEmTj5RBEloeZwQIJr39/GZmYmdENeXLs3tGDNZv2oIubZDu44M0pv77+/MwhgDvtAWOWQ9pCUQqYZCSBtDG660Dg99efn+AGfnn28Sk+A0GGmeY5xhIIksfgtAkiHu6/dQmbIlBCBiUpkMsIhfGDfTcvwV14c92Fuxohhk+4xflkkBUJKosocQpzC7Kws3DiM+zry09Pbq2/eBfuQlAKP9mzZ+PfX39+Iit8dfnZtc3xCxeDcg0uw0B6Tvbt3QgyA24gCIDy4pnJB5b/+/33F7FpEaQWpOf56Ydv8BZfoLyJ7n1s3gT5Cr34YsRWYoMKC7VAfWU5WxUtUAHLys3O///fv7+gAvbTw3ePHh2+cw0UZjBvEjSQEgAQYABZyQWIL1ugrwAAAABJRU5ErkJggg==";
-		hideimg.title = hideimg.alt="Hide";
-		hideimg.setAttribute('onclick', "insert_text('[hide]', '[/hide]')");
-		spoilersnode.parentNode.insertBefore(hideimg, spoilersnode.nextSibling);
-		spoilersnode.insertAdjacentHTML('afterend', '\n');
-	}
-}
 
 
 // Better quote by Potatoe, multi-quote by Megure

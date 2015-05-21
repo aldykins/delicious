@@ -1,18 +1,1 @@
-/***********************************************************
----------------- White Chocolate Stylesheet ----------------
-
-        Design and CSS: aldy
-        
-        Thanks to:
-            10d for testing and graphic designing
-            Alpha for CSS
-            Leamas for testing and suggesting
-            meimei for CSS
-            noise for designing the original stylesheets
-
-***********************************************************/
-
-@import url("whites.css");
-@import url("icons/dark.css");
-@import url("bbcode/black.css");
-@import url("avatars/avatars.css");
+@import url("styles/white.css");

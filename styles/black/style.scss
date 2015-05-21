@@ -1,0 +1,54 @@
+/* Dark Chocolate */
+@mixin background() {
+    background-color: #292929;
+}
+$primarybackground: rgba(#FFF,0.05) !important;
+$secondarybackground: #212121;
+
+$headerbackground: #151517;
+$menubackground: #232325;
+$searchbackground: #35353f;
+$navigationbackground: #FFF;
+
+$primaryfontcolour: #E6E6E6;
+$secondaryfontcolour: #8F8F8F;
+$tertiaryfontcolour: #BABABA;
+$header: #89ADCD;
+$snatched: #D71A41;
+$disabled: #696969;
+
+$link: #999;
+$linkhover: #CCC;
+$bold: $header;
+$boldhover: #6594BD;
+$usertorrent: #8AE0FF;
+$usertorrenthover: #A4DAB0;
+
+$primaryborder: 1px solid #45474A;
+$secondaryborder: 1px solid #202022;
+$headerborder: $header;
+$focusshadow: rgba(153,153,153,0.4);
+$colouredposttransparency: 0.15;
+
+$quoteborder: #F7995B;
+$quotebackground: #51321F;
+$codeborder: #B29D4B;
+$codebackground: #32322D;
+$spoilerborder: #D71A41;
+$spoilerbackground: #3B1C21;
+$hideborder: #36849B;
+$hidebackground: #144548;
+
+@import "../delicious";
+
+span.download_link a,a[title='Download'] {
+    background: $header;
+}
+
+.pruned a[title="Download"] {
+    background: rgba($header, 0.35);
+}
+
+#about g>g>path[fill="#ffffff"] {
+	fill: $secondarybackground;
+}
