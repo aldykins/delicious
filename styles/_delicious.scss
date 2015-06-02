@@ -455,10 +455,6 @@ th.torrent_properties a:hover {
     padding: 10px;
 }
 
-#user h2 img + img {
-    margin-left: 3px;
-}
-
 #user_leftcol .box,#user_rightcol .box, #user_leftcol .ucontact {
     overflow: hidden;
     background-color: $primarybackground;
@@ -486,11 +482,6 @@ th.torrent_properties a:hover {
 
 #user_leftcol .box div[align="left"] img {
 	margin-top: 6px;
-}
-
-#user_leftcol .box div img[title="IceCream"] + br + img[title="Watermelon"] {
-    margin-top: -15px;
-    margin-left: 160px;
 }
 
 .friendslist dt:first-child, .friendslist dd:nth-child(2) {
