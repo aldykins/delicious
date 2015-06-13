@@ -3842,30 +3842,6 @@ ul .invitetree {
     margin-bottom: 5px;
 }
 
-#profile_settings input#avatar + span {
-    margin-right: 10px;
-}
-
-#profile_settings input#has_adultavatar {
-    margin-top: 5px;
-}
-
-#profile_settings label[for="has_adultavatar"],#profile_settings label[for="has_adultsignature"] {
-    font-size: 0;
-}
-
-#profile_settings label[for="has_adultavatar"]:before {
-    content: 'You MUST check this, if your avatar is of 18+ material or otherwise NSFW.';
-    font-weight: bold;
-    font-size: 12px;
-}
-
-#profile_settings label[for="has_adultsignature"]:before {
-    content: 'You MUST check this, if signature avatar is of 18+ material or otherwise NSFW.';
-    font-weight: bold;
-    font-size: 12px;
-}
-
 #upload #dynamic_form {
     background: $secondarybackground;
     padding: 10px;
