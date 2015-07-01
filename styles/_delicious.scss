@@ -1639,10 +1639,6 @@ a[href^='alltorrents.php?action=history&userid='] {
     float: left;
 }
 
-#recordlabel .sidebar .pad {
-	word-wrap: break-word;
-}
-
 .box .head {
     color: $primaryfontcolour;
     font-size: 1.25em;
@@ -1870,21 +1866,6 @@ a[href^='alltorrents.php?action=history&userid='] {
 
 .post_block {
     border-top: none;
-}
-
-/* Best posts */
-.post_block.staff_post.user_17317 .head {
-    background: rgba(#0099FF,$colouredposttransparency) !important;
-}
-
-/* Cutest posts */
-.post_block.user_18701 .head {
-    background: rgba(#FF3AD9,$colouredposttransparency) !important;
-}
-
-/* Coolest posts */
-.post_block.user_14883 .head, .post_block.user_21070 .head, .post_block.user_33342 .head {
-    background: rgba(#18995B,$colouredposttransparency) !important;
 }
 
 /* Staff posts */
