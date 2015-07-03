@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.95
+// @version 1.951
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -92,7 +92,8 @@ function createSettingsPage() {
 	addCheckbox("Disgusting Treats", "Hide/Unhide those hideous treats!", 'delicioustreats');
 	addCheckbox("Delicious Keyboard Shortcuts", "Enable/Disable delicious keyboard shortcuts for easier access to Bold/Italics/Underline/Spoiler/Hide and aligning.", 'deliciouskeyboard');
 	addCheckbox("Delicious Title Notifications", "Display number of notifications in title.", 'delicioustitlenotifications');
-	addCheckbox("Delicious Yen per X", "Shows how much yen you receive per X, and as upload equivalent. Also adds raw download, raw upload and raw ratio.", 'deliciousyenperx');
+	addCheckbox("Delicious Yen per X", "Shows how much yen you receive per X, and as upload equivalent.", 'deliciousyenperx');
+	addCheckbox("Delicious Ratio", "Shows ratio and raw ratio and how much uploade / download you need for certain ratio milestones.", 'deliciousratio');
 	addCheckbox("Delicious Freeleech Pool", "Shows current freeleech pool progress in the navbar and on user pages (updated once an hour or when freeleech pool site is visited).", 'deliciousfreeleechpool');
 	addDropdown("FL Pool Navbar Position", "Select position of freeleech pool progress in the navbar or disable it.", 'deliciousflpoolposition', [['Before user info', 'before #userinfo_minor'], ['After user info', 'after #userinfo_minor'], ['Before menu', 'before .main-menu.nobullet'], ['After menu', 'after .main-menu.nobullet'], ['Don\'t display', 'none']], 'after #userinfo_minor');
 	addCheckbox("Delicious Freeleech Pie Chart", "Adds a dropdown with pie-chart to the freeleech pool progress in the navbar.", 'delicousnavbarpiechart');
@@ -109,6 +110,7 @@ var gm_delicioustreats = initGM('delicioustreats', 'true', false);
 var gm_deliciouskeyboard = initGM('deliciouskeyboard', 'true', false);
 var gm_delicioustitlenotifications = initGM('delicioustitlenotifications', 'true', false);
 var gm_deliciousyenperx = initGM('deliciousyenperx', 'true', false);
+var gm_deliciousratio = initGM('deliciousratio', 'true', false);
 var gm_deliciousfreeleechpool = initGM('deliciousfreeleechpool', 'true', false);
 var gm_delicousnavbarpiechart = initGM('delicousnavbarpiechart', 'false', false);
 
@@ -497,6 +499,14 @@ if (GM_getValue('deliciouskeyboard') === 'true' && document.querySelector('texta
 	ctrl('H', custom_insert_text, ['[hide]', '[/hide]']);
 	img = document.querySelector('#bbcode img[title="Hide"]');
 	if (img !== null) img.title += ' (' + ctrlorcmd + '+H)';
+	// YouTube
+	ctrl('Y', custom_insert_text, ['[youtube]', '[/youtube]']);
+	img = document.querySelector('#bbcode img[alt="YouTube"]');
+	if (img !== null) img.title += ' (' + ctrlorcmd + '+Y)';
+	// Image
+	ctrl('G', custom_insert_text, ['[img]', '[/img]']);
+	img = document.querySelector('#bbcode img[title="Image"]');
+	if (img !== null) img.title += ' (' + ctrlorcmd + '+G)';
 }
 
 
@@ -711,8 +721,8 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 }
 
 
-// Yen per X, by Megure, Lemma, NSC, et al.
-if(GM_getValue('deliciousyenperx', 'true') === 'true' && /user\.php\?id=/i.test(document.URL)) {
+// Yen per X and ratio milestones, by Megure, Lemma, NSC, et al.
+if(/user\.php\?id=/i.test(document.URL)) {
 	function compoundInterest(years) {
 		return (Math.pow(2, years) - 1) / Math.log(2);
 	}
@@ -786,12 +796,14 @@ if(GM_getValue('deliciousyenperx', 'true') === 'true' && /user\.php\?id=/i.test(
 		return dt;
 	}
 	function addRawStats() {
-		var tw, regExp;
-		// Find comments with stats
-		regExp = /Uploaded:\s*(([\d,.]+)\s*([A-Z]+)\s*\(([^)]*)\)).*\s*.*Downloaded:\s*(([\d,.]+)\s*([A-Z]+)\s*\(([^)]*)\))/i;
-		tw = document.createTreeWalker(document, NodeFilter.SHOW_COMMENT, { acceptNode: function(node) { return regExp.test(node.textContent); } });
+		var tw, regExp = /([\d,.]+)\s*([A-Z]+)\s*\(([^)]*)\)/i;
+		// Find text with raw stats
+		tw = document.createTreeWalker(document, NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /^Raw Uploaded:/i.test(node.data); } });
 		if (tw.nextNode() == null) return;
-		var match = tw.currentNode.textContent.match(regExp);
+		var rawUpMatch = tw.currentNode.data.match(regExp);
+		tw = document.createTreeWalker(tw.currentNode.parentNode.parentNode, NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /^Raw Downloaded:/i.test(node.data); } });
+		if (tw.nextNode() == null) return;
+		var rawDownMatch = tw.currentNode.data.match(regExp);
 		tw = document.createTreeWalker(document.getElementById('content'), NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /^\s*Ratio/i.test(node.data); } });
 		if (tw.nextNode() == null) return;
 		var ratioNode = tw.currentNode.parentNode;
@@ -801,12 +813,16 @@ if(GM_getValue('deliciousyenperx', 'true') === 'true' && /user\.php\?id=/i.test(
 		tw = document.createTreeWalker(document.getElementById('content'), NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return /^\s*Downloaded/i.test(node.data); } });
 		if (tw.nextNode() == null) return;
 		var dlNode = tw.currentNode.parentNode;
-		regExp = /([\d,.]+)\s*([A-Z]+)\s*\(([^)]*)\)/i;
+
 		var ul = ulNode.nextElementSibling.textContent.match(regExp);
 		var dl = dlNode.nextElementSibling.textContent.match(regExp);
-		var buff = humancount(bytecount(parseFloat(ul[1].replace(/,/g, '')), ul[2].toUpperCase()) - bytecount(parseFloat(dl[1].replace(/,/g, '')), dl[2].toUpperCase()));
-		var realBuff = humancount(bytecount(parseFloat(match[2].replace(/,/g, '')), match[3].toUpperCase()) - bytecount(parseFloat(match[6].replace(/,/g, '')), match[7].toUpperCase()));
-		var rawRatio = (bytecount(parseFloat(match[2].replace(/,/g, '')), match[3].toUpperCase()) / bytecount(parseFloat(match[6].replace(/,/g, '')), match[7].toUpperCase())).toFixed(2);
+		var uploaded = bytecount(parseFloat(ul[1].replace(/,/g, '')), ul[2].toUpperCase());
+		var downloaded = bytecount(parseFloat(dl[1].replace(/,/g, '')), dl[2].toUpperCase());
+		var rawuploaded = bytecount(parseFloat(rawUpMatch[1].replace(/,/g, '')), rawUpMatch[2].toUpperCase());
+		var rawdownloaded = bytecount(parseFloat(rawDownMatch[1].replace(/,/g, '')), rawDownMatch[2].toUpperCase());
+		var rawRatio = Infinity;
+		if (bytecount(parseFloat(rawDownMatch[1].replace(/,/g, '')), rawDownMatch[2].toUpperCase()) > 0)
+			rawRatio = (bytecount(parseFloat(rawUpMatch[1].replace(/,/g, '')), rawUpMatch[2].toUpperCase()) / bytecount(parseFloat(rawDownMatch[1].replace(/,/g, '')), rawDownMatch[2].toUpperCase())).toFixed(2);
 
 		// Color ratio
 		var color = 'r99';
@@ -822,10 +838,22 @@ if(GM_getValue('deliciousyenperx', 'true') === 'true' && /user\.php\?id=/i.test(
 		hr.style.clear = 'both';
 		ratioNode.parentNode.insertBefore(hr, ratioNode.nextElementSibling.nextSibling);
 		var rawRatioNode = addDefinitionAfter(ratioNode, 'Raw Ratio:', rawRatio, color);
-		addDefinitionAfter(ratioNode, 'Raw Downloaded:', match[5]);
-		addDefinitionAfter(ratioNode, 'Raw Uploaded:', match[1]);
-		ratioNode.nextElementSibling.title = 'Buffer: ' + buff;
-		rawRatioNode.nextElementSibling.title = 'Raw Buffer: ' + realBuff;
+		addDefinitionAfter(ratioNode, 'Raw Downloaded:', rawDownMatch[0]);
+		addDefinitionAfter(ratioNode, 'Raw Uploaded:', rawUpMatch[0]);
+		ratioNode.nextElementSibling.title = 'Ratio\t  Buffer';
+		rawRatioNode.nextElementSibling.title = 'Raw ratio\t Raw Buffer';
+
+		function printBuffer(u, d, r) {
+			if (u / r - d >= 0)
+				return '\n' + r.toFixed(1) + '\t\t' + ("        " + humancount(u / r - d)).slice(-10) + '\tcan be downloaded'
+			else
+				return '\n' + r.toFixed(1) + '\t\t' + ("        " + humancount(d * r - u)).slice(-10) + '\tmust be uploaded'
+		}
+		for (var i = 0; i < 10; i++) {
+			var myRatio = [0.2, 0.5, 0.7, 0.8, 0.9, 1.0, 1.5, 2.0, 5.0, 10.0][i];
+			ratioNode.nextElementSibling.title += printBuffer(uploaded, downloaded, myRatio);
+			rawRatioNode.nextElementSibling.title += printBuffer(rawuploaded, rawdownloaded, myRatio);
+		}
 	}
 	function addYenPerStats() {
 		var dpy = 365.256363; // days per year
@@ -843,8 +871,10 @@ if(GM_getValue('deliciousyenperx', 'true') === 'true' && /user\.php\?id=/i.test(
 		addDefinitionBefore(ypdNode, 'Yen as upload:', humancount(Math.pow(1024, 2) * ypy * compoundInterest(1 / dpy / 24 / 60 / 60)) + '/s');
 		addDefinitionBefore(ypdNode, 'Yen per hour:', (ypy * compoundInterest(1 / dpy / 24)).toFixed(1));
 	}
-	addRawStats();
-	addYenPerStats();
+	if (GM_getValue('deliciousratio', 'true') === 'true')
+		addRawStats();
+	if (GM_getValue('deliciousyenperx', 'true') === 'true')
+		addYenPerStats();
 }
 
 
