@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.951
+// @version 1.952
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -500,9 +500,9 @@ if (GM_getValue('deliciouskeyboard') === 'true' && document.querySelector('texta
 	img = document.querySelector('#bbcode img[title="Hide"]');
 	if (img !== null) img.title += ' (' + ctrlorcmd + '+H)';
 	// YouTube
-	ctrl('Y', custom_insert_text, ['[youtube]', '[/youtube]']);
+	ctrl('T', custom_insert_text, ['[youtube]', '[/youtube]']);
 	img = document.querySelector('#bbcode img[alt="YouTube"]');
-	if (img !== null) img.title += ' (' + ctrlorcmd + '+Y)';
+	if (img !== null) img.title += ' (' + ctrlorcmd + '+T)';
 	// Image
 	ctrl('G', custom_insert_text, ['[img]', '[/img]']);
 	img = document.querySelector('#bbcode img[title="Image"]');
