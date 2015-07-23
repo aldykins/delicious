@@ -484,7 +484,6 @@ if (GM_getValue('deliciouskeyboard') === 'true' && document.querySelector('texta
 		* All keyboard shortcuts based on MS Word
 		**/
 
-		var img, ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '⌘' : 'CTRL';
 		// Bold
 		insert('B', true, false, false, '[b]', '[/b]', '#bbcode img[title="Bold"]');
 		// Italics
