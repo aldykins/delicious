@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.952
+// @version 1.953
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -459,54 +459,53 @@ if (GM_getValue('deliciouskeyboard') === 'true' && document.querySelector('texta
 			elem.value += close;
 		}
 	}
-	function ctrl(key, callback, args) {
-		document.addEventListener('keydown', function (e) {
-			if((e.ctrlKey || e.metaKey) && e.keyCode === key.charCodeAt(0) && document.activeElement.tagName.toLowerCase() === 'textarea') {
+	var ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '⌘' : 'CTRL';
+	document.addEventListener('keydown', function(e) {
+		function insert(key, ctrl, alt, shift, open, close, query) {
+			if ((ctrl !== true || e.ctrlKey || e.metaKey) && (alt !== true || e.altKey) && (shift !== true || e.shiftKey) && e.keyCode === key.charCodeAt(0) && document.activeElement.tagName.toLowerCase() === 'textarea') {
 				e.preventDefault();
-				callback.apply(this, args);
+				custom_insert_text(open, close);
 				return false;
 			}
-		});
-	}
-	/**
-	* All keyboard shortcuts based on MS Word
-	**/
+			
+			if (query !== undefined) {
+				var img = document.querySelector(query);
+				if (img !== null) {
+					img.title += ' (';
+					if (ctrl === true) img.title += ctrlorcmd + ' + ';
+					if (alt === true) img.title += 'ALT + ';
+					if (shift === true) img.title += 'SHIFT + ';
+					img.title += key + ')';
+				}
+			}
+		}
+		
+		/**
+		* All keyboard shortcuts based on MS Word
+		**/
 
-	var img, ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '⌘' : 'CTRL';
-	// Bold
-	ctrl('B', custom_insert_text, ['[b]', '[/b]']);
-	img = document.querySelector('#bbcode img[title="Bold"]');
-	if (img !== null) img.title += ' (' + ctrlorcmd + '+B)';
-	// Italics
-	ctrl('I', custom_insert_text, ['[i]', '[/i]']);
-	img = document.querySelector('#bbcode img[title="Italics"]');
-	if (img !== null) img.title += ' (' + ctrlorcmd + '+I)';
-	// Underline
-	ctrl('U', custom_insert_text, ['[u]', '[/u]']);
-	img = document.querySelector('#bbcode img[title="Underline"]');
-	if (img !== null) img.title += ' (' + ctrlorcmd + '+U)';
-	// Align right
-	ctrl('R', custom_insert_text, ['[align=right]', '[/align]']);
-	// Align left
-	ctrl('L', custom_insert_text, ['[align=left]', '[/align]']);
-	// Align center
-	ctrl('E', custom_insert_text, ['[align=center]', '[/align]']);
-	// Spoiler
-	ctrl('S', custom_insert_text, ['[spoiler]', '[/spoiler]']);
-	img = document.querySelector('#bbcode img[title="Spoilers"]');
-	if (img !== null) img.title += ' (' + ctrlorcmd + '+S)';
-	// Hide
-	ctrl('H', custom_insert_text, ['[hide]', '[/hide]']);
-	img = document.querySelector('#bbcode img[title="Hide"]');
-	if (img !== null) img.title += ' (' + ctrlorcmd + '+H)';
-	// YouTube
-	ctrl('T', custom_insert_text, ['[youtube]', '[/youtube]']);
-	img = document.querySelector('#bbcode img[alt="YouTube"]');
-	if (img !== null) img.title += ' (' + ctrlorcmd + '+T)';
-	// Image
-	ctrl('G', custom_insert_text, ['[img]', '[/img]']);
-	img = document.querySelector('#bbcode img[title="Image"]');
-	if (img !== null) img.title += ' (' + ctrlorcmd + '+G)';
+		var img, ctrlorcmd = (navigator.appVersion.indexOf('Mac') != -1) ? '⌘' : 'CTRL';
+		// Bold
+		insert('B', true, false, false, '[b]', '[/b]', '#bbcode img[title="Bold"]');
+		// Italics
+		insert('I', true, false, false, '[i]', '[/i]', '#bbcode img[title="Italics"]');
+		// Underline
+		insert('U', true, false, false, '[u]', '[/u]', '#bbcode img[title="Underline"]');
+		// Align right
+		insert('R', true, false, false, '[align=right]', '[/align]');
+		// Align left
+		insert('L', true, false, false, '[align=left]', '[/align]');
+		// Align center
+		insert('E', true, false, false, '[align=center]', '[/align]');
+		// Spoiler
+		insert('S', true, false, false, '[spoiler]', '[/spoiler]', '#bbcode img[title="Spoilers"]');
+		// Hide
+		insert('H', true, false, false, '[hide]', '[/hide]', '#bbcode img[title="Hide"]');
+		// YouTube
+		insert('Y', true, true, false, '[youtube]', '[/youtube]', '#bbcode img[alt="YouTube"]');
+		// Image
+		insert('G', true, false, false, '[img]', '[/img]', '#bbcode img[title="Image"]');
+	});
 }
 
 
