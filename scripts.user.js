@@ -659,7 +659,7 @@ if (GM_getValue('deliciousfreeleechpool', 'true') === 'true') {
 		nav.replaceChild(a, nav.firstChild);
 	}
 	
-	var pos = GM_getValue('deliciousflpoolposition');
+	var pos = GM_getValue('deliciousflpoolposition', 'after #userinfo_minor');
 
 	if (pos !== 'none' || /user\.php\?id=/i.test(document.URL) || /konbini\.php\?action=pool/i.test(document.URL)) {
 		var p = document.createElement('p'),
