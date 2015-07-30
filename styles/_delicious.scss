@@ -3004,13 +3004,34 @@ img[src='/static/common/caticons/pv.png'] {
     padding-top: 0px;
 }
 
-.userstatsleft .center.strong, .userstatsright .center.strong {
-    padding-top: 10px;
+.userstatsleft, .userstatsright {
+    float: left;
+    min-width: 50%;
+    max-width: 50%;
+    width: 50%;
+
+    .clearcont {
+        width: auto;
+    }
+
+    dl.userprofile_list {
+        margin: 0;
+        padding: 5px 5%;
+    }
+
+    .center.strong {
+        padding-top: 10px;
+    }
+
+    h3 {
+        padding-left: 10px;
+        color: $bold;
+    }
 }
 
-.userstatsleft h3,.userstatsright h3 {
-    padding-left: 10px;
-    color: $bold;
+.userstatsright {
+    margin-left: -1px;
+    padding-right: 0;
 }
 
 #user_rightcol .head {
