@@ -920,10 +920,6 @@ pre.php {
 
 .userinfonav {
     padding: 0;
-    -moz-border-radius-bottomright: 3px;
-    -moz-border-radius-bottomleft: 3px;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
 }
 
 #userinfo ul {
@@ -951,13 +947,13 @@ pre.php {
     color: $tertiaryfontcolour;
 }
 
-#userinfo .navmenu,#userinfo #yen_count {
-    border-right: $secondaryborder;
-    padding: 0 7px 0 8px;
+#userinfo > ul > li {
+    border-left: $secondaryborder;
+    padding: 0 8px;
 }
 
-#userinfo .navmenu:hover,#userinfo #yen_count:hover {
-    background: rgba($navigationbackground,0.1);
+#userinfo > ul > li:hover {
+    background: rgba($navigationbackground, 0.1);
 }
 
 #userinfo .navmenu.nojs:hover,#userinfo .navmenu.selected,#userinfo #yen_count.nojs:hover,#userinfo #yen_count.selected {
@@ -965,30 +961,14 @@ pre.php {
     border-left: none;
 }
 
-#userinfo .userinfonav #username_menu,#userinfo .userinfonav li.navmenu:first-child {
-    border-left: $secondaryborder;
-    padding: 0 7px 0 8px;
-}
-
-#userinfo .userinfonav #username_menu.nojs:hover,#userinfo .userinfonav #username_menu.selected,#userinfo .userinfonav li.navmenu:first-child.nojs:hover,#userinfo .userinfonav li.navmenu:first-child.selected {
-    border-left: $secondaryborder;
-}
-
-#userinfo #quicklinks + li {
-    padding: 0 8px;
-}
-
-#userinfo #quicklinks {
-    margin-left: -1px;
+#userinfo > ul > li:last-child {
+    border-right: $secondaryborder;
 }
 
 #userinfo .subnav {
     background: $headerbackground;
-    -moz-border-radius-topright: 4px;
-    -webkit-border-top-right-radius: 4px;
-    border-top-right-radius: 4px;
     position: absolute;
-    top: 20px;
+    top: 100%;
     left: -1px;
     margin: 0;
     padding: 5px 0;
@@ -996,18 +976,16 @@ pre.php {
     min-width: 100px;
     text-align: left;
     list-style: none;
+    -webkit-border-top-right-radius: 4px;
     -webkit-border-bottom-right-radius: 4px;
     -webkit-border-bottom-left-radius: 4px;
+    -moz-border-radius-topright: 4px;
     -moz-border-radius-bottomright: 4px;
     -moz-border-radius-bottomleft: 4px;
+    border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 4px;
-    margin-top: 5px;
     border: $secondaryborder;
-}
-
-#userinfo_minor li:nth-child(4) ul.subnav {
-    left: 0px;
 }
 
 #userinfo .subnav li {
@@ -1027,7 +1005,7 @@ pre.php {
 }
 
 #userinfo .dropit {
-    margin: 1px 0 0 5px;
+    margin-left: 4px;
 }
 
 #userinfo ul.subnav li a:hover {
