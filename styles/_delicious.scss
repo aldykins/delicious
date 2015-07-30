@@ -3004,7 +3004,7 @@ img[src='/static/common/caticons/pv.png'] {
     padding-top: 0px;
 }
 
-.userstatsleft, .userstatsright {
+div.userstatsleft, div.userstatsright {
     float: left;
     min-width: 50%;
     max-width: 50%;
@@ -3029,7 +3029,7 @@ img[src='/static/common/caticons/pv.png'] {
     }
 }
 
-.userstatsright {
+div.userstatsright {
     margin-left: -1px;
     padding-right: 0;
 }
