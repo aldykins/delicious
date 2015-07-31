@@ -956,11 +956,6 @@ pre.php {
     background: rgba($navigationbackground, 0.1);
 }
 
-#userinfo .navmenu.nojs:hover,#userinfo .navmenu.selected,#userinfo #yen_count.nojs:hover,#userinfo #yen_count.selected {
-    border-bottom: $secondaryborder;
-    border-left: none;
-}
-
 #userinfo > ul > li:last-child {
     border-right: $secondaryborder;
 }
