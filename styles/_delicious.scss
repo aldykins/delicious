@@ -3012,6 +3012,12 @@ div.userstatsleft, div.userstatsright {
     dl.userprofile_list {
         margin: 0;
         padding: 5px 5%;
+
+        dd, dt {
+            float: left;
+            width: 50%;
+            margin: 0;
+        }
     }
 
     .center.strong {
