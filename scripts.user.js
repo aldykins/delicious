@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name AnimeBytes delicious user scripts
 // @author aldy, potatoe, alpha, Megure
-// @version 1.956
+// @version 1.957
 // @downloadURL https://aldy.nope.bz/scripts.user.js
 // @updateURL https://aldy.nope.bz/scripts.user.js
 // @description Variety of userscripts to fully utilise the site and stylesheet.
@@ -1110,7 +1110,7 @@ if(/user\.php\?id=/i.test(document.URL)) {
         return row;
     }
     function get_corresponding_torrent_row(row) {
-        var anchor = row.querySelector('a[title="Download"]');
+        var anchor = row.querySelector('a[title="Report"]');
         if (anchor !== null) {
             var match = anchor.href.match(/id=(\d+)/i);
             if (match !== null) {
